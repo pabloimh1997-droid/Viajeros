@@ -1293,7 +1293,7 @@
             <p id="tv-desc"></p>
         <div class="trip-dates-row" id="tv-dates" style="display:none"></div>
           </div>
-          <div style="margin-left:auto">
+          <div style="display:flex; gap:8px; margin-left:auto">
             <button class="btn btn-ghost btn-sm" onclick="openModal('invite-modal')">👥 Invitar</button>
           </div>
         </div>
@@ -1349,6 +1349,13 @@
           <button class="btn btn-primary" style="margin-top:8px; width:auto" onclick="addNote()">Publicar nota</button>
         </div>
       </div>
+
+    <!-- DANGER ZONE -->
+    <div id="trip-danger-zone" style="margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border);">
+      <button id="trip-action-btn" class="btn btn-danger" style="width:100%" onclick="tripDangerAction()">
+        🗑️ Eliminar viaje
+      </button>
+    </div>
 
     </div><!-- /trip-view -->
 
@@ -1765,13 +1772,7 @@
               ${t.startDate ? `<span>📅 ${formatDate(t.startDate)} → ${t.endDate ? formatDate(t.endDate) : '?'}</span>` : ''}
             </div>
           </div>
-          <div class="dropdown" onclick="event.stopPropagation()">
-            <button class="dots-btn" onclick="toggleTripMenu('${t.id}', this)">⋯</button>
-            <div class="dropdown-menu" id="trip-menu-${t.id}">
-              <div class="dropdown-item" onclick="openTripView('${t.id}')">✈️ Abrir viaje</div>
-              ${t.createdBy === currentUser.uid ? `<div class="dropdown-item danger" onclick="deleteTrip('${t.id}', '${t.name}')">🗑️ Eliminar viaje</div>` : `<div class="dropdown-item danger" onclick="leaveTrip('${t.id}', '${t.name}')">🚪 Salir del viaje</div>`}
-            </div>
-          </div>
+          <span class="badge badge-blue">→</span>
         </div>
       </div>
     `).join('');
@@ -1864,6 +1865,13 @@
     subscribeExpenses();
     subscribeNotes();
     document.getElementById('bottom-nav').style.display = 'block';
+    // Set danger button label depending on whether user is creator
+    const dangerBtn = document.getElementById('trip-action-btn');
+    if (currentTrip.createdBy === currentUser.uid) {
+      dangerBtn.textContent = '🗑️ Eliminar viaje';
+    } else {
+      dangerBtn.textContent = '🚪 Salir del viaje';
+    }
   }
 
   function goHome() {
@@ -2001,12 +2009,9 @@
 
     const canEdit = e.createdBy === currentUser.uid;
     const dotsMenu = canEdit ? `
-      <div class="dropdown" onclick="event.stopPropagation()">
-        <button class="dots-btn" onclick="toggleExpenseMenu('${e.id}', this)" style="margin-left:8px">⋯</button>
-        <div class="dropdown-menu" id="exp-menu-${e.id}">
-          <div class="dropdown-item" onclick="editExpense('${e.id}')">✏️ Editar gasto</div>
-          <div class="dropdown-item danger" onclick="deleteExpense('${e.id}')">🗑️ Eliminar gasto</div>
-        </div>
+      <div style="display:flex; flex-direction:column; gap:4px; margin-left:6px">
+        <button class="dots-btn" onclick="editExpense('${e.id}')" title="Editar" style="font-size:0.9rem">✏️</button>
+        <button class="dots-btn" onclick="deleteExpense('${e.id}')" title="Eliminar" style="font-size:0.9rem; color:var(--danger)">🗑️</button>
       </div>` : '';
 
     return `<div class="expense-card">
@@ -2233,6 +2238,16 @@
     menu.classList.add('open');
     positionMenu(menu, btn, menu.offsetHeight || 90);
   };
+
+  async function tripDangerAction() {
+    if (!currentTripId || !currentTrip) return;
+    if (currentTrip.createdBy === currentUser.uid) {
+      await deleteTrip(currentTripId, currentTrip.name);
+    } else {
+      await leaveTrip(currentTripId, currentTrip.name);
+    }
+  }
+  window.tripDangerAction = tripDangerAction;
 
   async function deleteTrip(tripId, name) {
     if (!confirm(`¿Eliminar el viaje "${name}"? Esto borrará todos los gastos y no se puede deshacer.`)) return;
