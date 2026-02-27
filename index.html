@@ -280,7 +280,6 @@
     cursor: pointer;
     transition: all 0.25s;
     position: relative;
-    overflow: hidden;
   }
 
   .trip-card::before {
@@ -867,10 +866,10 @@
   /* ─── DROPDOWN MENU ─── */
   .dropdown { position: relative; }
   .dropdown-menu {
-    position: absolute; top: calc(100% + 6px); right: 0;
+    position: fixed;
     background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); min-width: 160px; z-index: 100;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4); overflow: hidden; display: none;
+    border-radius: var(--radius-sm); min-width: 180px; z-index: 500;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6); overflow: hidden; display: none;
   }
   .dropdown-menu.open { display: block; animation: fadeIn 0.15s ease; }
   .dropdown-item {
@@ -1054,11 +1053,146 @@
     font-size: 0.8rem;
   }
 
-  @media (max-width: 600px) {
+  /* ══════════════════════════════════════
+     RESPONSIVE — MOBILE FIRST
+     ══════════════════════════════════════ */
+
+  /* Bottom nav for mobile */
+  .bottom-nav {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(17,19,24,0.96);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border);
+    z-index: 50;
+    padding: 8px 0 env(safe-area-inset-bottom, 8px);
+  }
+
+  .bottom-nav-inner {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .bnav-btn {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 3px;
+    background: none; border: none;
+    cursor: pointer; padding: 6px 16px;
+    color: var(--text3);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem; font-weight: 500;
+    transition: color 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .bnav-btn .bnav-icon { font-size: 1.3rem; }
+  .bnav-btn.active { color: var(--accent); }
+  .bnav-btn:active { transform: scale(0.92); }
+
+  @media (max-width: 640px) {
+    /* General */
     .form-row { grid-template-columns: 1fr; }
-    .category-grid { grid-template-columns: repeat(4, 1fr); }
-    .auth-card { padding: 36px 24px; }
-    .tabs { flex-wrap: wrap; }
+    .auth-card { padding: 32px 20px; border-radius: 20px; }
+    .auth-logo h1 { font-size: 2rem; }
+
+    /* Top nav simplified on mobile */
+    .topnav { padding: 12px 16px; }
+    .nav-brand { font-size: 1.2rem; }
+    #nav-name { display: none; }
+
+    /* Show bottom nav, hide FAB when inside trip */
+    .bottom-nav { display: block; }
+    .main-content { padding-top: 68px; padding-bottom: 80px; }
+
+    /* FAB repositioned above bottom nav */
+    .fab { bottom: 80px; right: 16px; width: 52px; height: 52px; font-size: 1.3rem; }
+
+    /* Home view */
+    #home-view { padding: 20px 16px; }
+    .section-title { font-size: 1.3rem; }
+
+    /* Trip cards */
+    .trip-card { padding: 16px; }
+    .trip-emoji { width: 44px; height: 44px; font-size: 1.4rem; border-radius: 12px; }
+    .trip-name { font-size: 1rem; }
+    .trip-meta { font-size: 0.78rem; gap: 8px; flex-wrap: wrap; }
+
+    /* Trip view */
+    #trip-view { padding: 16px; }
+    .trip-hero { padding: 16px; margin-bottom: 16px; }
+    .trip-hero-top { gap: 12px; }
+    .trip-hero-info h2 { font-size: 1.3rem; }
+    #tv-emoji { width: 48px !important; height: 48px !important; font-size: 1.4rem !important; border-radius: 12px; }
+
+    /* Hide desktop tabs on mobile (use bottom nav instead) */
+    .tabs { display: none; }
+
+    /* Members row wraps nicely */
+    .members-row { gap: 6px; margin-top: 12px; }
+    .member-chip { font-size: 0.78rem; padding: 4px 10px; }
+
+    /* Expense cards */
+    .expense-card { padding: 14px 16px; }
+    .expense-icon { width: 38px; height: 38px; font-size: 1rem; border-radius: 10px; }
+    .expense-title { font-size: 0.92rem; }
+    .expense-meta { font-size: 0.76rem; gap: 6px; }
+    .expense-amount .total { font-size: 1.1rem; }
+    .expense-amount .per-person { font-size: 0.76rem; }
+
+    /* Payment pills */
+    .payment-pill { font-size: 0.76rem; padding: 5px 10px; }
+
+    /* Modals full width on mobile */
+    .modal { padding: 24px 20px; border-radius: 20px 20px 0 0; }
+    .modal-title { font-size: 1.2rem; }
+    .category-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .cat-btn { padding: 8px 4px; font-size: 0.72rem; }
+    .cat-btn .cat-icon { font-size: 1.1rem; }
+
+    /* Auth */
+    #auth-screen { align-items: flex-end; padding: 0; }
+    .auth-card { border-radius: 20px 20px 0 0; max-height: 92vh; overflow-y: auto;
+      padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
+
+    /* Profile */
+    #profile-view { padding: 20px 16px; }
+    .profile-hero { padding: 20px; }
+    .bank-card-grid { grid-template-columns: 1fr 1fr; }
+
+    /* Balance */
+    .balance-card { padding: 16px; }
+    .balance-person { padding: 12px 0; }
+    .balance-amount { font-size: 1rem; }
+    .avatar-lg { width: 40px !important; height: 40px !important; font-size: 0.9rem !important; }
+
+    /* Total bar */
+    .total-bar { padding: 14px 16px; }
+    .total-bar-amount { font-size: 1.2rem; }
+
+    /* Notes */
+    #panel-notes { padding-bottom: 16px; }
+    .note-card { padding: 14px; }
+
+    /* Invite box */
+    .invite-box { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .invite-code { font-size: 1.5rem; letter-spacing: 4px; }
+
+    /* Back btn */
+    .back-btn { font-size: 0.88rem; margin-bottom: 16px; }
+
+    /* Section header */
+    .section-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .section-header .btn { width: 100%; justify-content: center; }
+  }
+
+  /* Safe area for notched phones */
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .bottom-nav { padding-bottom: calc(8px + env(safe-area-inset-bottom)); }
+    .fab { bottom: calc(80px + env(safe-area-inset-bottom)); }
   }
 </style>
 </head>
@@ -1449,6 +1583,25 @@
   </div>
 </div>
 
+
+  <!-- BOTTOM NAV (mobile only) -->
+  <nav class="bottom-nav" id="bottom-nav" style="display:none">
+    <div class="bottom-nav-inner">
+      <button class="bnav-btn active" id="bnav-shared" onclick="switchTabMobile('shared')">
+        <span class="bnav-icon">💸</span>Compartido
+      </button>
+      <button class="bnav-btn" id="bnav-personal" onclick="switchTabMobile('personal')">
+        <span class="bnav-icon">🔒</span>Personal
+      </button>
+      <button class="bnav-btn" id="bnav-balance" onclick="switchTabMobile('balance')">
+        <span class="bnav-icon">⚖️</span>Balance
+      </button>
+      <button class="bnav-btn" id="bnav-notes" onclick="switchTabMobile('notes')">
+        <span class="bnav-icon">📝</span>Notas
+      </button>
+    </div>
+  </nav>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -1524,6 +1677,7 @@
   window.saveBankAccount = saveBankAccount;
   window.previewReceipt = previewReceipt;
   window.togglePayInfo = togglePayInfo;
+  window.switchTabMobile = switchTabMobile;
 
   // ─── AUTH ───
   onAuthStateChanged(auth, user => {
@@ -1709,11 +1863,13 @@
     switchTab('shared');
     subscribeExpenses();
     subscribeNotes();
+    document.getElementById('bottom-nav').style.display = 'block';
   }
 
   function goHome() {
     document.getElementById('home-view').style.display = 'block';
     document.getElementById('trip-view').style.display = 'none';
+    document.getElementById('bottom-nav').style.display = 'none';
     if (unsubscribeExpenses) { unsubscribeExpenses(); unsubscribeExpenses = null; }
     if (unsubscribeNotes) { unsubscribeNotes(); unsubscribeNotes = null; }
     currentTripId = null;
@@ -1730,6 +1886,17 @@
     if (tab === 'balance') renderBalance();
     document.getElementById('fab-btn').style.display = (tab === 'balance') ? 'none' : 'flex';
   }
+
+
+  function switchTabMobile(tab) {
+    switchTab(tab);
+    // Update bottom nav active state
+    ['shared','personal','balance','notes'].forEach(t => {
+      const btn = document.getElementById('bnav-' + t);
+      if (btn) btn.classList.toggle('active', t === tab);
+    });
+  }
+  window.switchTabMobile = switchTabMobile;
 
   // ─── EXPENSES ───
   function subscribeExpenses() {
@@ -2037,14 +2204,37 @@
     document.querySelectorAll('.dropdown-menu').forEach(m => {
       if (m.id !== 'trip-menu-' + tripId) m.classList.remove('open');
     });
-    document.getElementById('trip-menu-' + tripId)?.classList.toggle('open');
+    const menu = document.getElementById('trip-menu-' + tripId);
+    if (!menu) return;
+    if (menu.classList.contains('open')) { menu.classList.remove('open'); return; }
+    const rect = btn.getBoundingClientRect();
+    const menuWidth = 180;
+    let left = rect.right - menuWidth;
+    let top = rect.bottom + 6;
+    // Keep within viewport
+    if (left < 8) left = 8;
+    if (top + 120 > window.innerHeight) top = rect.top - 120;
+    menu.style.left = left + 'px';
+    menu.style.top = top + 'px';
+    menu.classList.add('open');
   }
 
   window.toggleExpenseMenu = function(expId, btn) {
     document.querySelectorAll('.dropdown-menu').forEach(m => {
       if (m.id !== 'exp-menu-' + expId) m.classList.remove('open');
     });
-    document.getElementById('exp-menu-' + expId)?.classList.toggle('open');
+    const menu = document.getElementById('exp-menu-' + expId);
+    if (!menu) return;
+    if (menu.classList.contains('open')) { menu.classList.remove('open'); return; }
+    const rect = btn.getBoundingClientRect();
+    const menuWidth = 180;
+    let left = rect.right - menuWidth;
+    let top = rect.bottom + 6;
+    if (left < 8) left = 8;
+    if (top + 100 > window.innerHeight) top = rect.top - 100;
+    menu.style.left = left + 'px';
+    menu.style.top = top + 'px';
+    menu.classList.add('open');
   };
 
   async function deleteTrip(tripId, name) {
@@ -2121,6 +2311,7 @@
     document.getElementById('home-view').style.display = 'none';
     document.getElementById('trip-view').style.display = 'none';
     document.getElementById('profile-view').style.display = 'block';
+    document.getElementById('bottom-nav').style.display = 'none';
     const u = currentUser;
     document.getElementById('pv-avatar').textContent = (u.displayName || '?')[0].toUpperCase();
     document.getElementById('pv-name').textContent = u.displayName || 'Sin nombre';
