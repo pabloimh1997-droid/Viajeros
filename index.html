@@ -2200,6 +2200,18 @@
 
 
   // ─── TRIP MENU ───
+  function positionMenu(menu, btn, menuHeight) {
+    const rect = btn.getBoundingClientRect();
+    const menuWidth = 180;
+    let left = rect.right - menuWidth;
+    let top = rect.bottom + 4;
+    if (left < 8) left = 8;
+    if (left + menuWidth > window.innerWidth - 8) left = window.innerWidth - menuWidth - 8;
+    if (top + menuHeight > window.innerHeight - 8) top = rect.top - menuHeight - 4;
+    menu.style.left = left + 'px';
+    menu.style.top = top + 'px';
+  }
+
   function toggleTripMenu(tripId, btn) {
     document.querySelectorAll('.dropdown-menu').forEach(m => {
       if (m.id !== 'trip-menu-' + tripId) m.classList.remove('open');
@@ -2207,16 +2219,8 @@
     const menu = document.getElementById('trip-menu-' + tripId);
     if (!menu) return;
     if (menu.classList.contains('open')) { menu.classList.remove('open'); return; }
-    const rect = btn.getBoundingClientRect();
-    const menuWidth = 180;
-    let left = rect.right - menuWidth;
-    let top = rect.bottom + 6;
-    // Keep within viewport
-    if (left < 8) left = 8;
-    if (top + 120 > window.innerHeight) top = rect.top - 120;
-    menu.style.left = left + 'px';
-    menu.style.top = top + 'px';
     menu.classList.add('open');
+    positionMenu(menu, btn, menu.offsetHeight || 90);
   }
 
   window.toggleExpenseMenu = function(expId, btn) {
@@ -2226,15 +2230,8 @@
     const menu = document.getElementById('exp-menu-' + expId);
     if (!menu) return;
     if (menu.classList.contains('open')) { menu.classList.remove('open'); return; }
-    const rect = btn.getBoundingClientRect();
-    const menuWidth = 180;
-    let left = rect.right - menuWidth;
-    let top = rect.bottom + 6;
-    if (left < 8) left = 8;
-    if (top + 100 > window.innerHeight) top = rect.top - 100;
-    menu.style.left = left + 'px';
-    menu.style.top = top + 'px';
     menu.classList.add('open');
+    positionMenu(menu, btn, menu.offsetHeight || 90);
   };
 
   async function deleteTrip(tripId, name) {
