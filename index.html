@@ -539,23 +539,36 @@
     border: 1px solid transparent;
   }
 
-  .payment-pill.paid {
-    background: rgba(124,239,176,0.15);
-    color: var(--accent3);
-    border-color: rgba(124,239,176,0.2);
-  }
-
+  /* Estados: unpaid → claimed (amarillo) → confirmed (verde) */
   .payment-pill.unpaid {
     background: var(--surface2);
     color: var(--text2);
     border-color: var(--border);
   }
-
   .payment-pill.unpaid:hover {
-    border-color: rgba(124,239,176,0.3);
-    color: var(--accent3);
+    border-color: rgba(232,201,122,0.4);
+    color: var(--accent);
   }
-
+  .payment-pill.claimed {
+    background: rgba(232,201,122,0.15);
+    color: var(--accent);
+    border-color: rgba(232,201,122,0.35);
+    cursor: default;
+  }
+  .payment-pill.claimed.can-confirm {
+    cursor: pointer;
+  }
+  .payment-pill.claimed.can-confirm:hover {
+    background: rgba(124,239,176,0.15);
+    color: var(--accent3);
+    border-color: rgba(124,239,176,0.3);
+  }
+  .payment-pill.confirmed {
+    background: rgba(124,239,176,0.15);
+    color: var(--accent3);
+    border-color: rgba(124,239,176,0.2);
+    cursor: default;
+  }
   .payment-pill .pill-icon { font-size: 0.9rem; }
 
   /* ─── BALANCE SECTION ─── */
@@ -851,6 +864,196 @@
 
   .flex-gap { display: flex; gap: 10px; }
 
+  /* ─── DROPDOWN MENU ─── */
+  .dropdown { position: relative; }
+  .dropdown-menu {
+    position: absolute; top: calc(100% + 6px); right: 0;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); min-width: 160px; z-index: 100;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4); overflow: hidden; display: none;
+  }
+  .dropdown-menu.open { display: block; animation: fadeIn 0.15s ease; }
+  .dropdown-item {
+    display: flex; align-items: center; gap: 8px; padding: 10px 14px;
+    font-size: 0.88rem; cursor: pointer; color: var(--text2); transition: background 0.15s;
+  }
+  .dropdown-item:hover { background: var(--surface3); color: var(--text); }
+  .dropdown-item.danger { color: var(--danger); }
+  .dropdown-item.danger:hover { background: rgba(240,120,120,0.1); }
+  .dots-btn {
+    width: 32px; height: 32px; border-radius: 8px; border: 1px solid transparent;
+    background: transparent; cursor: pointer; display: flex; align-items: center;
+    justify-content: center; color: var(--text2); font-size: 1.2rem;
+    transition: all 0.15s; flex-shrink: 0;
+  }
+  .dots-btn:hover { background: var(--surface2); border-color: var(--border); color: var(--text); }
+
+  /* ─── PERSONAL TOTAL BAR ─── */
+  .total-bar {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px 20px; margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .total-bar-label { font-size: 0.85rem; color: var(--text2); }
+  .total-bar-amount { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+
+
+  /* ─── PROFILE PAGE ─── */
+  #profile-view {
+    display: none;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+
+  .profile-hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .profile-avatar {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; font-weight: 700; color: #fff;
+    margin: 0 auto 12px;
+  }
+
+  .profile-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem; font-weight: 700;
+  }
+
+  .profile-email { color: var(--text2); font-size: 0.88rem; margin-top: 4px; }
+
+  .profile-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .profile-section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem; font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.82rem;
+  }
+
+  /* ─── BANK INFO CARD ─── */
+  .bank-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  .bank-card-header {
+    display: flex; align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .bank-card-bank {
+    font-weight: 600; font-size: 0.95rem;
+  }
+
+  .bank-card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .bank-card-field { font-size: 0.82rem; }
+  .bank-card-field .field-label { color: var(--text3); margin-bottom: 2px; }
+  .bank-card-field .field-value { color: var(--text); font-weight: 500; }
+
+  /* ─── PAYMENT INFO POPUP ─── */
+  .pay-info-box {
+    background: var(--surface2);
+    border: 1px solid rgba(232,201,122,0.2);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-top: 12px;
+    display: none;
+  }
+
+  .pay-info-box.show { display: block; animation: fadeIn 0.2s ease; }
+
+  .pay-info-row {
+    display: flex; justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pay-info-row:last-child { border-bottom: none; }
+  .pay-info-row .key { color: var(--text2); }
+  .pay-info-row .val { font-weight: 600; color: var(--text); }
+
+  /* ─── RECEIPT IMAGE ─── */
+  .receipt-upload {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    font-size: 0.88rem;
+    color: var(--text2);
+    margin-top: 8px;
+  }
+
+  .receipt-upload:hover { border-color: rgba(91,140,247,0.4); color: var(--accent2); }
+
+  .receipt-thumb {
+    width: 100%; max-height: 120px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    margin-top: 8px;
+    cursor: pointer;
+  }
+
+  .receipt-preview-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    background: rgba(91,140,247,0.1);
+    border: 1px solid rgba(91,140,247,0.2);
+    border-radius: 20px;
+    font-size: 0.78rem;
+    color: var(--accent2);
+    cursor: pointer;
+    margin-top: 8px;
+  }
+
+  /* ─── TRIP DATES ─── */
+  .trip-dates-row {
+    display: flex; gap: 8px;
+    align-items: center;
+    margin-top: 8px;
+    font-size: 0.82rem;
+    color: var(--text2);
+  }
+
+  .trip-dates-row .date-badge {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+  }
+
   @media (max-width: 600px) {
     .form-row { grid-template-columns: 1fr; }
     .category-grid { grid-template-columns: repeat(4, 1fr); }
@@ -920,6 +1123,7 @@
     <div class="nav-user">
       <div class="avatar" id="nav-avatar">?</div>
       <span id="nav-name" style="font-size:0.9rem; color:var(--text2)"></span>
+      <button class="btn btn-ghost btn-sm" onclick="openProfile()">👤 Perfil</button>
       <button class="btn btn-ghost btn-sm" onclick="doLogout()">Salir</button>
     </div>
   </nav>
@@ -953,6 +1157,7 @@
           <div class="trip-hero-info">
             <h2 id="tv-name">Viaje</h2>
             <p id="tv-desc"></p>
+        <div class="trip-dates-row" id="tv-dates" style="display:none"></div>
           </div>
           <div style="margin-left:auto">
             <button class="btn btn-ghost btn-sm" onclick="openModal('invite-modal')">👥 Invitar</button>
@@ -1012,6 +1217,24 @@
       </div>
 
     </div><!-- /trip-view -->
+
+    <!-- PROFILE VIEW -->
+    <div id="profile-view">
+      <div class="back-btn" onclick="goHome()">← Volver a mis viajes</div>
+
+      <div class="profile-hero">
+        <div class="profile-avatar" id="pv-avatar">?</div>
+        <div class="profile-name" id="pv-name"></div>
+        <div class="profile-email" id="pv-email"></div>
+      </div>
+
+      <div class="profile-section">
+        <div class="profile-section-title">💳 Datos para recibir transferencias</div>
+        <div id="bank-cards-list"></div>
+        <button class="btn btn-ghost" style="width:100%; margin-top:4px" onclick="openModal('bank-modal')">+ Agregar cuenta bancaria</button>
+      </div>
+    </div>
+
   </div><!-- /main-content -->
 
   <!-- FAB -->
@@ -1054,6 +1277,16 @@
         <option value="USD">USD — Dólar</option>
         <option value="ARS">ARS — Peso Argentino</option>
       </select>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Fecha de inicio</label>
+        <input type="date" id="trip-start-date">
+      </div>
+      <div class="form-group">
+        <label>Fecha de regreso</label>
+        <input type="date" id="trip-end-date">
+      </div>
     </div>
     <div style="display:flex; gap:10px">
       <button class="btn btn-ghost" style="flex:1" onclick="closeModal('create-trip-modal')">Cancelar</button>
@@ -1122,9 +1355,18 @@
 
     <div id="exp-preview" style="display:none; margin-bottom:16px; padding:14px; background:var(--surface2); border-radius:var(--radius-sm); font-size:0.88rem; color:var(--text2)"></div>
 
+    <div class="form-group">
+      <label>Comprobante (opcional)</label>
+      <div class="receipt-upload" onclick="document.getElementById('receipt-file').click()">
+        📎 Subir foto del recibo o comprobante
+      </div>
+      <input type="file" id="receipt-file" accept="image/*" style="display:none" onchange="previewReceipt(this)">
+      <div id="receipt-preview-container"></div>
+    </div>
+
     <div style="display:flex; gap:10px">
       <button class="btn btn-ghost" style="flex:1" onclick="closeModal('add-expense-modal')">Cancelar</button>
-      <button class="btn btn-primary" style="flex:1" onclick="saveExpense()">Guardar gasto</button>
+      <button class="btn btn-primary" style="flex:1" id="save-expense-btn" onclick="saveExpense()">Guardar gasto</button>
     </div>
   </div>
 </div>
@@ -1147,6 +1389,63 @@
     </p>
     <div id="modal-members-list" style="margin-top:8px"></div>
     <button class="btn btn-ghost" style="margin-top:20px; width:100%" onclick="closeModal('invite-modal')">Cerrar</button>
+  </div>
+</div>
+
+
+<!-- BANK MODAL -->
+<div class="modal-overlay" id="bank-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title">💳 Cuenta Bancaria</h2>
+    <div class="form-group">
+      <label>Banco</label>
+      <select id="bank-name">
+        <option value="">Selecciona banco</option>
+        <option>Banco de Chile</option>
+        <option>BancoEstado</option>
+        <option>Santander</option>
+        <option>BCI</option>
+        <option>Scotiabank</option>
+        <option>Itaú</option>
+        <option>Falabella</option>
+        <option>Ripley</option>
+        <option>BICE</option>
+        <option>Security</option>
+        <option>Mercado Pago</option>
+        <option>Tenpo</option>
+        <option>Otro</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Tipo de cuenta</label>
+        <select id="bank-type">
+          <option>Cuenta RUT</option>
+          <option>Cuenta Corriente</option>
+          <option>Cuenta Vista</option>
+          <option>Cuenta de Ahorro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Número de cuenta</label>
+        <input type="text" id="bank-number" placeholder="12345678">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>RUT titular</label>
+        <input type="text" id="bank-rut" placeholder="12.345.678-9">
+      </div>
+      <div class="form-group">
+        <label>Nombre titular</label>
+        <input type="text" id="bank-holder" placeholder="Pablo Muñoz">
+      </div>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:8px">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('bank-modal')">Cancelar</button>
+      <button class="btn btn-primary" style="flex:1" onclick="saveBankAccount()">Guardar cuenta</button>
+    </div>
   </div>
 </div>
 
@@ -1191,6 +1490,9 @@
   let selectedSplitMembers = [];
   let unsubscribeExpenses = null;
   let unsubscribeNotes = null;
+  const IMGBB_KEY = 'ea6a31b8d4d6e7ef9c7c19cd8d6c4d44';
+  let editingExpenseId = null;
+  let receiptUrl = null;
 
   // Expose to global
   window.doLogin = doLogin;
@@ -1208,10 +1510,20 @@
   window.selectCat = selectCat;
   window.selectExpenseType = selectExpenseType;
   window.saveExpense = saveExpense;
-  window.togglePayment = togglePayment;
+  window.claimPayment = claimPayment;
+  window.confirmPayment = confirmPayment;
   window.addNote = addNote;
   window.copyCode = copyCode;
   window.openAddExpense = openAddExpense;
+  window.deleteTrip = deleteTrip;
+  window.leaveTrip = leaveTrip;
+  window.toggleTripMenu = toggleTripMenu;
+  window.editExpense = editExpense;
+  window.deleteExpense = deleteExpense;
+  window.openProfile = openProfile;
+  window.saveBankAccount = saveBankAccount;
+  window.previewReceipt = previewReceipt;
+  window.togglePayInfo = togglePayInfo;
 
   // ─── AUTH ───
   onAuthStateChanged(auth, user => {
@@ -1296,9 +1608,16 @@
               <span>👥 ${t.memberIds?.length || 1} personas</span>
               <span>${t.currency || 'CLP'}</span>
               ${t.description ? `<span>${t.description}</span>` : ''}
+              ${t.startDate ? `<span>📅 ${formatDate(t.startDate)} → ${t.endDate ? formatDate(t.endDate) : '?'}</span>` : ''}
             </div>
           </div>
-          <span class="badge badge-blue">→</span>
+          <div class="dropdown" onclick="event.stopPropagation()">
+            <button class="dots-btn" onclick="toggleTripMenu('${t.id}', this)">⋯</button>
+            <div class="dropdown-menu" id="trip-menu-${t.id}">
+              <div class="dropdown-item" onclick="openTripView('${t.id}')">✈️ Abrir viaje</div>
+              ${t.createdBy === currentUser.uid ? `<div class="dropdown-item danger" onclick="deleteTrip('${t.id}', '${t.name}')">🗑️ Eliminar viaje</div>` : `<div class="dropdown-item danger" onclick="leaveTrip('${t.id}', '${t.name}')">🚪 Salir del viaje</div>`}
+            </div>
+          </div>
         </div>
       </div>
     `).join('');
@@ -1311,12 +1630,16 @@
     if (!name) return toast('Ponle nombre al viaje ✈️');
 
     const code = Math.random().toString(36).substr(2, 6).toUpperCase();
+    const startDate = document.getElementById('trip-start-date').value;
+    const endDate = document.getElementById('trip-end-date').value;
     const tripData = {
       name,
       description: desc,
       emoji: selectedEmoji,
       currency,
       code,
+      startDate,
+      endDate,
       createdBy: currentUser.uid,
       memberIds: [currentUser.uid],
       members: [{ uid: currentUser.uid, name: currentUser.displayName || currentUser.email }],
@@ -1369,6 +1692,11 @@
     document.getElementById('tv-emoji').textContent = currentTrip.emoji || '✈️';
     document.getElementById('tv-name').textContent = currentTrip.name;
     document.getElementById('tv-desc').textContent = currentTrip.description || '';
+    const datesRow = document.getElementById('tv-dates');
+    if (currentTrip.startDate) {
+      datesRow.innerHTML = `<span>📅</span><span class="date-badge">${formatDate(currentTrip.startDate)}</span><span>→</span><span class="date-badge">${currentTrip.endDate ? formatDate(currentTrip.endDate) : '?'}</span>`;
+      datesRow.style.display = 'flex';
+    } else { datesRow.style.display = 'none'; }
 
     const membersRow = document.getElementById('tv-members');
     membersRow.innerHTML = tripMembers.map(m => `
@@ -1432,7 +1760,16 @@
       return;
     }
     expenses.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
-    container.innerHTML = expenses.map(e => renderExpenseCard(e, false)).join('');
+    const total = expenses.reduce((sum, e) => sum + (e.amount || 0), 0);
+    const currency = currentTrip?.currency || 'CLP';
+    const totalBar = `<div class="total-bar">
+      <div>
+        <div class="total-bar-label">Total mis gastos personales</div>
+        <div style="font-size:0.78rem; color:var(--text3); margin-top:2px">${expenses.length} gasto${expenses.length !== 1 ? 's' : ''}</div>
+      </div>
+      <div class="total-bar-amount">${formatAmount(total, currency)}</div>
+    </div>`;
+    container.innerHTML = totalBar + expenses.map(e => renderExpenseCard(e, false)).join('');
   }
 
   function renderExpenseCard(e, showPayments) {
@@ -1444,18 +1781,46 @@
 
     let paymentsHtml = '';
     if (showPayments && splitWith.length > 0) {
+      const isCreator = e.createdBy === currentUser.uid;
       const pills = splitWith.map(uid => {
         const member = tripMembers.find(m => m.uid === uid);
         const name = member ? member.name : uid;
+        const firstName = name.split(' ')[0];
         const isPayer = uid === e.paidBy;
-        const hasPaid = isPayer || (e.payments && e.payments[uid]);
-        const canToggle = uid === currentUser.uid && !isPayer;
-        return `<div class="payment-pill ${hasPaid ? 'paid' : 'unpaid'}" 
-          ${canToggle ? `onclick="togglePayment('${e.id}','${uid}')"` : ''}
-          title="${isPayer ? 'Pagador original' : (hasPaid ? 'Pagado' : 'Pendiente')}">
-          <span class="pill-icon">${hasPaid ? '✓' : '○'}</span>
-          ${name.split(' ')[0]}${isPayer ? ' 💳' : ''}
-        </div>`;
+        const payState = isPayer ? 'confirmed' : (e.payments?.[uid] || 'unpaid');
+
+        let pillClass, pillIcon, pillTitle, clickAttr = '';
+
+        if (payState === 'confirmed') {
+          pillClass = 'confirmed';
+          pillIcon = '✓';
+          pillTitle = isPayer ? 'Pagador original' : 'Confirmado por el creador';
+        } else if (payState === 'claimed') {
+          if (isCreator && uid !== currentUser.uid) {
+            pillClass = 'claimed can-confirm';
+            pillIcon = '🕐';
+            pillTitle = 'Clic para confirmar que recibiste el pago';
+            clickAttr = 'onclick="confirmPayment(\'' + e.id + '\',\'' + uid + '\')"';
+          } else {
+            pillClass = 'claimed';
+            pillIcon = '🕐';
+            pillTitle = 'Pagado — esperando confirmación del creador';
+          }
+        } else {
+          pillClass = 'unpaid';
+          pillIcon = '○';
+          if (uid === currentUser.uid && !isPayer) {
+            pillTitle = 'Clic para marcar que ya pagaste';
+            clickAttr = 'onclick="claimPayment(\'' + e.id + '\',\'' + uid + '\')"';
+          } else {
+            pillTitle = 'Pendiente de pago';
+          }
+        }
+
+        return '<div class="payment-pill ' + pillClass + '" ' + clickAttr + ' title="' + pillTitle + '">'
+          + '<span class="pill-icon">' + pillIcon + '</span> '
+          + firstName + (isPayer ? ' 💳' : '')
+          + '</div>';
       }).join('');
       paymentsHtml = `<div class="payments-section">
         <div class="payments-label">Confirmaciones de pago</div>
@@ -1465,6 +1830,17 @@
 
     const paidByMember = tripMembers.find(m => m.uid === e.paidBy);
     const paidByName = paidByMember ? paidByMember.name.split(' ')[0] : 'Alguien';
+    const receiptHtml = e.receiptUrl ? `<div style="margin-top:10px"><a href="${e.receiptUrl}" target="_blank" class="receipt-preview-pill">📎 Ver comprobante</a></div>` : '';
+
+    const canEdit = e.createdBy === currentUser.uid;
+    const dotsMenu = canEdit ? `
+      <div class="dropdown" onclick="event.stopPropagation()">
+        <button class="dots-btn" onclick="toggleExpenseMenu('${e.id}', this)" style="margin-left:8px">⋯</button>
+        <div class="dropdown-menu" id="exp-menu-${e.id}">
+          <div class="dropdown-item" onclick="editExpense('${e.id}')">✏️ Editar gasto</div>
+          <div class="dropdown-item danger" onclick="deleteExpense('${e.id}')">🗑️ Eliminar gasto</div>
+        </div>
+      </div>` : '';
 
     return `<div class="expense-card">
       <div class="expense-header">
@@ -1472,34 +1848,53 @@
         <div class="expense-details">
           <div class="expense-title">${e.description}</div>
           <div class="expense-meta">
-            <span>💳 ${paidByName}</span>
+            <span>💳 ${paidByName} <span style="cursor:pointer; color:var(--accent2); font-size:0.78rem" onclick="togglePayInfo('${e.id}','${e.paidBy}', event)">ver datos</span></span>
             <span>${e.category || 'Otro'}</span>
             <span>${e.date || ''}</span>
             ${showPayments ? `<span>👥 ${splitWith.length} personas</span>` : ''}
           </div>
         </div>
-        <div class="expense-amount">
-          <div class="total">${formatAmount(e.amount, currency)}</div>
-          ${showPayments && splitWith.length > 1 ? `<div class="per-person">${formatAmount(perPerson, currency)} c/u</div>` : ''}
+        <div style="display:flex; align-items:flex-start; gap:4px">
+          <div class="expense-amount">
+            <div class="total">${formatAmount(e.amount, currency)}</div>
+            ${showPayments && splitWith.length > 1 ? `<div class="per-person">${formatAmount(perPerson, currency)} c/u</div>` : ''}
+          </div>
+          ${dotsMenu}
         </div>
       </div>
       ${paymentsHtml}
     </div>`;
   }
 
-  async function togglePayment(expenseId, uid) {
+  // Quien pagó reclama su pago → estado 'claimed' (amarillo)
+  async function claimPayment(expenseId, uid) {
     const expRef = doc(db, 'trips', currentTripId, 'expenses', expenseId);
     const expSnap = await getDoc(expRef);
     if (!expSnap.exists()) return;
-    const data = expSnap.data();
-    const payments = data.payments || {};
-    if (payments[uid]) {
+    const payments = { ...(expSnap.data().payments || {}) };
+    if (payments[uid] === 'claimed') {
+      // Permite desmarcar si aún no está confirmado
       delete payments[uid];
+      await updateDoc(expRef, { payments });
+      toast('Pago desmarcado');
     } else {
-      payments[uid] = true;
+      payments[uid] = 'claimed';
+      await updateDoc(expRef, { payments });
+      toast('🕐 Marcado como pagado — esperando confirmación');
     }
+  }
+
+  // El creador del gasto confirma que recibió el dinero → estado 'confirmed' (verde)
+  async function confirmPayment(expenseId, uid) {
+    const expRef = doc(db, 'trips', currentTripId, 'expenses', expenseId);
+    const expSnap = await getDoc(expRef);
+    if (!expSnap.exists()) return;
+    const payments = { ...(expSnap.data().payments || {}) };
+    const member = tripMembers.find(m => m.uid === uid);
+    const name = member ? member.name.split(' ')[0] : 'esta persona';
+    payments[uid] = 'confirmed';
     await updateDoc(expRef, { payments });
-    toast(payments[uid] !== undefined ? '✓ Marcado como pagado' : 'Marcado como pendiente');
+    toast('✅ Confirmado — ' + name + ' pagó su parte');;
   }
 
   // ─── ADD EXPENSE ───
@@ -1527,6 +1922,10 @@
     document.getElementById('type-personal').classList.remove('selected');
     document.getElementById('split-group').style.display = 'block';
     document.getElementById('paidby-group').style.display = 'block';
+    editingExpenseId = null;
+    receiptUrl = null;
+    document.getElementById('receipt-file').value = '';
+    document.getElementById('receipt-preview-container').innerHTML = '';
     document.getElementById('expense-modal-title').textContent = 'Agregar Gasto';
 
     // Preview updater
@@ -1601,16 +2000,246 @@
       type: selectedExpType,
       paidBy,
       splitWith: selectedExpType === 'shared' ? selectedSplitMembers : [currentUser.uid],
-      payments: {},
-      createdBy: currentUser.uid,
-      createdAt: serverTimestamp()
     };
 
-    await addDoc(collection(db, 'trips', currentTripId, 'expenses'), expData);
+    // Upload receipt if provided
+    const saveBtn = document.getElementById('save-expense-btn');
+    saveBtn.textContent = 'Guardando...';
+    saveBtn.disabled = true;
+    try {
+      const uploadedUrl = await uploadReceiptIfNeeded();
+      if (uploadedUrl) expData.receiptUrl = uploadedUrl;
+    } catch(e) { toast('Error subiendo comprobante, guardando sin foto'); }
+    saveBtn.textContent = 'Guardar gasto';
+    saveBtn.disabled = false;
+
+    if (editingExpenseId) {
+      await updateDoc(doc(db, 'trips', currentTripId, 'expenses', editingExpenseId), expData);
+      toast('Gasto actualizado ✓');
+      editingExpenseId = null;
+    } else {
+      await addDoc(collection(db, 'trips', currentTripId, 'expenses'), {
+        ...expData,
+        payments: {},
+        createdBy: currentUser.uid,
+        createdAt: serverTimestamp()
+      });
+      toast('Gasto guardado ✓');
+    }
     closeModal('add-expense-modal');
-    toast('Gasto guardado ✓');
     if (selectedExpType !== 'personal') switchTab('shared');
     else switchTab('personal');
+  }
+
+
+  // ─── TRIP MENU ───
+  function toggleTripMenu(tripId, btn) {
+    document.querySelectorAll('.dropdown-menu').forEach(m => {
+      if (m.id !== 'trip-menu-' + tripId) m.classList.remove('open');
+    });
+    document.getElementById('trip-menu-' + tripId)?.classList.toggle('open');
+  }
+
+  window.toggleExpenseMenu = function(expId, btn) {
+    document.querySelectorAll('.dropdown-menu').forEach(m => {
+      if (m.id !== 'exp-menu-' + expId) m.classList.remove('open');
+    });
+    document.getElementById('exp-menu-' + expId)?.classList.toggle('open');
+  };
+
+  async function deleteTrip(tripId, name) {
+    if (!confirm(`¿Eliminar el viaje "${name}"? Esto borrará todos los gastos y no se puede deshacer.`)) return;
+    // Delete all expenses subcollection
+    const expSnap = await getDocs(collection(db, 'trips', tripId, 'expenses'));
+    for (const d of expSnap.docs) await deleteDoc(doc(db, 'trips', tripId, 'expenses', d.id));
+    const notesSnap = await getDocs(collection(db, 'trips', tripId, 'notes'));
+    for (const d of notesSnap.docs) await deleteDoc(doc(db, 'trips', tripId, 'notes', d.id));
+    await deleteDoc(doc(db, 'trips', tripId));
+    toast('Viaje eliminado');
+    loadTrips();
+  }
+
+  async function leaveTrip(tripId, name) {
+    if (!confirm(`¿Salir del viaje "${name}"?`)) return;
+    await updateDoc(doc(db, 'trips', tripId), {
+      memberIds: arrayRemove(currentUser.uid),
+      members: arrayRemove(tripMembers.find(m => m.uid === currentUser.uid))
+    });
+    toast('Saliste del viaje');
+    loadTrips();
+  }
+
+  // ─── EDIT EXPENSE ───
+  async function editExpense(expId) {
+    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('open'));
+    const expSnap = await getDoc(doc(db, 'trips', currentTripId, 'expenses', expId));
+    if (!expSnap.exists()) return;
+    const e = { id: expId, ...expSnap.data() };
+
+    editingExpenseId = expId;
+    selectedExpType = e.type;
+    selectedCat = e.category || 'Alojamiento';
+    selectedCatIcon = e.categoryIcon || '🏠';
+    selectedSplitMembers = e.splitWith || tripMembers.map(m => m.uid);
+
+    document.getElementById('expense-modal-title').textContent = '✏️ Editar Gasto';
+    document.getElementById('exp-desc').value = e.description;
+    document.getElementById('exp-amount').value = e.amount;
+    document.getElementById('exp-date').value = e.date || '';
+
+    const paidBySelect = document.getElementById('exp-paidby');
+    paidBySelect.innerHTML = tripMembers.map(m => `<option value="${m.uid}" ${m.uid === e.paidBy ? 'selected' : ''}>${m.name}</option>`).join('');
+
+    // Set type UI
+    document.getElementById('type-shared').classList.toggle('selected', e.type === 'shared');
+    document.getElementById('type-personal').classList.toggle('selected', e.type === 'personal');
+    document.getElementById('split-group').style.display = e.type === 'shared' ? 'block' : 'none';
+    document.getElementById('paidby-group').style.display = e.type === 'shared' ? 'block' : 'none';
+
+    // Set category UI
+    document.querySelectorAll('.category-grid .cat-btn').forEach(btn => {
+      const catName = btn.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+      btn.classList.toggle('selected', catName === e.category);
+    });
+
+    renderSplitMembers();
+    document.getElementById('exp-amount').oninput = updateExpensePreview;
+    updateExpensePreview();
+    openModal('add-expense-modal');
+  }
+
+  async function deleteExpense(expId) {
+    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('open'));
+    if (!confirm('¿Eliminar este gasto?')) return;
+    await deleteDoc(doc(db, 'trips', currentTripId, 'expenses', expId));
+    toast('Gasto eliminado');
+  }
+
+
+  // ─── PROFILE ───
+  function openProfile() {
+    document.getElementById('home-view').style.display = 'none';
+    document.getElementById('trip-view').style.display = 'none';
+    document.getElementById('profile-view').style.display = 'block';
+    const u = currentUser;
+    document.getElementById('pv-avatar').textContent = (u.displayName || '?')[0].toUpperCase();
+    document.getElementById('pv-name').textContent = u.displayName || 'Sin nombre';
+    document.getElementById('pv-email').textContent = u.email;
+    loadBankAccounts();
+  }
+
+  async function loadBankAccounts() {
+    const snap = await getDocs(collection(db, 'users', currentUser.uid, 'bankAccounts'));
+    const accounts = [];
+    snap.forEach(d => accounts.push({ id: d.id, ...d.data() }));
+    const container = document.getElementById('bank-cards-list');
+    if (!accounts.length) {
+      container.innerHTML = '<p style="color:var(--text3); font-size:0.88rem; margin-bottom:12px">Sin cuentas bancarias aún</p>';
+      return;
+    }
+    container.innerHTML = accounts.map(a => `
+      <div class="bank-card">
+        <div class="bank-card-header">
+          <div class="bank-card-bank">🏦 ${a.bank}</div>
+          <button class="btn btn-danger btn-sm" onclick="deleteBankAccount('${a.id}')">Eliminar</button>
+        </div>
+        <div class="bank-card-grid">
+          <div class="bank-card-field"><div class="field-label">Tipo</div><div class="field-value">${a.type}</div></div>
+          <div class="bank-card-field"><div class="field-label">N° Cuenta</div><div class="field-value">${a.number}</div></div>
+          <div class="bank-card-field"><div class="field-label">RUT</div><div class="field-value">${a.rut}</div></div>
+          <div class="bank-card-field"><div class="field-label">Titular</div><div class="field-value">${a.holder}</div></div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function saveBankAccount() {
+    const bank = document.getElementById('bank-name').value;
+    const type = document.getElementById('bank-type').value;
+    const number = document.getElementById('bank-number').value.trim();
+    const rut = document.getElementById('bank-rut').value.trim();
+    const holder = document.getElementById('bank-holder').value.trim();
+    if (!bank) return toast('Selecciona un banco');
+    if (!number) return toast('Ingresa el número de cuenta');
+    await addDoc(collection(db, 'users', currentUser.uid, 'bankAccounts'), { bank, type, number, rut, holder });
+    closeModal('bank-modal');
+    toast('Cuenta guardada ✓');
+    loadBankAccounts();
+  }
+
+  async function deleteBankAccount(id) {
+    if (!confirm('¿Eliminar esta cuenta?')) return;
+    await deleteDoc(doc(db, 'users', currentUser.uid, 'bankAccounts', id));
+    toast('Cuenta eliminada');
+    loadBankAccounts();
+  }
+
+  // ─── PAY INFO TOGGLE ───
+  async function togglePayInfo(expId, payerUid, event) {
+    event.stopPropagation();
+    const box = document.getElementById('payinfo-' + expId);
+    if (box.classList.contains('show')) { box.classList.remove('show'); return; }
+    // Load payer's bank accounts
+    const snap = await getDocs(collection(db, 'users', payerUid, 'bankAccounts'));
+    const accounts = [];
+    snap.forEach(d => accounts.push(d.data()));
+    if (!accounts.length) {
+      box.innerHTML = '<p style="color:var(--text2); font-size:0.85rem">Sin datos bancarios registrados</p>';
+    } else {
+      box.innerHTML = accounts.map(a => `
+        <div style="margin-bottom:10px">
+          <div style="font-weight:600; margin-bottom:6px; color:var(--accent)">🏦 ${a.bank} — ${a.type}</div>
+          <div class="pay-info-row"><span class="key">N° Cuenta</span><span class="val">${a.number}</span></div>
+          <div class="pay-info-row"><span class="key">RUT</span><span class="val">${a.rut}</span></div>
+          <div class="pay-info-row"><span class="key">Titular</span><span class="val">${a.holder}</span></div>
+        </div>
+      `).join('<hr style="border:none;border-top:1px solid var(--border);margin:8px 0">');
+    }
+    box.classList.add('show');
+  }
+
+  // ─── RECEIPT UPLOAD (ImgBB) ───
+  function previewReceipt(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const container = document.getElementById('receipt-preview-container');
+    const reader = new FileReader();
+    reader.onload = e => {
+      container.innerHTML = `<img src="${e.target.result}" class="receipt-thumb" title="Clic para quitar" onclick="removeReceipt()">`;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  window.removeReceipt = function() {
+    receiptUrl = null;
+    document.getElementById('receipt-file').value = '';
+    document.getElementById('receipt-preview-container').innerHTML = '';
+  };
+
+  async function uploadReceiptIfNeeded() {
+    const fileInput = document.getElementById('receipt-file');
+    if (!fileInput.files[0]) return null;
+    const file = fileInput.files[0];
+    const base64 = await new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = () => res(r.result.split(',')[1]);
+      r.onerror = rej;
+      r.readAsDataURL(file);
+    });
+    const formData = new FormData();
+    formData.append('key', IMGBB_KEY);
+    formData.append('image', base64);
+    const resp = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: formData });
+    const data = await resp.json();
+    if (data.success) return data.data.url;
+    throw new Error('Error subiendo imagen');
+  }
+
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const [y, m, d] = dateStr.split('-');
+    const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    return `${d} ${months[parseInt(m)-1]} ${y}`;
   }
 
   // ─── BALANCE ───
@@ -1765,6 +2394,12 @@
     overlay.addEventListener('click', e => {
       if (e.target === overlay) overlay.classList.remove('show');
     });
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.dropdown')) {
+      document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('open'));
+    }
   });
 
   function formatAmount(n, currency) {
