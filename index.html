@@ -1047,18 +1047,6 @@
   .bank-card-field .field-label { color: var(--text3); margin-bottom: 2px; }
   .bank-card-field .field-value { color: var(--text); font-weight: 500; }
 
-  /* ─── PAYMENT INFO POPUP ─── */
-  .pay-info-box {
-    background: var(--surface2);
-    border: 1px solid rgba(232,201,122,0.2);
-    border-radius: var(--radius-sm);
-    padding: 14px 16px;
-    margin-top: 12px;
-    display: none;
-  }
-
-  .pay-info-box.show { display: block; animation: fadeIn 0.2s ease; }
-
   .pay-info-row {
     display: flex; justify-content: space-between;
     align-items: center;
@@ -1509,7 +1497,9 @@
       <label>Categoría</label>
       <div class="category-grid">
         <div class="cat-btn selected" onclick="selectCat(this,'Alojamiento','🏠')"><span class="cat-icon">🏠</span><small>Alojam.</small></div>
-        <div class="cat-btn" onclick="selectCat(this,'Transporte','✈️')"><span class="cat-icon">✈️</span><small>Transp.</small></div>
+        <div class="cat-btn" onclick="selectCat(this,'Vuelo','✈️')"><span class="cat-icon">✈️</span><small>Vuelo</small></div>
+        <div class="cat-btn" onclick="selectCat(this,'Auto','🚗')"><span class="cat-icon">🚗</span><small>Auto</small></div>
+        <div class="cat-btn" onclick="selectCat(this,'Tren','🚂')"><span class="cat-icon">🚂</span><small>Tren</small></div>
         <div class="cat-btn" onclick="selectCat(this,'Comida','🍽️')"><span class="cat-icon">🍽️</span><small>Comida</small></div>
         <div class="cat-btn" onclick="selectCat(this,'Actividades','🎯')"><span class="cat-icon">🎯</span><small>Activid.</small></div>
         <div class="cat-btn" onclick="selectCat(this,'Compras','🛍️')"><span class="cat-icon">🛍️</span><small>Compras</small></div>
@@ -1655,6 +1645,19 @@
   <img id="lightbox-img" src="" alt="Comprobante">
 </div>
 
+
+<!-- PAY INFO MODAL -->
+<div class="modal-overlay" id="pay-info-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2 class="modal-title" id="pay-modal-title">💳 Datos para transferir</h2>
+    <div id="pay-modal-content">
+      <p style="color:var(--text2)">Cargando...</p>
+    </div>
+    <button class="btn btn-ghost" style="width:100%; margin-top:20px" onclick="closeModal('pay-info-modal')">Cerrar</button>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -1726,7 +1729,7 @@
   window.deleteExpense = deleteExpense;
   window.openProfile = openProfile;
   window.saveBankAccount = saveBankAccount;
-  window.togglePayInfo = togglePayInfo;
+  window.openPayModal = openPayModal;
   window.switchTabMobile = switchTabMobile;
 
   // ─── AUTH ───
@@ -1998,7 +2001,7 @@
     const splitWith = e.splitWith || tripMembers.map(m => m.uid);
     const perPerson = splitWith.length > 0 ? Math.round(e.amount / splitWith.length) : e.amount;
     const currency = currentTrip?.currency || 'CLP';
-    const catColors = { Alojamiento:'#5b8cf7', Transporte:'#e8c97a', Comida:'#7cefb0', Actividades:'#f07878', Compras:'#b07cef', Entretenimiento:'#ef9b7c', Salud:'#7cd4ef', Otro:'#8a8fa3' };
+    const catColors = { Alojamiento:'#5b8cf7', Vuelo:'#e8c97a', Auto:'#f0a050', Tren:'#a0c4ff', Comida:'#7cefb0', Actividades:'#f07878', Compras:'#b07cef', Entretenimiento:'#ef9b7c', Salud:'#7cd4ef', Otro:'#8a8fa3' };
     const color = catColors[e.category] || '#5b8cf7';
 
     let paymentsHtml = '';
@@ -2066,7 +2069,7 @@
         <div class="expense-details">
           <div class="expense-title">${e.description}</div>
           <div class="expense-meta">
-            <span>💳 ${paidByName} <span style="cursor:pointer; color:var(--accent2); font-size:0.78rem" onclick="togglePayInfo('${e.id}','${e.paidBy}', event)">ver datos</span></span>
+            <span>💳 ${paidByName} <span style="cursor:pointer; color:var(--accent2); font-size:0.78rem" onclick="openPayModal('${e.paidBy}', event)">ver datos →</span></span>
             <span>${e.category || 'Otro'}</span>
             <span>${e.date || ''}</span>
             ${showPayments ? `<span>👥 ${splitWith.length} personas</span>` : ''}
@@ -2572,10 +2575,17 @@
     const sharedExpenses = expenses.filter(e => e.type === 'shared');
     const currency = currentTrip?.currency || 'CLP';
 
-    // Calculate how much each person paid and owes
-    const paid = {}; // how much each person paid
-    const owes = {}; // how much each person owes
+    // Track total paid per person (for summary row)
+    const paid = {};
+    const owes = {};
     tripMembers.forEach(m => { paid[m.uid] = 0; owes[m.uid] = 0; });
+
+    // Track direct debts: debts[from][to] = amount owed
+    const debts = {};
+    tripMembers.forEach(m => {
+      debts[m.uid] = {};
+      tripMembers.forEach(n => { debts[m.uid][n.uid] = 0; });
+    });
 
     sharedExpenses.forEach(e => {
       const splitWith = e.splitWith || tripMembers.map(m => m.uid);
@@ -2583,10 +2593,30 @@
       if (paid[e.paidBy] !== undefined) paid[e.paidBy] += e.amount;
       splitWith.forEach(uid => {
         if (owes[uid] !== undefined) owes[uid] += perPerson;
+        // Each member who didn't pay owes the payer their share
+        if (uid !== e.paidBy && debts[uid] && debts[uid][e.paidBy] !== undefined) {
+          debts[uid][e.paidBy] += perPerson;
+        }
       });
     });
 
-    // Net balance: positive = should receive, negative = should pay
+    // Simplify debts: if A owes B and B owes A, net them out
+    tripMembers.forEach(a => {
+      tripMembers.forEach(b => {
+        if (a.uid >= b.uid) return; // only process each pair once
+        const ab = debts[a.uid][b.uid] || 0;
+        const ba = debts[b.uid][a.uid] || 0;
+        if (ab > ba) {
+          debts[a.uid][b.uid] = ab - ba;
+          debts[b.uid][a.uid] = 0;
+        } else {
+          debts[b.uid][a.uid] = ba - ab;
+          debts[a.uid][b.uid] = 0;
+        }
+      });
+    });
+
+    // Summary per person
     const net = {};
     tripMembers.forEach(m => { net[m.uid] = paid[m.uid] - owes[m.uid]; });
 
@@ -2594,7 +2624,7 @@
     balanceList.innerHTML = tripMembers.map(m => {
       const n = net[m.uid] || 0;
       const cls = n > 0 ? 'balance-positive' : n < 0 ? 'balance-negative' : 'balance-neutral';
-      const label = n > 0 ? 'Le deben' : n < 0 ? 'Debe' : 'Pagado';
+      const label = n > 0 ? 'Le deben' : n < 0 ? 'Debe' : 'Al día';
       return `<div class="balance-person">
         <div class="balance-left">
           <div class="avatar avatar-lg">${(m.name||'?')[0].toUpperCase()}</div>
@@ -2610,28 +2640,19 @@
       </div>`;
     }).join('');
 
-    // Calculate who owes whom
+    // Show direct debts between each pair
     const owedList = document.getElementById('owed-list');
-    const debtors = tripMembers.filter(m => net[m.uid] < -1).sort((a,b) => net[a.uid] - net[b.uid]);
-    const creditors = tripMembers.filter(m => net[m.uid] > 1).sort((a,b) => net[b.uid] - net[a.uid]);
-    
-    if (!debtors.length) {
+    const transactions = [];
+    tripMembers.forEach(from => {
+      tripMembers.forEach(to => {
+        const amt = debts[from.uid]?.[to.uid] || 0;
+        if (amt > 1) transactions.push({ from: from.name, to: to.name, fromUid: from.uid, toUid: to.uid, amount: amt });
+      });
+    });
+
+    if (!transactions.length) {
       owedList.innerHTML = '<p style="color:var(--text2); font-size:0.9rem">🎉 ¡Todos están al día!</p>';
       return;
-    }
-
-    const transactions = [];
-    const debtorsCopy = debtors.map(m => ({ ...m, balance: net[m.uid] }));
-    const creditorsCopy = creditors.map(m => ({ ...m, balance: net[m.uid] }));
-
-    let i = 0, j = 0;
-    while (i < debtorsCopy.length && j < creditorsCopy.length) {
-      const amount = Math.min(-debtorsCopy[i].balance, creditorsCopy[j].balance);
-      transactions.push({ from: debtorsCopy[i].name, to: creditorsCopy[j].name, amount });
-      debtorsCopy[i].balance += amount;
-      creditorsCopy[j].balance -= amount;
-      if (Math.abs(debtorsCopy[i].balance) < 1) i++;
-      if (Math.abs(creditorsCopy[j].balance) < 1) j++;
     }
 
     owedList.innerHTML = transactions.map(t => `
