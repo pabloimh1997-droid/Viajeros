@@ -1071,41 +1071,6 @@
   .pay-info-row .key { color: var(--text2); }
   .pay-info-row .val { font-weight: 600; color: var(--text); }
 
-  /* ─── RECEIPT IMAGE ─── */
-  .receipt-upload {
-    border: 2px dashed var(--border);
-    border-radius: var(--radius-sm);
-    padding: 16px;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.2s;
-    font-size: 0.88rem;
-    color: var(--text2);
-    margin-top: 8px;
-  }
-
-  .receipt-upload:hover { border-color: rgba(91,140,247,0.4); color: var(--accent2); }
-
-  .receipt-thumb {
-    width: 100%; max-height: 120px;
-    object-fit: cover;
-    border-radius: var(--radius-sm);
-    margin-top: 8px;
-    cursor: pointer;
-  }
-
-  .receipt-preview-pill {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 4px 10px;
-    background: rgba(91,140,247,0.1);
-    border: 1px solid rgba(91,140,247,0.2);
-    border-radius: 20px;
-    font-size: 0.78rem;
-    color: var(--accent2);
-    cursor: pointer;
-    margin-top: 8px;
-  }
-
   /* ─── TRIP DATES ─── */
   .trip-dates-row {
     display: flex; gap: 8px;
@@ -1565,19 +1530,9 @@
     </div>
 
     <div id="exp-preview" style="display:none; margin-bottom:16px; padding:14px; background:var(--surface2); border-radius:var(--radius-sm); font-size:0.88rem; color:var(--text2)"></div>
-
-    <div class="form-group">
-      <label>Comprobante (opcional)</label>
-      <div class="receipt-upload" onclick="document.getElementById('receipt-file').click()">
-        📎 Subir foto del recibo o comprobante
-      </div>
-      <input type="file" id="receipt-file" accept="image/*" style="display:none" onchange="previewReceipt(this)">
-      <div id="receipt-preview-container"></div>
-    </div>
-
     <div style="display:flex; gap:10px">
       <button class="btn btn-ghost" style="flex:1" onclick="closeModal('add-expense-modal')">Cancelar</button>
-      <button class="btn btn-primary" style="flex:1" id="save-expense-btn" onclick="saveExpense()">Guardar gasto</button>
+      <button class="btn btn-primary" style="flex:1" onclick="saveExpense()">Guardar gasto</button>
     </div>
   </div>
 </div>
@@ -1741,9 +1696,7 @@
   let selectedSplitMembers = [];
   let unsubscribeExpenses = null;
   let unsubscribeNotes = null;
-  const IMGBB_KEY = 'ea6a31b8d4d6e7ef9c7c19cd8d6c4d44';
   let editingExpenseId = null;
-  let receiptUrl = null;
 
   // Expose to global
   window.doLogin = doLogin;
@@ -1773,7 +1726,6 @@
   window.deleteExpense = deleteExpense;
   window.openProfile = openProfile;
   window.saveBankAccount = saveBankAccount;
-  window.previewReceipt = previewReceipt;
   window.togglePayInfo = togglePayInfo;
   window.switchTabMobile = switchTabMobile;
 
@@ -2100,9 +2052,6 @@
 
     const paidByMember = tripMembers.find(m => m.uid === e.paidBy);
     const paidByName = paidByMember ? paidByMember.name.split(' ')[0] : 'Alguien';
-    // Show receipt button to everyone (creator + members)
-    const safeReceiptUrl = (e.receiptUrl || '').replace(/'/g, '%27');
-    const receiptHtml = e.receiptUrl ? `<div style="margin-top:10px"><span class="receipt-preview-pill" onclick="openLightbox('${safeReceiptUrl}')">📎 Ver comprobante</span></div>` : '';
 
     const canEdit = e.createdBy === currentUser.uid;
     const dotsMenu = canEdit ? `
@@ -2192,9 +2141,6 @@
     document.getElementById('split-group').style.display = 'block';
     document.getElementById('paidby-group').style.display = 'block';
     editingExpenseId = null;
-    receiptUrl = null;
-    document.getElementById('receipt-file').value = '';
-    document.getElementById('receipt-preview-container').innerHTML = '';
     document.getElementById('expense-modal-title').textContent = 'Agregar Gasto';
 
     // Preview updater
@@ -2270,27 +2216,6 @@
       paidBy,
       splitWith: selectedExpType === 'shared' ? selectedSplitMembers : [currentUser.uid],
     };
-
-    // Upload receipt if provided
-    const saveBtn = document.getElementById('save-expense-btn');
-    const fileInput = document.getElementById('receipt-file');
-    const hasFile = fileInput.files[0];
-    saveBtn.textContent = hasFile ? '📤 Subiendo imagen...' : 'Guardando...';
-    saveBtn.disabled = true;
-    try {
-      const uploadedUrl = await uploadReceiptIfNeeded();
-      if (uploadedUrl) {
-        expData.receiptUrl = uploadedUrl;
-        console.log('Receipt uploaded:', uploadedUrl);
-      }
-    } catch(err) {
-      saveBtn.textContent = 'Guardar gasto';
-      saveBtn.disabled = false;
-      toast('❌ Error al subir imagen: ' + err.message);
-      return; // Stop - don't save without receipt if user chose one
-    }
-    saveBtn.textContent = 'Guardar gasto';
-    saveBtn.disabled = false;
 
     if (editingExpenseId) {
       await updateDoc(doc(db, 'trips', currentTripId, 'expenses', editingExpenseId), expData);
@@ -2629,75 +2554,6 @@
   };
 
   // ─── RECEIPT UPLOAD (ImgBB) ───
-  function previewReceipt(input) {
-    const file = input.files[0];
-    if (!file) return;
-    const container = document.getElementById('receipt-preview-container');
-    const reader = new FileReader();
-    reader.onload = e => {
-      container.innerHTML = `<img src="${e.target.result}" class="receipt-thumb" title="Clic para quitar" onclick="removeReceipt()">`;
-    };
-    reader.readAsDataURL(file);
-  }
-
-  window.removeReceipt = function() {
-    receiptUrl = null;
-    document.getElementById('receipt-file').value = '';
-    document.getElementById('receipt-preview-container').innerHTML = '';
-  };
-
-  async function uploadReceiptIfNeeded() {
-    const fileInput = document.getElementById('receipt-file');
-    if (!fileInput.files[0]) return null;
-    const file = fileInput.files[0];
-
-    // Compress if > 1MB to avoid imgbb limits
-    let base64;
-    if (file.size > 1024 * 1024) {
-      base64 = await compressImage(file, 0.7);
-    } else {
-      base64 = await new Promise((res, rej) => {
-        const r = new FileReader();
-        r.onload = () => res(r.result.split(',')[1]);
-        r.onerror = rej;
-        r.readAsDataURL(file);
-      });
-    }
-
-    const formData = new FormData();
-    formData.append('key', IMGBB_KEY);
-    formData.append('image', base64);
-
-    let resp;
-    try {
-      resp = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: formData });
-    } catch(networkErr) {
-      throw new Error('Sin conexión al subir imagen');
-    }
-
-    const data = await resp.json();
-    if (data.success) return data.data.url;
-    console.error('ImgBB error:', data);
-    throw new Error('ImgBB: ' + (data.error?.message || 'Error desconocido'));
-  }
-
-  async function compressImage(file, quality) {
-    return new Promise((res) => {
-      const img = new Image();
-      const url = URL.createObjectURL(file);
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        let w = img.width, h = img.height;
-        // Max 1200px wide
-        if (w > 1200) { h = Math.round(h * 1200 / w); w = 1200; }
-        canvas.width = w; canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        URL.revokeObjectURL(url);
-        res(canvas.toDataURL('image/jpeg', quality).split(',')[1]);
-      };
-      img.src = url;
-    });
-  }
 
   function formatDate(dateStr) {
     if (!dateStr) return '';
