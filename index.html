@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Viajeros — Gastos de Viaje</title>
+<title>Viajeros ✈️</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,800;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -897,6 +897,76 @@
   .total-bar-amount { font-family: 'Fraunces', serif; font-size: 1.5rem; font-weight: 700; color: var(--accent); }
 
 
+
+  /* ─── CUSTOM CONFIRM DIALOG ─── */
+  .confirm-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .confirm-overlay.show { opacity: 1; pointer-events: all; }
+
+  .confirm-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 28px;
+    max-width: 360px;
+    width: 100%;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+    transform: scale(0.92);
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    text-align: center;
+  }
+  .confirm-overlay.show .confirm-box { transform: scale(1); }
+
+  .confirm-icon { font-size: 2.8rem; margin-bottom: 12px; }
+  .confirm-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem; font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .confirm-msg { color: var(--text2); font-size: 0.9rem; line-height: 1.5; margin-bottom: 24px; }
+  .confirm-actions { display: flex; gap: 10px; }
+  .confirm-actions .btn { flex: 1; }
+
+
+  /* ─── LIGHTBOX ─── */
+  .lightbox-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 2000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+    cursor: zoom-out;
+  }
+  .lightbox-overlay.show { opacity: 1; pointer-events: all; }
+  .lightbox-overlay img {
+    max-width: 100%; max-height: 90vh;
+    border-radius: 12px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.8);
+    transform: scale(0.9);
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .lightbox-overlay.show img { transform: scale(1); }
+  .lightbox-close {
+    position: absolute; top: 16px; right: 16px;
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50%;
+    color: white; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+  }
+
   /* ─── PROFILE PAGE ─── */
   #profile-view {
     display: none;
@@ -1609,6 +1679,27 @@
     </div>
   </nav>
 
+
+<!-- CUSTOM CONFIRM DIALOG -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-icon" id="confirm-icon">⚠️</div>
+    <div class="confirm-title" id="confirm-title">¿Estás seguro?</div>
+    <div class="confirm-msg" id="confirm-msg"></div>
+    <div class="confirm-actions">
+      <button class="btn btn-ghost" onclick="confirmResolve(false)">Cancelar</button>
+      <button class="btn btn-danger" id="confirm-ok-btn" onclick="confirmResolve(true)">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-close">✕</div>
+  <img id="lightbox-img" src="" alt="Comprobante">
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -1934,7 +2025,11 @@
       container.innerHTML = `<div class="empty-state"><div class="empty-icon">🔒</div><p>Sin gastos personales</p><small>Solo tú puedes verlos</small></div>`;
       return;
     }
-    expenses.sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
+    expenses.sort((a,b) => {
+      const da = a.date || ''; const db2 = b.date || '';
+      if (da && db2) return db2.localeCompare(da);
+      return (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0);
+    });
     const total = expenses.reduce((sum, e) => sum + (e.amount || 0), 0);
     const currency = currentTrip?.currency || 'CLP';
     const totalBar = `<div class="total-bar">
@@ -2005,7 +2100,9 @@
 
     const paidByMember = tripMembers.find(m => m.uid === e.paidBy);
     const paidByName = paidByMember ? paidByMember.name.split(' ')[0] : 'Alguien';
-    const receiptHtml = e.receiptUrl ? `<div style="margin-top:10px"><a href="${e.receiptUrl}" target="_blank" class="receipt-preview-pill">📎 Ver comprobante</a></div>` : '';
+    // Show receipt button to everyone (creator + members)
+    const safeReceiptUrl = (e.receiptUrl || '').replace(/'/g, '%27');
+    const receiptHtml = e.receiptUrl ? `<div style="margin-top:10px"><span class="receipt-preview-pill" onclick="openLightbox('${safeReceiptUrl}')">📎 Ver comprobante</span></div>` : '';
 
     const canEdit = e.createdBy === currentUser.uid;
     const dotsMenu = canEdit ? `
@@ -2176,12 +2273,22 @@
 
     // Upload receipt if provided
     const saveBtn = document.getElementById('save-expense-btn');
-    saveBtn.textContent = 'Guardando...';
+    const fileInput = document.getElementById('receipt-file');
+    const hasFile = fileInput.files[0];
+    saveBtn.textContent = hasFile ? '📤 Subiendo imagen...' : 'Guardando...';
     saveBtn.disabled = true;
     try {
       const uploadedUrl = await uploadReceiptIfNeeded();
-      if (uploadedUrl) expData.receiptUrl = uploadedUrl;
-    } catch(e) { toast('Error subiendo comprobante, guardando sin foto'); }
+      if (uploadedUrl) {
+        expData.receiptUrl = uploadedUrl;
+        console.log('Receipt uploaded:', uploadedUrl);
+      }
+    } catch(err) {
+      saveBtn.textContent = 'Guardar gasto';
+      saveBtn.disabled = false;
+      toast('❌ Error al subir imagen: ' + err.message);
+      return; // Stop - don't save without receipt if user chose one
+    }
     saveBtn.textContent = 'Guardar gasto';
     saveBtn.disabled = false;
 
@@ -2250,25 +2357,39 @@
   window.tripDangerAction = tripDangerAction;
 
   async function deleteTrip(tripId, name) {
-    if (!confirm(`¿Eliminar el viaje "${name}"? Esto borrará todos los gastos y no se puede deshacer.`)) return;
+    const ok = await customConfirm({
+      icon: '🗑️',
+      title: '¿Eliminar viaje?',
+      msg: '"' + name + '" y todos sus gastos se borrarán para siempre. No se puede deshacer.',
+      okLabel: 'Sí, eliminar',
+      okClass: 'btn-danger'
+    });
+    if (!ok) return;
     // Delete all expenses subcollection
     const expSnap = await getDocs(collection(db, 'trips', tripId, 'expenses'));
     for (const d of expSnap.docs) await deleteDoc(doc(db, 'trips', tripId, 'expenses', d.id));
     const notesSnap = await getDocs(collection(db, 'trips', tripId, 'notes'));
     for (const d of notesSnap.docs) await deleteDoc(doc(db, 'trips', tripId, 'notes', d.id));
     await deleteDoc(doc(db, 'trips', tripId));
-    toast('Viaje eliminado');
-    loadTrips();
+    toast('Viaje eliminado 🗑️');
+    goHome();
   }
 
   async function leaveTrip(tripId, name) {
-    if (!confirm(`¿Salir del viaje "${name}"?`)) return;
+    const ok = await customConfirm({
+      icon: '🚪',
+      title: '¿Salir del viaje?',
+      msg: 'Dejarás el viaje "' + name + '". Puedes volver a unirte con el código.',
+      okLabel: 'Salir',
+      okClass: 'btn-danger'
+    });
+    if (!ok) return;
     await updateDoc(doc(db, 'trips', tripId), {
       memberIds: arrayRemove(currentUser.uid),
       members: arrayRemove(tripMembers.find(m => m.uid === currentUser.uid))
     });
     toast('Saliste del viaje');
-    loadTrips();
+    goHome();
   }
 
   // ─── EDIT EXPENSE ───
@@ -2312,11 +2433,50 @@
 
   async function deleteExpense(expId) {
     document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('open'));
-    if (!confirm('¿Eliminar este gasto?')) return;
+    const ok = await customConfirm({
+      icon: '💸',
+      title: '¿Eliminar gasto?',
+      msg: 'Este gasto se borrará y no se podrá recuperar.',
+      okLabel: 'Eliminar',
+      okClass: 'btn-danger'
+    });
+    if (!ok) return;
     await deleteDoc(doc(db, 'trips', currentTripId, 'expenses', expId));
     toast('Gasto eliminado');
   }
 
+
+
+  // ─── CUSTOM CONFIRM ───
+  let _confirmResolve = null;
+
+  function customConfirm({ icon = '⚠️', title = '¿Estás seguro?', msg = '', okLabel = 'Confirmar', okClass = 'btn-danger' } = {}) {
+    return new Promise(resolve => {
+      _confirmResolve = resolve;
+      document.getElementById('confirm-icon').textContent = icon;
+      document.getElementById('confirm-title').textContent = title;
+      document.getElementById('confirm-msg').textContent = msg;
+      const okBtn = document.getElementById('confirm-ok-btn');
+      okBtn.textContent = okLabel;
+      okBtn.className = 'btn ' + okClass;
+      document.getElementById('confirm-overlay').classList.add('show');
+    });
+  }
+
+  window.confirmResolve = function(val) {
+    document.getElementById('confirm-overlay').classList.remove('show');
+    if (_confirmResolve) { _confirmResolve(val); _confirmResolve = null; }
+  };
+
+
+  function openLightbox(url) {
+    document.getElementById('lightbox-img').src = url;
+    document.getElementById('lightbox').classList.add('show');
+  }
+  window.closeLightbox = function() {
+    document.getElementById('lightbox').classList.remove('show');
+  };
+  window.openLightbox = openLightbox;
 
   // ─── PROFILE ───
   function openProfile() {
@@ -2340,20 +2500,33 @@
       container.innerHTML = '<p style="color:var(--text3); font-size:0.88rem; margin-bottom:12px">Sin cuentas bancarias aún</p>';
       return;
     }
-    container.innerHTML = accounts.map(a => `
+    container.innerHTML = accounts.map(a => {
+      const clipText = [
+        'Nombre: ' + a.holder,
+        'RUT: ' + a.rut,
+        'Banco: ' + a.bank,
+        'Tipo de cuenta: ' + a.type,
+        'Número de cuenta: ' + a.number
+      ].join('\n');
+      return `
       <div class="bank-card">
         <div class="bank-card-header">
           <div class="bank-card-bank">🏦 ${a.bank}</div>
           <button class="btn btn-danger btn-sm" onclick="deleteBankAccount('${a.id}')">Eliminar</button>
         </div>
         <div class="bank-card-grid">
+          <div class="bank-card-field"><div class="field-label">Titular</div><div class="field-value">${a.holder}</div></div>
+          <div class="bank-card-field"><div class="field-label">RUT</div><div class="field-value">${a.rut}</div></div>
           <div class="bank-card-field"><div class="field-label">Tipo</div><div class="field-value">${a.type}</div></div>
           <div class="bank-card-field"><div class="field-label">N° Cuenta</div><div class="field-value">${a.number}</div></div>
-          <div class="bank-card-field"><div class="field-label">RUT</div><div class="field-value">${a.rut}</div></div>
-          <div class="bank-card-field"><div class="field-label">Titular</div><div class="field-value">${a.holder}</div></div>
         </div>
+        <button class="btn btn-ghost btn-sm" style="width:100%; margin-top:10px"
+          data-clip="${clipText.replace(/"/g,'&quot;')}"
+          onclick="copyBankData(this, this.dataset.clip)">
+          📋 Copiar mis datos para compartir
+        </button>
       </div>
-    `).join('');
+    `}).join('');
   }
 
   async function saveBankAccount() {
@@ -2371,7 +2544,14 @@
   }
 
   async function deleteBankAccount(id) {
-    if (!confirm('¿Eliminar esta cuenta?')) return;
+    const ok = await customConfirm({
+      icon: '💳',
+      title: '¿Eliminar cuenta?',
+      msg: 'Se borrará esta cuenta bancaria de tu perfil.',
+      okLabel: 'Eliminar',
+      okClass: 'btn-danger'
+    });
+    if (!ok) return;
     await deleteDoc(doc(db, 'users', currentUser.uid, 'bankAccounts', id));
     toast('Cuenta eliminada');
     loadBankAccounts();
@@ -2382,24 +2562,71 @@
     event.stopPropagation();
     const box = document.getElementById('payinfo-' + expId);
     if (box.classList.contains('show')) { box.classList.remove('show'); return; }
-    // Load payer's bank accounts
     const snap = await getDocs(collection(db, 'users', payerUid, 'bankAccounts'));
     const accounts = [];
     snap.forEach(d => accounts.push(d.data()));
     if (!accounts.length) {
-      box.innerHTML = '<p style="color:var(--text2); font-size:0.85rem">Sin datos bancarios registrados</p>';
+      box.innerHTML = '<p style="color:var(--text2); font-size:0.85rem; padding:4px 0">Esta persona no tiene datos bancarios registrados</p>';
     } else {
-      box.innerHTML = accounts.map(a => `
-        <div style="margin-bottom:10px">
-          <div style="font-weight:600; margin-bottom:6px; color:var(--accent)">🏦 ${a.bank} — ${a.type}</div>
-          <div class="pay-info-row"><span class="key">N° Cuenta</span><span class="val">${a.number}</span></div>
-          <div class="pay-info-row"><span class="key">RUT</span><span class="val">${a.rut}</span></div>
+      box.innerHTML = accounts.map((a, idx) => {
+        // Build Chilean bank transfer format for clipboard
+        const clipText = [
+          'Nombre: ' + a.holder,
+          'RUT: ' + a.rut,
+          'Banco: ' + a.bank,
+          'Tipo de cuenta: ' + a.type,
+          'Número de cuenta: ' + a.number
+        ].join('\n');
+
+        return `
+        <div style="margin-bottom:${accounts.length > 1 ? '12px' : '0'}">
+          <div style="font-weight:700; margin-bottom:8px; color:var(--accent); font-size:0.9rem">
+            🏦 ${a.bank}
+          </div>
           <div class="pay-info-row"><span class="key">Titular</span><span class="val">${a.holder}</span></div>
+          <div class="pay-info-row"><span class="key">RUT</span><span class="val">${a.rut}</span></div>
+          <div class="pay-info-row"><span class="key">Tipo</span><span class="val">${a.type}</span></div>
+          <div class="pay-info-row"><span class="key">N° Cuenta</span><span class="val">${a.number}</span></div>
+          <button class="btn btn-primary btn-sm" style="width:100%; margin-top:10px; gap:6px"
+            data-clip="${clipText.replace(/"/g,'&quot;').replace(/`/g,'')}"
+            onclick="copyBankData(this, this.dataset.clip)">
+            📋 Copiar datos para transferir
+          </button>
         </div>
-      `).join('<hr style="border:none;border-top:1px solid var(--border);margin:8px 0">');
+        ${idx < accounts.length - 1 ? '<hr style="border:none;border-top:1px solid var(--border);margin:10px 0">' : ''}
+        `;
+      }).join('');
     }
     box.classList.add('show');
   }
+
+  window.copyBankData = function(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const original = btn.innerHTML;
+      btn.innerHTML = '✅ ¡Copiado! Pega en tu app del banco';
+      btn.style.background = 'rgba(124,239,176,0.2)';
+      btn.style.color = 'var(--accent3)';
+      btn.style.border = '1px solid rgba(124,239,176,0.3)';
+      setTimeout(() => {
+        btn.innerHTML = original;
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.style.border = '';
+      }, 2500);
+    }).catch(() => {
+      // Fallback for older browsers
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      btn.innerHTML = '✅ ¡Copiado!';
+      setTimeout(() => { btn.innerHTML = '📋 Copiar datos para transferir'; }, 2000);
+    });
+  };
 
   // ─── RECEIPT UPLOAD (ImgBB) ───
   function previewReceipt(input) {
@@ -2423,19 +2650,53 @@
     const fileInput = document.getElementById('receipt-file');
     if (!fileInput.files[0]) return null;
     const file = fileInput.files[0];
-    const base64 = await new Promise((res, rej) => {
-      const r = new FileReader();
-      r.onload = () => res(r.result.split(',')[1]);
-      r.onerror = rej;
-      r.readAsDataURL(file);
-    });
+
+    // Compress if > 1MB to avoid imgbb limits
+    let base64;
+    if (file.size > 1024 * 1024) {
+      base64 = await compressImage(file, 0.7);
+    } else {
+      base64 = await new Promise((res, rej) => {
+        const r = new FileReader();
+        r.onload = () => res(r.result.split(',')[1]);
+        r.onerror = rej;
+        r.readAsDataURL(file);
+      });
+    }
+
     const formData = new FormData();
     formData.append('key', IMGBB_KEY);
     formData.append('image', base64);
-    const resp = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: formData });
+
+    let resp;
+    try {
+      resp = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: formData });
+    } catch(networkErr) {
+      throw new Error('Sin conexión al subir imagen');
+    }
+
     const data = await resp.json();
     if (data.success) return data.data.url;
-    throw new Error('Error subiendo imagen');
+    console.error('ImgBB error:', data);
+    throw new Error('ImgBB: ' + (data.error?.message || 'Error desconocido'));
+  }
+
+  async function compressImage(file, quality) {
+    return new Promise((res) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let w = img.width, h = img.height;
+        // Max 1200px wide
+        if (w > 1200) { h = Math.round(h * 1200 / w); w = 1200; }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        res(canvas.toDataURL('image/jpeg', quality).split(',')[1]);
+      };
+      img.src = url;
+    });
   }
 
   function formatDate(dateStr) {
