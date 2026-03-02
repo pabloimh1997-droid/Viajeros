@@ -560,6 +560,323 @@
       .bottom-nav { padding-bottom: calc(8px + env(safe-area-inset-bottom)); }
       .fab { bottom: calc(80px + env(safe-area-inset-bottom)); }
     }
+
+    /* ─── ITINERARY ─── */
+    #panel-itinerary { animation: fadeIn 0.4s ease; }
+
+    .itin-day-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .itin-day-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+    .itin-day-header:hover { background: var(--surface3); }
+    .itin-day-header-left { display: flex; align-items: center; gap: 12px; }
+    .itin-day-badge {
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: #fff; font-weight: 700; font-size: 0.75rem;
+      padding: 4px 10px; border-radius: 20px; white-space: nowrap;
+    }
+    .itin-day-title { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 600; }
+    .itin-day-subtitle { font-size: 0.78rem; color: var(--text2); margin-top: 2px; }
+    .itin-day-chevron { color: var(--text3); font-size: 0.9rem; transition: transform 0.25s; }
+    .itin-day-block.collapsed .itin-day-chevron { transform: rotate(-90deg); }
+    .itin-day-body { padding: 12px 16px 16px; }
+    .itin-day-block.collapsed .itin-day-body { display: none; }
+
+    .itin-event {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      transition: background 0.15s;
+    }
+    .itin-event:last-child { border-bottom: none; }
+    .itin-timeline {
+      display: flex; flex-direction: column; align-items: center;
+      width: 44px; flex-shrink: 0; padding-top: 2px;
+    }
+    .itin-time {
+      font-size: 0.72rem; font-weight: 700; color: var(--accent);
+      font-family: 'DM Sans', sans-serif; letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+    .itin-time-line {
+      width: 1px; flex: 1; min-height: 24px;
+      background: linear-gradient(to bottom, var(--accent2) 0%, transparent 100%);
+      margin-top: 4px; opacity: 0.25;
+    }
+    .itin-event-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+      background: var(--surface2);
+    }
+    .itin-event-body { flex: 1; min-width: 0; }
+    .itin-event-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 2px; }
+    .itin-event-meta { font-size: 0.78rem; color: var(--text2); display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+    .itin-event-note {
+      font-size: 0.82rem; color: var(--text2); line-height: 1.5;
+      background: rgba(91, 140, 247, 0.06);
+      border-left: 2px solid var(--accent2);
+      padding: 6px 10px; border-radius: 0 6px 6px 0;
+      margin-top: 6px;
+    }
+    .itin-event-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+    .itin-tag {
+      font-size: 0.7rem; font-weight: 600; padding: 2px 8px;
+      border-radius: 20px; border: 1px solid;
+    }
+    .itin-tag-must { background: rgba(232,201,122,0.12); color: var(--accent); border-color: rgba(232,201,122,0.25); }
+    .itin-tag-book { background: rgba(240,120,120,0.12); color: var(--danger); border-color: rgba(240,120,120,0.25); }
+    .itin-tag-tip  { background: rgba(124,239,176,0.12); color: var(--accent3); border-color: rgba(124,239,176,0.25); }
+    .itin-tag-free { background: rgba(91,140,247,0.12); color: var(--accent2); border-color: rgba(91,140,247,0.25); }
+
+    .itin-event-actions {
+      display: flex; gap: 6px; flex-shrink: 0; padding-top: 2px;
+    }
+    .itin-action-btn {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: transparent; border: 1px solid var(--border);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; color: var(--text3); transition: all 0.2s;
+    }
+    .itin-action-btn:hover { background: var(--surface3); color: var(--text); border-color: rgba(255,255,255,0.12); }
+    .itin-action-btn.del:hover { background: rgba(240,120,120,0.15); color: var(--danger); border-color: rgba(240,120,120,0.3); }
+
+    .itin-add-event-btn {
+      display: flex; align-items: center; gap: 6px;
+      width: 100%; padding: 8px 10px; margin-top: 6px;
+      background: transparent; border: 1px dashed var(--text3);
+      border-radius: var(--radius-sm); cursor: pointer;
+      color: var(--text3); font-size: 0.82rem; font-weight: 500;
+      transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+    }
+    .itin-add-event-btn:hover { border-color: var(--accent2); color: var(--accent2); background: rgba(91,140,247,0.06); }
+
+    .itin-load-btn {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      width: 100%; padding: 12px 16px; margin: 8px 0;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius); cursor: pointer;
+      color: var(--text2); font-size: 0.88rem; font-weight: 600;
+      transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+    }
+    .itin-load-btn:hover { background: var(--surface3); color: var(--text); border-color: rgba(255,255,255,0.12); }
+    .itin-load-next:hover { border-color: rgba(91,140,247,0.3); color: var(--accent2); }
+    .itin-load-prev:hover { border-color: rgba(232,201,122,0.3); color: var(--accent); }
+    .itin-load-count { font-size: 0.78rem; font-weight: 400; color: var(--text3); }
+
+    .itin-empty { text-align: center; padding: 40px 20px; }
+    .itin-empty-icon { font-size: 2.5rem; margin-bottom: 10px; }
+    .itin-empty p { color: var(--text2); font-size: 0.9rem; }
+    .itin-empty small { color: var(--text3); font-size: 0.8rem; }
+
+    /* Progress bar at top of itinerary */
+    .itin-progress-bar {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 14px 18px; margin-bottom: 16px;
+    }
+    .itin-progress-track {
+      flex: 1; height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden;
+    }
+    .itin-progress-fill {
+      height: 100%; border-radius: 3px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      transition: width 0.4s ease;
+    }
+    .itin-progress-label { font-size: 0.78rem; color: var(--text2); white-space: nowrap; }
+
+    /* ─── ITINERARY MODAL ─── */
+    .itin-category-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 8px; }
+    .itin-tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .itin-tag-toggle {
+      padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border);
+      background: var(--surface2); color: var(--text2); font-size: 0.8rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .itin-tag-toggle.active { background: rgba(91,140,247,0.15); color: var(--accent2); border-color: rgba(91,140,247,0.35); }
+    .itin-tag-toggle.must.active { background: rgba(232,201,122,0.15); color: var(--accent); border-color: rgba(232,201,122,0.35); }
+    .itin-tag-toggle.book.active { background: rgba(240,120,120,0.15); color: var(--danger); border-color: rgba(240,120,120,0.3); }
+    .itin-tag-toggle.tip.active  { background: rgba(124,239,176,0.15); color: var(--accent3); border-color: rgba(124,239,176,0.25); }
+
+    @media (max-width: 640px) {
+      .itin-day-header { padding: 12px 14px; }
+      .itin-day-body { padding: 8px 10px 12px; }
+      .itin-timeline { width: 38px; }
+      .itin-event-icon { width: 32px; height: 32px; font-size: 0.9rem; border-radius: 8px; }
+      .itin-event-title { font-size: 0.88rem; }
+      .itin-event-meta { font-size: 0.72rem; }
+    }
+
+    /* ─── GALLERY ─── */
+    #panel-gallery { animation: fadeIn 0.4s ease; }
+
+    .gallery-day-group { margin-bottom: 28px; }
+    .gallery-day-label {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 12px;
+    }
+    .gallery-day-label .gdl-badge {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 20px; padding: 4px 12px;
+      font-size: 0.78rem; font-weight: 600; color: var(--text2);
+      white-space: nowrap;
+    }
+    .gallery-day-label .gdl-line {
+      flex: 1; height: 1px; background: var(--border);
+    }
+    .gallery-day-label .gdl-count {
+      font-size: 0.75rem; color: var(--text3);
+      white-space: nowrap;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+    .gallery-thumb {
+      aspect-ratio: 1;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .gallery-thumb:hover { transform: scale(1.03); box-shadow: 0 8px 24px rgba(0,0,0,0.5); z-index: 1; }
+    .gallery-thumb img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block; transition: opacity 0.3s;
+    }
+    .gallery-thumb .thumb-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 50%);
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .gallery-thumb:hover .thumb-overlay { opacity: 1; }
+    .gallery-thumb .thumb-caption {
+      position: absolute; bottom: 6px; left: 6px; right: 6px;
+      font-size: 0.7rem; color: #fff; font-weight: 500;
+      opacity: 0; transition: opacity 0.2s;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .gallery-thumb:hover .thumb-caption { opacity: 1; }
+    .gallery-thumb .thumb-del {
+      position: absolute; top: 5px; right: 5px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(0,0,0,0.6); border: none; cursor: pointer;
+      font-size: 0.65rem; color: #fff; display: none;
+      align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .gallery-thumb:hover .thumb-del { display: flex; }
+    .gallery-thumb .thumb-del:hover { background: var(--danger); }
+
+    /* Upload tile */
+    .gallery-upload-tile {
+      aspect-ratio: 1; border-radius: 10px;
+      border: 2px dashed var(--text3);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.2s; background: transparent;
+      color: var(--text3); font-size: 0.75rem; font-weight: 500; gap: 6px;
+    }
+    .gallery-upload-tile:hover { border-color: var(--accent2); color: var(--accent2); background: rgba(91,140,247,0.06); }
+    .gallery-upload-tile .upload-icon { font-size: 1.4rem; }
+    .gallery-upload-tile.uploading { opacity: 0.6; pointer-events: none; }
+
+    /* Gallery lightbox upgrade */
+    .gallery-lightbox {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.92);
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .gallery-lightbox.open { display: flex; }
+    .gallery-lightbox-img {
+      max-width: 100%; max-height: 75vh;
+      border-radius: 12px; object-fit: contain;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+    }
+    .gallery-lightbox-nav {
+      display: flex; align-items: center; gap: 16px; margin-top: 16px;
+    }
+    .gallery-lb-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); font-size: 1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .gallery-lb-btn:hover { background: var(--surface3); }
+    .gallery-lb-btn:disabled { opacity: 0.3; pointer-events: none; }
+    .gallery-lb-info {
+      text-align: center;
+    }
+    .gallery-lb-caption { font-size: 0.88rem; color: var(--text); font-weight: 500; max-width: 300px; }
+    .gallery-lb-meta { font-size: 0.75rem; color: var(--text3); margin-top: 4px; }
+    .gallery-lb-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--text); font-size: 1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    /* Gallery header stats */
+    .gallery-stats {
+      display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .gallery-stat-pill {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 20px; padding: 6px 14px;
+      font-size: 0.82rem; color: var(--text2);
+    }
+    .gallery-stat-pill strong { color: var(--text); }
+
+    .gallery-empty { text-align: center; padding: 50px 20px; }
+    .gallery-empty-icon { font-size: 3rem; margin-bottom: 12px; }
+    .gallery-empty p { color: var(--text2); font-size: 0.95rem; }
+    .gallery-empty small { color: var(--text3); font-size: 0.82rem; }
+
+    /* Add photo modal */
+    .gallery-date-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px;
+    }
+    .gallery-date-btn {
+      padding: 8px 6px; background: var(--surface2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); cursor: pointer; text-align: center;
+      font-size: 0.78rem; color: var(--text2); transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .gallery-date-btn:hover, .gallery-date-btn.selected {
+      background: rgba(91,140,247,0.15); border-color: rgba(91,140,247,0.35); color: var(--accent2);
+    }
+    .gallery-preview-wrap {
+      width: 100%; aspect-ratio: 4/3; border-radius: var(--radius-sm);
+      overflow: hidden; background: var(--surface2); margin-bottom: 12px;
+      display: flex; align-items: center; justify-content: center; color: var(--text3);
+    }
+    .gallery-preview-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+    @media (max-width: 640px) {
+      .gallery-grid { gap: 4px; }
+      .gallery-thumb { border-radius: 8px; }
+    }
   </style>
 </head>
 
@@ -690,6 +1007,8 @@
           <div class="tab" onclick="switchTab('personal')">🔒 Mis Gastos</div>
           <div class="tab" onclick="switchTab('balance')">📊 Dashboard</div>
           <div class="tab" onclick="switchTab('notes')">📝 Notas</div>
+          <div class="tab" onclick="switchTab('itinerary')">🗺️ Itinerario</div>
+          <div class="tab" onclick="switchTab('gallery')">📸 Galería</div>
         </div>
 
         <!-- SHARED EXPENSES -->
@@ -792,7 +1111,38 @@
           </div>
         </div>
 
-        <!-- DANGER ZONE -->
+        <!-- ITINERARY -->
+        <div class="section-panel" id="panel-itinerary">
+          <div id="itin-progress-wrap" style="display:none">
+            <div class="itin-progress-bar">
+              <span style="font-size:1rem">🗓️</span>
+              <div class="itin-progress-track"><div class="itin-progress-fill" id="itin-progress-fill" style="width:0%"></div></div>
+              <span class="itin-progress-label" id="itin-progress-label">Día 0 de 0</span>
+            </div>
+          </div>
+          <div id="itin-days-list">
+            <div class="itin-empty">
+              <div class="itin-empty-icon">🗺️</div>
+              <p>El itinerario está vacío</p>
+              <small>Toca + para agregar actividades día a día</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- GALLERY -->
+        <div class="section-panel" id="panel-gallery">
+          <div class="gallery-stats" id="gallery-stats" style="display:none">
+            <div class="gallery-stat-pill">📸 <strong id="gallery-photo-count">0</strong> fotos</div>
+            <div class="gallery-stat-pill">📅 <strong id="gallery-day-count">0</strong> días con recuerdos</div>
+          </div>
+          <div id="gallery-content">
+            <div class="gallery-empty">
+              <div class="gallery-empty-icon">📷</div>
+              <p>La galería está vacía</p>
+              <small>Toca + para agregar las primeras fotos del viaje</small>
+            </div>
+          </div>
+        </div>
         <div id="trip-danger-zone" style="margin-top:32px;padding-top:20px;border-top:1px solid var(--border)">
           <button id="trip-action-btn" class="btn btn-danger" style="width:100%" onclick="tripDangerAction()">🗑️ Eliminar viaje</button>
         </div>
@@ -1071,6 +1421,76 @@
     </div>
   </div>
 
+  <!-- ITINERARY ADD EVENT MODAL -->
+  <div class="modal-overlay" id="add-itin-event-modal">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <h2 class="modal-title" id="itin-modal-title">Agregar actividad 🗓️</h2>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Hora de inicio</label>
+          <input type="time" id="itin-time-start" value="09:00">
+        </div>
+        <div class="form-group">
+          <label>Hora de fin (opcional)</label>
+          <input type="time" id="itin-time-end">
+        </div>
+      </div>
+
+      <div class="form-group" id="itin-date-row" style="display:none">
+        <label>Día del viaje</label>
+        <select id="itin-day-select"></select>
+      </div>
+
+      <div class="form-group">
+        <label>Nombre de la actividad</label>
+        <input type="text" id="itin-title" placeholder="Visita al Coliseo, Trekking Torres del Paine...">
+      </div>
+
+      <div class="form-group">
+        <label>Tipo de actividad</label>
+        <div class="itin-category-grid" id="itin-cat-grid">
+          <div class="cat-btn selected" onclick="selectItinCat(this,'Visita','🏛️')"><span class="cat-icon">🏛️</span><small>Visita</small></div>
+          <div class="cat-btn" onclick="selectItinCat(this,'Comida','🍽️')"><span class="cat-icon">🍽️</span><small>Comida</small></div>
+          <div class="cat-btn" onclick="selectItinCat(this,'Trekking','🥾')"><span class="cat-icon">🥾</span><small>Trekking</small></div>
+          <div class="cat-btn" onclick="selectItinCat(this,'Transporte','🚌')"><span class="cat-icon">🚌</span><small>Transp.</small></div>
+          <div class="cat-btn" onclick="selectItinCat(this,'Alojamiento','🏨')"><span class="cat-icon">🏨</span><small>Hotel</small></div>
+          <div class="cat-btn" onclick="selectItinCat(this,'Playa','🏖️')"><span class="cat-icon">🏖️</span><small>Playa</small></div>
+          <div class="cat-btn" onclick="selectItinCat(this,'Vuelo','✈️')"><span class="cat-icon">✈️</span><small>Vuelo</small></div>
+          <div class="cat-btn" onclick="selectItinCat(this,'Compras','🛍️')"><span class="cat-icon">🛍️</span><small>Compras</small></div>
+          <div class="cat-btn" onclick="selectItinCat(this,'Fiesta','🎉')"><span class="cat-icon">🎉</span><small>Fiesta</small></div>
+          <div class="cat-btn" onclick="selectItinCat(this,'Otro','📍')"><span class="cat-icon">📍</span><small>Otro</small></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Lugar / Dirección (opcional)</label>
+        <input type="text" id="itin-location" placeholder="Roma, Italia · Via Sacra 1">
+      </div>
+
+      <div class="form-group">
+        <label>Nota / Datos relevantes (opcional)</label>
+        <textarea id="itin-note" placeholder="Comprar entradas con anticipación, llevar agua, código de reserva: ABC123..." style="height:80px;resize:none"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Etiquetas</label>
+        <div class="itin-tag-row">
+          <div class="itin-tag-toggle must" id="itag-must" onclick="toggleItinTag('must')">⭐ Imperdible</div>
+          <div class="itin-tag-toggle book" id="itag-book" onclick="toggleItinTag('book')">📋 Reservar antes</div>
+          <div class="itin-tag-toggle tip" id="itag-tip" onclick="toggleItinTag('tip')">💡 Dato útil</div>
+          <div class="itin-tag-toggle" id="itag-free" onclick="toggleItinTag('free')" style="--tag-clr:var(--accent2)">🆓 Gratis</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:4px">
+        <button class="btn btn-ghost" style="flex:1" onclick="closeModal('add-itin-event-modal')">Cancelar</button>
+        <button class="btn btn-primary" style="flex:1" onclick="saveItinEvent()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- BOTTOM NAV (mobile) -->
   <nav class="bottom-nav" id="bottom-nav" style="display:none">
     <div class="bottom-nav-inner">
@@ -1078,6 +1498,8 @@
       <button class="bnav-btn" id="bnav-personal" onclick="switchTabMobile('personal')"><span class="bnav-icon">🔒</span>Personal</button>
       <button class="bnav-btn" id="bnav-balance" onclick="switchTabMobile('balance')"><span class="bnav-icon">📊</span>Dashboard</button>
       <button class="bnav-btn" id="bnav-notes" onclick="switchTabMobile('notes')"><span class="bnav-icon">📝</span>Notas</button>
+      <button class="bnav-btn" id="bnav-itinerary" onclick="switchTabMobile('itinerary')"><span class="bnav-icon">🗺️</span>Itinerario</button>
+      <button class="bnav-btn" id="bnav-gallery" onclick="switchTabMobile('gallery')"><span class="bnav-icon">📸</span>Galería</button>
     </div>
   </nav>
 
@@ -1107,6 +1529,61 @@
       <h2 class="modal-title" id="pay-modal-title">💳 Datos para transferir</h2>
       <div id="pay-modal-content"><p style="color:var(--text2)">Cargando...</p></div>
       <button class="btn btn-ghost" style="width:100%;margin-top:20px" onclick="closeModal('pay-info-modal')">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- GALLERY LIGHTBOX -->
+  <div class="gallery-lightbox" id="gallery-lightbox">
+    <button class="gallery-lb-close" onclick="closeGalleryLightbox()">✕</button>
+    <img class="gallery-lightbox-img" id="gallery-lb-img" src="" alt="">
+    <div class="gallery-lightbox-nav">
+      <button class="gallery-lb-btn" id="gallery-lb-prev" onclick="galleryLbNav(-1)">←</button>
+      <div class="gallery-lb-info">
+        <div class="gallery-lb-caption" id="gallery-lb-caption"></div>
+        <div class="gallery-lb-meta" id="gallery-lb-meta"></div>
+      </div>
+      <button class="gallery-lb-btn" id="gallery-lb-next" onclick="galleryLbNav(1)">→</button>
+    </div>
+  </div>
+
+  <!-- ADD PHOTO MODAL -->
+  <div class="modal-overlay" id="add-photo-modal">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <h2 class="modal-title">Agregar foto 📸</h2>
+
+      <div class="form-group">
+        <label>Foto</label>
+        <div id="gallery-preview-wrap" class="gallery-preview-wrap">
+          <span style="font-size:2rem">🖼️</span>
+        </div>
+        <input type="file" id="gallery-photo-input" accept="image/*" style="display:none" onchange="onGalleryPhotoSelected(this)">
+        <label for="gallery-photo-input" class="file-upload-btn" id="gallery-photo-label">
+          <span class="file-icon">📷</span>
+          <span id="gallery-photo-filename">Seleccionar foto...</span>
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label>Pie de foto (opcional)</label>
+        <input type="text" id="gallery-caption" placeholder="Atardecer increíble, La mejor cena del viaje...">
+      </div>
+
+      <div class="form-group" id="gallery-day-group">
+        <label>Día del viaje</label>
+        <div class="gallery-date-grid" id="gallery-date-grid"></div>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:8px">
+        <button class="btn btn-ghost" style="flex:1" onclick="closeModal('add-photo-modal')">Cancelar</button>
+        <button class="btn btn-primary" style="flex:1" id="gallery-save-btn" onclick="saveGalleryPhoto()">Subir foto</button>
+      </div>
+      <div id="gallery-upload-status" style="display:none;text-align:center;padding:10px;font-size:0.85rem;color:var(--text2)">
+        Subiendo foto... 📤
+        <div style="width:100%;height:4px;background:var(--surface2);border-radius:2px;margin-top:8px;overflow:hidden">
+          <div id="gallery-upload-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:2px;transition:width 0.3s"></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1147,7 +1624,23 @@
     let unsubscribeExpenses = null;
     let unsubscribeNotes = null;
     let unsubscribeNotifications = null;
+    let unsubscribeItinerary = null;
+    let unsubscribeGallery = null;
     let editingExpenseId = null;
+
+    // Itinerary state
+    let selectedItinCat = 'Visita';
+    let selectedItinCatIcon = '🏛️';
+    let activeItinTags = new Set();
+    let editingItinEventId = null;
+    let editingItinDay = null;
+    let itinVisibleDays = 5;
+
+    // Gallery state
+    let gallerySelectedDay = null;
+    let galleryPhotoFile = null;
+    let galleryLbPhotos = [];
+    let galleryLbIndex = 0;
 
     // Notifications state
     let notifications = [];
@@ -1185,6 +1678,24 @@
     window.toggleNotifPanel = toggleNotifPanel;
     window.clearNotifications = clearNotifications;
     window.tripDangerAction = tripDangerAction;
+    window.openAddItinEvent = openAddItinEvent;
+    window.openEditItinEvent = openEditItinEvent;
+    window.saveItinEvent = saveItinEvent;
+    window.deleteItinEvent = deleteItinEvent;
+    window.selectItinCat = selectItinCat;
+    window.toggleItinTag = toggleItinTag;
+    window.toggleItinDay = toggleItinDay;
+    window.itinLoadMore = itinLoadMore;
+    window.itinLoadPrev = itinLoadPrev;
+    window.itinLoadMoreFromStart = itinLoadMoreFromStart;
+    window.openAddPhoto = openAddPhoto;
+    window.selectGalleryDay = selectGalleryDay;
+    window.onGalleryPhotoSelected = onGalleryPhotoSelected;
+    window.saveGalleryPhoto = saveGalleryPhoto;
+    window.deleteGalleryPhoto = deleteGalleryPhoto;
+    window.openGalleryLightbox = openGalleryLightbox;
+    window.galleryLbNav = galleryLbNav;
+    window.closeGalleryLightbox = closeGalleryLightbox;
 
     window.togglePwd = function (inputId, btn) {
       const input = document.getElementById(inputId);
@@ -1342,6 +1853,8 @@
       subscribeExpenses();
       subscribeNotes();
       subscribeNotifications(tripId);
+      subscribeItinerary();
+      subscribeGallery();
 
       // Now that the trip subscriptions are set, enable the FAB and default tab
       switchTab('shared');
@@ -1359,10 +1872,13 @@
       document.getElementById('home-view').style.display = 'block';
       document.getElementById('trip-view').style.display = 'none';
       document.getElementById('bottom-nav').style.display = 'none';
+      document.getElementById('fab-btn').style.display = 'none';
       document.body.classList.remove('trip-view-active');
       if (unsubscribeExpenses) { unsubscribeExpenses(); unsubscribeExpenses = null; }
       if (unsubscribeNotes) { unsubscribeNotes(); unsubscribeNotes = null; }
       if (unsubscribeNotifications) { unsubscribeNotifications(); unsubscribeNotifications = null; }
+      if (unsubscribeItinerary) { unsubscribeItinerary(); unsubscribeItinerary = null; }
+      if (unsubscribeGallery) { unsubscribeGallery(); unsubscribeGallery = null; }
       currentTripId = null;
       currentTrip = null;
       loadTrips();
@@ -1372,17 +1888,24 @@
       window._currentTabType = tab === 'personal' ? 'personal' : 'shared';
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
-      const tabIndex = ['shared', 'personal', 'balance', 'notes'].indexOf(tab);
+      const tabIndex = ['shared', 'personal', 'balance', 'notes', 'itinerary', 'gallery'].indexOf(tab);
       document.querySelectorAll('.tab')[tabIndex].classList.add('active');
       document.getElementById('panel-' + tab).classList.add('active');
       if (tab === 'balance') renderDashboard();
-      document.getElementById('fab-btn').style.display = tab === 'balance' ? 'none' : 'flex';
+      if (tab === 'itinerary') renderItinerary(true);
+      if (tab === 'gallery') renderGallery();
+      // FAB behavior per tab
+      const fab = document.getElementById('fab-btn');
+      if (tab === 'balance') { fab.style.display = 'none'; }
+      else if (tab === 'itinerary') { fab.style.display = 'none'; }
+      else if (tab === 'gallery') { fab.style.display = 'flex'; fab.title = 'Agregar foto'; fab.onclick = () => openAddPhoto(); }
+      else { fab.style.display = 'flex'; fab.title = 'Agregar gasto'; fab.onclick = () => openAddExpense(window._currentTabType || 'shared'); }
     }
 
     function switchTabMobile(tab) {
       window._currentTabType = tab === 'personal' ? 'personal' : 'shared';
       switchTab(tab);
-      ['shared', 'personal', 'balance', 'notes'].forEach(t => {
+      ['shared', 'personal', 'balance', 'notes', 'itinerary', 'gallery'].forEach(t => {
         const btn = document.getElementById('bnav-' + t);
         if (btn) btn.classList.toggle('active', t === tab);
       });
@@ -2703,6 +3226,584 @@
       document.getElementById('note-input').value = '';
       toast('Nota publicada ✓');
     }
+
+    // ─── ITINERARY ───
+    function getDaysBetween(startDate, endDate) {
+      if (!startDate) return [];
+      const days = [];
+      const start = new Date(startDate + 'T00:00:00');
+      const end = endDate ? new Date(endDate + 'T00:00:00') : start;
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        days.push(d.toISOString().split('T')[0]);
+      }
+      return days;
+    }
+
+    function subscribeItinerary() {
+      if (unsubscribeItinerary) unsubscribeItinerary();
+      const q = collection(db, 'trips', currentTripId, 'itinerary');
+      unsubscribeItinerary = onSnapshot(q, snap => {
+        const events = [];
+        snap.forEach(d => events.push({ id: d.id, ...d.data() }));
+        window._itinEvents = events;
+        renderItinerary();
+      });
+    }
+
+    function renderItinerary(resetPagination) {
+      if (!currentTrip) return;
+      if (resetPagination) itinVisibleDays = 5;
+      const allDays = getDaysBetween(currentTrip.startDate, currentTrip.endDate);
+      const events = window._itinEvents || [];
+      const container = document.getElementById('itin-days-list');
+      const progressWrap = document.getElementById('itin-progress-wrap');
+
+      if (!allDays.length) {
+        container.innerHTML = `<div class="itin-empty"><div class="itin-empty-icon">📅</div><p>El viaje no tiene fechas definidas</p><small>Edita el viaje para agregar fechas de inicio y fin</small></div>`;
+        progressWrap.style.display = 'none';
+        return;
+      }
+
+      // Progress: which day are we on today
+      const today = new Date().toISOString().split('T')[0];
+      const passedDays = allDays.filter(d => d <= today).length;
+      const totalDays = allDays.length;
+      const pct = Math.min(100, Math.round((passedDays / totalDays) * 100));
+      progressWrap.style.display = '';
+      document.getElementById('itin-progress-fill').style.width = pct + '%';
+      document.getElementById('itin-progress-label').textContent = `Día ${Math.min(passedDays, totalDays)} de ${totalDays}`;
+
+      // Smart start: begin from today if within trip, otherwise from first day
+      let startIdx = 0;
+      const todayIdx = allDays.indexOf(today);
+      if (todayIdx > 0) startIdx = todayIdx;
+
+      // Slice visible window
+      const visibleDays = allDays.slice(startIdx, startIdx + itinVisibleDays);
+      const hasMore = (startIdx + itinVisibleDays) < allDays.length;
+      const hasPrev = startIdx > 0;
+
+      const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+      const weekDays = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+
+      const daysHtml = visibleDays.map((dateStr, i) => {
+        const idx = allDays.indexOf(dateStr);
+        const dayEvents = events
+          .filter(e => e.date === dateStr)
+          .sort((a, b) => (a.timeStart || '00:00').localeCompare(b.timeStart || '00:00'));
+        const d = new Date(dateStr + 'T12:00:00');
+        const dayLabel = `Día ${idx + 1}`;
+        const dateLabel = `${weekDays[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+        const isToday = dateStr === today;
+        const isPast = dateStr < today;
+        const eventsHtml = dayEvents.map(ev => renderItinEventCard(ev)).join('');
+
+        return `<div class="itin-day-block" id="itin-day-${dateStr}">
+          <div class="itin-day-header" onclick="toggleItinDay('${dateStr}')">
+            <div class="itin-day-header-left">
+              <span class="itin-day-badge" style="${isToday ? 'background:linear-gradient(135deg,var(--accent3),var(--accent2))' : isPast ? 'background:var(--surface3);color:var(--text3)' : ''}">${dayLabel}</span>
+              <div>
+                <div class="itin-day-title">${dateLabel}${isToday ? ' <span style="color:var(--accent3);font-size:0.78rem;font-weight:600">● Hoy</span>' : ''}</div>
+                <div class="itin-day-subtitle">${dayEvents.length ? `${dayEvents.length} actividad${dayEvents.length !== 1 ? 'es' : ''}` : 'Sin actividades aún'}</div>
+              </div>
+            </div>
+            <span class="itin-day-chevron">▾</span>
+          </div>
+          <div class="itin-day-body">
+            ${eventsHtml || `<div style="text-align:center;padding:14px 0;color:var(--text3);font-size:0.82rem">Sin actividades programadas</div>`}
+            <button class="itin-add-event-btn" onclick="openAddItinEvent('${dateStr}')">+ Agregar actividad</button>
+          </div>
+        </div>`;
+      }).join('');
+
+      // Navigation buttons
+      const prevHtml = hasPrev ? `
+        <button class="itin-load-btn itin-load-prev" onclick="itinLoadPrev()">
+          ↑ Ver días anteriores <span class="itin-load-count">(${startIdx} día${startIdx !== 1 ? 's' : ''})</span>
+        </button>` : '';
+
+      const remaining = allDays.length - (startIdx + itinVisibleDays);
+      const nextHtml = hasMore ? `
+        <button class="itin-load-btn itin-load-next" onclick="itinLoadMore()">
+          Ver más días ↓ <span class="itin-load-count">(${remaining} día${remaining !== 1 ? 's' : ''} más)</span>
+        </button>` : '';
+
+      const doneHtml = !hasMore && totalDays > 5 ? `
+        <div style="text-align:center;padding:14px 0;color:var(--text3);font-size:0.82rem">
+          ✓ Has visto todos los días del viaje
+        </div>` : '';
+
+      container.innerHTML = prevHtml + daysHtml + nextHtml + doneHtml;
+    }
+
+    function renderItinEventCard(ev) {
+      const tagHtml = (ev.tags || []).map(tag => {
+        const tagMap = { must: ['itin-tag-must','⭐ Imperdible'], book: ['itin-tag-book','📋 Reservar'], tip: ['itin-tag-tip','💡 Dato útil'], free: ['itin-tag-free','🆓 Gratis'] };
+        const [cls, label] = tagMap[tag] || ['', tag];
+        return `<span class="itin-tag ${cls}">${label}</span>`;
+      }).join('');
+
+      const timeLabel = ev.timeStart ? `<span>🕐 ${ev.timeStart}${ev.timeEnd ? ' – ' + ev.timeEnd : ''}</span>` : '';
+      const locationLabel = ev.location ? `<span>📍 ${ev.location}</span>` : '';
+      const noteHtml = ev.note ? `<div class="itin-event-note">💬 ${ev.note}</div>` : '';
+
+      return `<div class="itin-event">
+        <div class="itin-timeline">
+          <div class="itin-time">${ev.timeStart || '—'}</div>
+          <div class="itin-time-line"></div>
+        </div>
+        <div class="itin-event-icon">${ev.icon || '📍'}</div>
+        <div class="itin-event-body">
+          <div class="itin-event-title">${ev.title}</div>
+          <div class="itin-event-meta">${timeLabel}${locationLabel}</div>
+          ${noteHtml}
+          ${tagHtml ? `<div class="itin-event-tags">${tagHtml}</div>` : ''}
+        </div>
+        <div class="itin-event-actions">
+          <button class="itin-action-btn" title="Editar" onclick="openEditItinEvent('${ev.id}','${ev.date}')">✏️</button>
+          <button class="itin-action-btn del" title="Eliminar" onclick="deleteItinEvent('${ev.id}')">🗑️</button>
+        </div>
+      </div>`;
+    }
+
+    function toggleItinDay(dateStr) {
+      document.getElementById('itin-day-' + dateStr)?.classList.toggle('collapsed');
+    }
+
+    function itinLoadMore() {
+      itinVisibleDays += 5;
+      renderItinerary();
+    }
+
+    function itinLoadPrev() {
+      // Expand window to show from beginning
+      const allDays = getDaysBetween(currentTrip?.startDate, currentTrip?.endDate);
+      const today = new Date().toISOString().split('T')[0];
+      const todayIdx = allDays.indexOf(today);
+      const startIdx = todayIdx > 0 ? todayIdx : 0;
+      // Increase visible days to cover all from 0 to current end
+      itinVisibleDays = startIdx + itinVisibleDays;
+      // Temporarily override startIdx by setting a flag — simpler: just show all from 0
+      window._itinShowFromStart = true;
+      renderItineraryFromStart();
+    }
+
+    function renderItineraryFromStart() {
+      if (!currentTrip) return;
+      const allDays = getDaysBetween(currentTrip.startDate, currentTrip.endDate);
+      const events = window._itinEvents || [];
+      const container = document.getElementById('itin-days-list');
+      const today = new Date().toISOString().split('T')[0];
+      const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+      const weekDays = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+
+      // Update progress
+      const passedDays = allDays.filter(d => d <= today).length;
+      const totalDays = allDays.length;
+      const pct = Math.min(100, Math.round((passedDays / totalDays) * 100));
+      document.getElementById('itin-progress-fill').style.width = pct + '%';
+      document.getElementById('itin-progress-label').textContent = `Día ${Math.min(passedDays, totalDays)} de ${totalDays}`;
+
+      const visibleDays = allDays.slice(0, itinVisibleDays);
+      const hasMore = itinVisibleDays < allDays.length;
+      const remaining = allDays.length - itinVisibleDays;
+
+      const daysHtml = visibleDays.map((dateStr, idx) => {
+        const dayEvents = events
+          .filter(e => e.date === dateStr)
+          .sort((a, b) => (a.timeStart || '00:00').localeCompare(b.timeStart || '00:00'));
+        const d = new Date(dateStr + 'T12:00:00');
+        const dayLabel = `Día ${idx + 1}`;
+        const dateLabel = `${weekDays[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+        const isToday = dateStr === today;
+        const isPast = dateStr < today;
+        const eventsHtml = dayEvents.map(ev => renderItinEventCard(ev)).join('');
+        return `<div class="itin-day-block" id="itin-day-${dateStr}">
+          <div class="itin-day-header" onclick="toggleItinDay('${dateStr}')">
+            <div class="itin-day-header-left">
+              <span class="itin-day-badge" style="${isToday ? 'background:linear-gradient(135deg,var(--accent3),var(--accent2))' : isPast ? 'background:var(--surface3);color:var(--text3)' : ''}">${dayLabel}</span>
+              <div>
+                <div class="itin-day-title">${dateLabel}${isToday ? ' <span style="color:var(--accent3);font-size:0.78rem;font-weight:600">● Hoy</span>' : ''}</div>
+                <div class="itin-day-subtitle">${dayEvents.length ? `${dayEvents.length} actividad${dayEvents.length !== 1 ? 'es' : ''}` : 'Sin actividades aún'}</div>
+              </div>
+            </div>
+            <span class="itin-day-chevron">▾</span>
+          </div>
+          <div class="itin-day-body">
+            ${eventsHtml || `<div style="text-align:center;padding:14px 0;color:var(--text3);font-size:0.82rem">Sin actividades programadas</div>`}
+            <button class="itin-add-event-btn" onclick="openAddItinEvent('${dateStr}')">+ Agregar actividad</button>
+          </div>
+        </div>`;
+      }).join('');
+
+      const nextHtml = hasMore ? `<button class="itin-load-btn itin-load-next" onclick="itinLoadMoreFromStart()">Ver más días ↓ <span class="itin-load-count">(${remaining} día${remaining !== 1 ? 's' : ''} más)</span></button>` : `<div style="text-align:center;padding:14px 0;color:var(--text3);font-size:0.82rem">✓ Has visto todos los días del viaje</div>`;
+      container.innerHTML = daysHtml + nextHtml;
+    }
+
+    function itinLoadMoreFromStart() {
+      itinVisibleDays += 5;
+      renderItineraryFromStart();
+    }
+
+    function openAddItinEvent(dateStr) {
+      editingItinEventId = null;
+      editingItinDay = dateStr;
+      document.getElementById('itin-modal-title').textContent = 'Agregar actividad 🗓️';
+      document.getElementById('itin-title').value = '';
+      document.getElementById('itin-time-start').value = '09:00';
+      document.getElementById('itin-time-end').value = '';
+      document.getElementById('itin-location').value = '';
+      document.getElementById('itin-note').value = '';
+      activeItinTags.clear();
+      selectedItinCat = 'Visita'; selectedItinCatIcon = '🏛️';
+      document.querySelectorAll('#itin-cat-grid .cat-btn').forEach((b, i) => b.classList.toggle('selected', i === 0));
+      ['must','book','tip','free'].forEach(t => document.getElementById('itag-' + t)?.classList.remove('active'));
+
+      // If dateStr is null, show a date selector
+      const dateRow = document.getElementById('itin-date-row');
+      if (!dateStr) {
+        if (dateRow) dateRow.style.display = '';
+        const sel = document.getElementById('itin-day-select');
+        if (sel) {
+          const days = getDaysBetween(currentTrip?.startDate, currentTrip?.endDate);
+          sel.innerHTML = days.map(d => {
+            const [y,m,dd] = d.split('-');
+            const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+            return `<option value="${d}">${dd} ${months[parseInt(m)-1]} ${y}</option>`;
+          }).join('');
+        }
+      } else {
+        if (dateRow) dateRow.style.display = 'none';
+      }
+      openModal('add-itin-event-modal');
+    }
+
+    function openEditItinEvent(eventId, dateStr) {
+      const ev = (window._itinEvents || []).find(e => e.id === eventId);
+      if (!ev) return;
+      editingItinEventId = eventId;
+      editingItinDay = ev.date || dateStr;
+      document.getElementById('itin-modal-title').textContent = 'Editar actividad ✏️';
+      document.getElementById('itin-title').value = ev.title || '';
+      document.getElementById('itin-time-start').value = ev.timeStart || '09:00';
+      document.getElementById('itin-time-end').value = ev.timeEnd || '';
+      document.getElementById('itin-location').value = ev.location || '';
+      document.getElementById('itin-note').value = ev.note || '';
+      selectedItinCat = ev.category || 'Visita';
+      selectedItinCatIcon = ev.icon || '📍';
+      // Restore category selection
+      document.querySelectorAll('#itin-cat-grid .cat-btn').forEach(b => {
+        b.classList.toggle('selected', b.textContent.trim().includes(ev.icon || ''));
+      });
+      // Restore tags
+      activeItinTags = new Set(ev.tags || []);
+      ['must','book','tip','free'].forEach(t => {
+        document.getElementById('itag-' + t)?.classList.toggle('active', activeItinTags.has(t));
+      });
+      const dateRow = document.getElementById('itin-date-row');
+      if (dateRow) dateRow.style.display = 'none';
+      openModal('add-itin-event-modal');
+    }
+
+    async function saveItinEvent() {
+      const title = document.getElementById('itin-title').value.trim();
+      if (!title) return toast('Escribe el nombre de la actividad');
+      const timeStart = document.getElementById('itin-time-start').value;
+      const timeEnd = document.getElementById('itin-time-end').value;
+      const location = document.getElementById('itin-location').value.trim();
+      const note = document.getElementById('itin-note').value.trim();
+
+      let date = editingItinDay;
+      if (!date) {
+        const sel = document.getElementById('itin-day-select');
+        date = sel ? sel.value : null;
+      }
+      if (!date) return toast('Selecciona un día');
+
+      const eventData = {
+        title, timeStart, timeEnd, location, note,
+        date, category: selectedItinCat, icon: selectedItinCatIcon,
+        tags: Array.from(activeItinTags),
+        authorId: currentUser.uid, authorName: currentUser.displayName || currentUser.email,
+        updatedAt: serverTimestamp()
+      };
+
+      if (editingItinEventId) {
+        await updateDoc(doc(db, 'trips', currentTripId, 'itinerary', editingItinEventId), eventData);
+        toast('Actividad actualizada ✓');
+      } else {
+        eventData.createdAt = serverTimestamp();
+        await addDoc(collection(db, 'trips', currentTripId, 'itinerary'), eventData);
+        toast('Actividad agregada ✓');
+      }
+      closeModal('add-itin-event-modal');
+    }
+
+    async function deleteItinEvent(eventId) {
+      const ok = await customConfirm({ icon: '🗑️', title: '¿Eliminar actividad?', msg: 'Esta acción no se puede deshacer.', okLabel: 'Eliminar' });
+      if (!ok) return;
+      await deleteDoc(doc(db, 'trips', currentTripId, 'itinerary', eventId));
+      toast('Actividad eliminada');
+    }
+
+    function selectItinCat(el, cat, icon) {
+      selectedItinCat = cat; selectedItinCatIcon = icon;
+      document.querySelectorAll('#itin-cat-grid .cat-btn').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    function toggleItinTag(tag) {
+      if (activeItinTags.has(tag)) activeItinTags.delete(tag);
+      else activeItinTags.add(tag);
+      document.getElementById('itag-' + tag)?.classList.toggle('active', activeItinTags.has(tag));
+    }
+
+    // ─── GALLERY ───
+    function subscribeGallery() {
+      if (unsubscribeGallery) unsubscribeGallery();
+      const q = collection(db, 'trips', currentTripId, 'gallery');
+      unsubscribeGallery = onSnapshot(q, snap => {
+        const photos = [];
+        snap.forEach(d => photos.push({ id: d.id, ...d.data() }));
+        photos.sort((a, b) => {
+          if (a.date && b.date) return a.date.localeCompare(b.date);
+          return (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0);
+        });
+        window._galleryPhotos = photos;
+        renderGallery();
+      });
+    }
+
+    function renderGallery() {
+      if (!currentTrip) return;
+      const photos = window._galleryPhotos || [];
+      const container = document.getElementById('gallery-content');
+      const statsEl = document.getElementById('gallery-stats');
+
+      if (!photos.length) {
+        statsEl.style.display = 'none';
+        container.innerHTML = `<div class="gallery-empty"><div class="gallery-empty-icon">📷</div><p>La galería está vacía</p><small>Toca + para agregar las primeras fotos del viaje</small></div>`;
+        return;
+      }
+
+      // Update stats
+      const daysWithPhotos = new Set(photos.map(p => p.date).filter(Boolean)).size;
+      statsEl.style.display = 'flex';
+      document.getElementById('gallery-photo-count').textContent = photos.length;
+      document.getElementById('gallery-day-count').textContent = daysWithPhotos;
+
+      // Group by date
+      const grouped = {};
+      const noDayKey = '__noday__';
+      photos.forEach(p => {
+        const key = p.date || noDayKey;
+        if (!grouped[key]) grouped[key] = [];
+        grouped[key].push(p);
+      });
+
+      const allDays = getDaysBetween(currentTrip.startDate, currentTrip.endDate);
+      const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+      const weekDays = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+
+      // Sort groups: dated days in order, then undated
+      const sortedKeys = Object.keys(grouped).sort((a, b) => {
+        if (a === noDayKey) return 1;
+        if (b === noDayKey) return -1;
+        return a.localeCompare(b);
+      });
+
+      container.innerHTML = sortedKeys.map(key => {
+        const dayPhotos = grouped[key];
+        let label = 'Sin fecha';
+        let dayNum = '';
+        if (key !== noDayKey) {
+          const idx = allDays.indexOf(key);
+          const d = new Date(key + 'T12:00:00');
+          label = `${weekDays[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+          dayNum = idx >= 0 ? `Día ${idx + 1} · ` : '';
+        }
+
+        const thumbsHtml = dayPhotos.map((p, i) => {
+          const groupIdx = photos.indexOf(p);
+          return `<div class="gallery-thumb" onclick="openGalleryLightbox(${groupIdx})">
+            <img src="${p.url}" alt="${p.caption || ''}" loading="lazy">
+            <div class="thumb-overlay"></div>
+            ${p.caption ? `<div class="thumb-caption">${p.caption}</div>` : ''}
+            <button class="thumb-del" onclick="event.stopPropagation();deleteGalleryPhoto('${p.id}')" title="Eliminar">✕</button>
+          </div>`;
+        }).join('');
+
+        return `<div class="gallery-day-group">
+          <div class="gallery-day-label">
+            <span class="gdl-badge">${dayNum}${label}</span>
+            <div class="gdl-line"></div>
+            <span class="gdl-count">${dayPhotos.length} foto${dayPhotos.length !== 1 ? 's' : ''}</span>
+          </div>
+          <div class="gallery-grid">
+            ${thumbsHtml}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function openAddPhoto(preselectedDay) {
+      galleryPhotoFile = null;
+      gallerySelectedDay = preselectedDay || null;
+      document.getElementById('gallery-caption').value = '';
+      document.getElementById('gallery-photo-input').value = '';
+      document.getElementById('gallery-photo-filename').textContent = 'Seleccionar foto...';
+      document.getElementById('gallery-preview-wrap').innerHTML = '<span style="font-size:2rem">🖼️</span>';
+      document.getElementById('gallery-upload-status').style.display = 'none';
+      document.getElementById('gallery-save-btn').disabled = false;
+
+      // Build day grid
+      const days = getDaysBetween(currentTrip?.startDate, currentTrip?.endDate);
+      const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+      const weekDays = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+      const grid = document.getElementById('gallery-date-grid');
+      const dayGroup = document.getElementById('gallery-day-group');
+
+      if (days.length) {
+        dayGroup.style.display = '';
+        grid.innerHTML = days.map((dateStr, idx) => {
+          const d = new Date(dateStr + 'T12:00:00');
+          const isSelected = preselectedDay === dateStr;
+          return `<div class="gallery-date-btn${isSelected ? ' selected' : ''}" id="gdayb-${dateStr}" onclick="selectGalleryDay('${dateStr}')" data-date="${dateStr}">
+            <div style="font-weight:700;font-size:0.85rem">Día ${idx+1}</div>
+            <div style="font-size:0.7rem;color:var(--text3)">${weekDays[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}</div>
+          </div>`;
+        }).join('');
+        if (preselectedDay) gallerySelectedDay = preselectedDay;
+      } else {
+        dayGroup.style.display = 'none';
+      }
+
+      openModal('add-photo-modal');
+    }
+
+    function selectGalleryDay(dateStr) {
+      gallerySelectedDay = dateStr;
+      document.querySelectorAll('.gallery-date-btn').forEach(b => b.classList.toggle('selected', b.dataset.date === dateStr));
+    }
+
+    function onGalleryPhotoSelected(input) {
+      const file = input.files[0];
+      if (!file) return;
+      galleryPhotoFile = file;
+      document.getElementById('gallery-photo-filename').textContent = file.name;
+      const reader = new FileReader();
+      reader.onload = e => {
+        document.getElementById('gallery-preview-wrap').innerHTML = `<img src="${e.target.result}" alt="preview">`;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function saveGalleryPhoto() {
+      if (!galleryPhotoFile) return toast('Selecciona una foto primero 📷');
+      const caption = document.getElementById('gallery-caption').value.trim();
+      const saveBtn = document.getElementById('gallery-save-btn');
+      const status = document.getElementById('gallery-upload-status');
+      const bar = document.getElementById('gallery-upload-bar');
+
+      saveBtn.disabled = true;
+      status.style.display = 'block';
+
+      // Animate progress bar
+      let prog = 0;
+      const progInterval = setInterval(() => {
+        prog = Math.min(prog + Math.random() * 15, 85);
+        bar.style.width = prog + '%';
+      }, 200);
+
+      try {
+        const formData = new FormData();
+        formData.append('image', galleryPhotoFile);
+        const res = await fetch('https://api.imgbb.com/1/upload?key=ea6a31b8d4d6e7ef9c7c19cd8d6c4d44', { method: 'POST', body: formData });
+        const data = await res.json();
+        clearInterval(progInterval);
+        if (!data.success) { toast('Error al subir la foto'); saveBtn.disabled = false; status.style.display = 'none'; return; }
+        bar.style.width = '100%';
+
+        const photoData = {
+          url: data.data.url,
+          thumbUrl: data.data.thumb?.url || data.data.url,
+          caption,
+          date: gallerySelectedDay || null,
+          authorId: currentUser.uid,
+          authorName: currentUser.displayName || currentUser.email,
+          createdAt: serverTimestamp()
+        };
+        await addDoc(collection(db, 'trips', currentTripId, 'gallery'), photoData);
+        toast('Foto agregada a la galería ✓ 📸');
+        closeModal('add-photo-modal');
+      } catch(e) {
+        clearInterval(progInterval);
+        toast('Error: ' + e.message);
+      }
+      saveBtn.disabled = false;
+      status.style.display = 'none';
+    }
+
+    async function deleteGalleryPhoto(photoId) {
+      const ok = await customConfirm({ icon: '🗑️', title: '¿Eliminar foto?', msg: 'Esta foto se eliminará de la galería del viaje.', okLabel: 'Eliminar' });
+      if (!ok) return;
+      await deleteDoc(doc(db, 'trips', currentTripId, 'gallery', photoId));
+      toast('Foto eliminada');
+    }
+
+    // Gallery lightbox
+    function openGalleryLightbox(index) {
+      const photos = window._galleryPhotos || [];
+      galleryLbPhotos = photos;
+      galleryLbIndex = index;
+      updateGalleryLb();
+      document.getElementById('gallery-lightbox').classList.add('open');
+    }
+
+    function updateGalleryLb() {
+      const p = galleryLbPhotos[galleryLbIndex];
+      if (!p) return;
+      const img = document.getElementById('gallery-lb-img');
+      img.style.opacity = 0;
+      img.src = p.url;
+      img.onload = () => { img.style.opacity = 1; };
+      document.getElementById('gallery-lb-caption').textContent = p.caption || '';
+      const allDays = getDaysBetween(currentTrip?.startDate, currentTrip?.endDate);
+      const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+      const weekDays = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+      let metaStr = `Foto ${galleryLbIndex + 1} de ${galleryLbPhotos.length}`;
+      if (p.date) {
+        const idx = allDays.indexOf(p.date);
+        const d = new Date(p.date + 'T12:00:00');
+        metaStr += ` · ${idx >= 0 ? 'Día ' + (idx+1) + ' · ' : ''}${weekDays[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+      }
+      if (p.authorName) metaStr += ` · por ${p.authorName.split(' ')[0]}`;
+      document.getElementById('gallery-lb-meta').textContent = metaStr;
+      document.getElementById('gallery-lb-prev').disabled = galleryLbIndex === 0;
+      document.getElementById('gallery-lb-next').disabled = galleryLbIndex === galleryLbPhotos.length - 1;
+    }
+
+    function galleryLbNav(dir) {
+      galleryLbIndex = Math.max(0, Math.min(galleryLbPhotos.length - 1, galleryLbIndex + dir));
+      updateGalleryLb();
+    }
+
+    function closeGalleryLightbox() {
+      document.getElementById('gallery-lightbox').classList.remove('open');
+    }
+
+    // Keyboard nav for gallery lightbox
+    document.addEventListener('keydown', e => {
+      if (!document.getElementById('gallery-lightbox').classList.contains('open')) return;
+      if (e.key === 'ArrowLeft') galleryLbNav(-1);
+      if (e.key === 'ArrowRight') galleryLbNav(1);
+      if (e.key === 'Escape') closeGalleryLightbox();
+    });
+
+    // Click outside lightbox image closes it
+    document.getElementById('gallery-lightbox').addEventListener('click', function(e) {
+      if (e.target === this) closeGalleryLightbox();
+    });
 
     // ─── INVITE ───
     window.openModal = function (id) {
