@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Viajeros ✈️</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
@@ -30,6 +30,16 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      touch-action: pan-y;
+      overflow-x: hidden;
+    }
+
+    body {
+      touch-action: pan-y;
+      overscroll-behavior-x: none;
+    }
 
     body {
       font-family: 'DM Sans', sans-serif;
@@ -489,8 +499,9 @@
 
     /* ─── BOTTOM NAV ─── */
     .bottom-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: rgba(17, 19, 24, 0.96); backdrop-filter: blur(20px); border-top: 1px solid var(--border); z-index: 50; padding: 8px 0 env(safe-area-inset-bottom, 8px); }
-    .bottom-nav-inner { display: flex; justify-content: space-around; align-items: center; max-width: 480px; margin: 0 auto; }
-    .bnav-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; background: none; border: none; cursor: pointer; padding: 6px 16px; color: var(--text3); font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 500; transition: color 0.2s; -webkit-tap-highlight-color: transparent; }
+    .bottom-nav-inner { display: flex; justify-content: flex-start; align-items: center; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 0 4px; }
+    .bottom-nav-inner::-webkit-scrollbar { display: none; }
+    .bnav-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; background: none; border: none; cursor: pointer; padding: 6px 14px; color: var(--text3); font-family: 'DM Sans', sans-serif; font-size: 0.68rem; font-weight: 500; transition: color 0.2s; -webkit-tap-highlight-color: transparent; flex-shrink: 0; scroll-snap-align: start; min-width: calc(100% / 5); }
     .bnav-btn .bnav-icon { font-size: 1.3rem; }
     .bnav-btn.active { color: var(--accent); }
     .bnav-btn:active { transform: scale(0.92); }
@@ -804,12 +815,14 @@
       background: rgba(0,0,0,0.92);
       display: none; flex-direction: column; align-items: center; justify-content: center;
       padding: 20px;
+      touch-action: pan-y;
     }
     .gallery-lightbox.open { display: flex; }
     .gallery-lightbox-img {
       max-width: 100%; max-height: 75vh;
       border-radius: 12px; object-fit: contain;
       box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      touch-action: pinch-zoom;
     }
     .gallery-lightbox-nav {
       display: flex; align-items: center; gap: 16px; margin-top: 16px;
@@ -1909,6 +1922,9 @@
         const btn = document.getElementById('bnav-' + t);
         if (btn) btn.classList.toggle('active', t === tab);
       });
+      // Scroll active tab into view smoothly
+      const activeBtn = document.getElementById('bnav-' + tab);
+      if (activeBtn) activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
 
     // ─── NOTIFICATIONS (in-app, Firestore realtime) ───
