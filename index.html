@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Viajeros ✈️</title>
+  <title>Viajeros</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,800;1,300&family=DM+Sans:wght@300;400;500;600&display=swap"
@@ -60,17 +61,942 @@
       z-index: 0;
     }
 
+    /* ─── SKELETON LOADING ─── */
+    .skeleton {
+      background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-sm);
+    }
+    
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    
+    .skeleton-text {
+      height: 12px;
+      margin: 4px 0;
+    }
+    
+    .skeleton-text.small {
+      width: 60%;
+      height: 10px;
+    }
+    
+    .skeleton-text.medium {
+      width: 80%;
+    }
+    
+    .skeleton-text.large {
+      width: 100%;
+    }
+    
+    .skeleton-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    
+    .skeleton-card {
+      height: 80px;
+      margin: 8px 0;
+    }
+    
+    /* Skeleton específicos para la app */
+    .skeleton-trip-card {
+      height: 120px;
+      border-radius: var(--radius);
+      margin: 12px 0;
+    }
+    
+    .skeleton-expense-item {
+      height: 60px;
+      border-radius: var(--radius-sm);
+      margin: 8px 0;
+      display: flex;
+      align-items: center;
+      padding: 16px;
+    }
+    
+    .skeleton-expense-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+    
+    .skeleton-expense-content {
+      flex: 1;
+    }
+    
+    .skeleton-expense-amount {
+      width: 60px;
+      height: 16px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    
+    .skeleton-member-item {
+      height: 48px;
+      border-radius: var(--radius-sm);
+      margin: 6px 0;
+      display: flex;
+      align-items: center;
+      padding: 12px;
+    }
+    
+    .skeleton-member-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      margin-right: 8px;
+      flex-shrink: 0;
+    }
+    
+    .skeleton-member-info {
+      flex: 1;
+    }
+    
+    .skeleton-member-balance {
+      width: 40px;
+      height: 14px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    /* ─── DETALLES UX MEJORADOS ─── */
+    
+    /* Tooltips contextuales */
+    .tooltip {
+      position: relative;
+      cursor: help;
+    }
+    
+    .tooltip::before {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--surface);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s;
+      z-index: 1000;
+      margin-bottom: 4px;
+    }
+    
+    .tooltip::after {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 4px solid transparent;
+      border-top-color: var(--border);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s;
+      z-index: 1000;
+    }
+    
+    .tooltip:hover::before,
+    .tooltip:hover::after {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Indicadores de progreso circulares */
+    .progress-ring {
+      width: 40px;
+      height: 40px;
+      transform: rotate(-90deg);
+    }
+    
+    .progress-ring-circle {
+      stroke: var(--surface2);
+      stroke-width: 3;
+      fill: none;
+    }
+    
+    .progress-ring-progress {
+      stroke: var(--accent);
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.5s ease;
+    }
+    
+    /* Barras de progreso lineales */
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: var(--surface2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      transition: width 0.5s ease;
+    }
+    
+    /* Estados hover mejorados */
+    .hover-lift {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .hover-lift:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Efectos de ripple */
+    .ripple {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .ripple::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s;
+    }
+    
+    .ripple:active::before {
+      width: 200px;
+      height: 200px;
+    }
+    
+    /* Badges y etiquetas */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .badge.success {
+      background: rgba(124, 239, 176, 0.2);
+      color: var(--accent3);
+    }
+    
+    .badge.warning {
+      background: rgba(232, 201, 122, 0.2);
+      color: var(--accent);
+    }
+    
+    .badge.error {
+      background: rgba(240, 120, 120, 0.2);
+      color: var(--danger);
+    }
+    
+    .badge.info {
+      background: rgba(91, 140, 247, 0.2);
+      color: var(--accent2);
+    }
+    
+    /* Estados de carga sutiles */
+    .loading-slow {
+      position: relative;
+    }
+    
+    .loading-slow::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(232, 201, 122, 0.1), transparent);
+      animation: shimmer 1.5s infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    /* Mejoras de accesibilidad visual */
+    .focus-ring {
+      outline: none;
+    }
+    
+    .focus-ring:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm);
+    }
+    
+    /* Estados vacíos mejorados */
+    .empty-state-enhanced {
+      text-align: center;
+      padding: 60px 20px;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+    }
+    
+    .empty-state-enhanced:hover {
+      opacity: 1;
+    }
+    
+    .empty-icon-enhanced {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      opacity: 0.4;
+      transition: all 0.3s;
+    }
+    
+    .empty-state-enhanced:hover .empty-icon-enhanced {
+      opacity: 0.6;
+      transform: scale(1.05);
+    }
+    
+    .empty-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    
+    .empty-description {
+      color: var(--text2);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+    
+    .empty-action {
+      color: var(--accent2);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    
+    .empty-action:hover {
+      color: var(--accent);
+    }
+
+    /* ─── NOTIFICATIONS MEJORADAS ─── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--surface);
+      color: var(--text);
+      padding: 12px 20px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      z-index: 10000;
+      font-size: 0.9rem;
+      font-weight: 500;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+      max-width: 90vw;
+      text-align: center;
+    }
+    
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .toast.success {
+      background: rgba(124, 239, 176, 0.1);
+      border-color: var(--accent3);
+      color: var(--accent3);
+    }
+    
+    .toast.error {
+      background: rgba(240, 120, 120, 0.1);
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+    
+    .toast.warning {
+      background: rgba(232, 201, 122, 0.1);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    
+    .toast.info {
+      background: rgba(91, 140, 247, 0.1);
+      border-color: var(--accent2);
+      color: var(--accent2);
+    }
+    
+    .toast-icon {
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 1rem;
+    }
+    
+    /* Notification banners */
+    .notification-banner {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100%);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      z-index: 9999;
+      max-width: 90vw;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
+    }
+    
+    .notification-banner.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .notification-banner.success {
+      border-color: var(--accent3);
+      background: rgba(124, 239, 176, 0.05);
+    }
+    
+    .notification-banner.error {
+      border-color: var(--danger);
+      background: rgba(240, 120, 120, 0.05);
+    }
+    
+    .notification-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .notification-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    
+    .notification-text {
+      flex: 1;
+    }
+    
+    .notification-title {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    
+    .notification-message {
+      font-size: 0.85rem;
+      color: var(--text2);
+    }
+    
+    .notification-close {
+      background: none;
+      border: none;
+      color: var(--text2);
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    
+    .notification-close:hover {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    /* ─── FORM VALIDATION ─── */
+    .form-group {
+      margin-bottom: 16px;
+      position: relative;
+    }
+    
+    .form-group label {
+      display: block; 
+      font-size: 0.8rem; 
+      font-weight: 500; 
+      color: var(--text2); 
+      margin-bottom: 8px; 
+      text-transform: uppercase; 
+      letter-spacing: 0.5px;
+      transition: color 0.2s;
+    }
+    
+    .form-input {
+      width: 100%; 
+      background: var(--surface2); 
+      border: 1px solid var(--border); 
+      border-radius: var(--radius-sm); 
+      padding: 12px 16px; 
+      color: var(--text); 
+      font-family: 'DM Sans', sans-serif; 
+      font-size: 16px; 
+      outline: none; 
+      transition: all 0.2s;
+      position: relative;
+    }
+    
+    .form-input:focus {
+      border-color: rgba(91, 140, 247, 0.4);
+      background: var(--surface3);
+    }
+    
+    .form-input.valid {
+      border-color: var(--accent3);
+      background: rgba(124, 239, 176, 0.05);
+    }
+    
+    .form-input.invalid {
+      border-color: var(--danger);
+      background: rgba(240, 120, 120, 0.05);
+    }
+    
+    .form-input.valid:focus {
+      border-color: var(--accent3);
+      box-shadow: 0 0 0 3px rgba(124, 239, 176, 0.1);
+    }
+    
+    .form-input.invalid:focus {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(240, 120, 120, 0.1);
+    }
+    
+    .validation-message {
+      font-size: 0.75rem;
+      margin-top: 4px;
+      display: none;
+      animation: slideDown 0.2s ease;
+    }
+    
+    .validation-message.error {
+      color: var(--danger);
+      display: block;
+    }
+    
+    .validation-message.success {
+      color: var(--accent3);
+      display: block;
+    }
+    
+    .validation-icon {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    
+    .validation-icon.show {
+      opacity: 1;
+    }
+    
+    .form-group.with-icon .form-input {
+      padding-right: 40px;
+    }
+
+    /* ─── LOADING SPINNER ─── */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 12, 16, 0.8);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    
+    .loading-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .loading-spinner {
+      text-align: center;
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--surface2);
+      border-top: 3px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    
+    /* ─── MEJORAS DE ACCESIBILIDAD ─── */
+    /* Reducir movimiento para usuarios que lo prefieren */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    
+    /* Mejorar contraste para usuarios con sensibilidad visual */
+    @media (prefers-contrast: high) {
+      :root {
+        --border: rgba(255, 255, 255, 0.2);
+        --text2: #b0b5c8;
+        --text3: #808598;
+      }
+    }
+    
+    /* Modo oscuro/claro automático */
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f8f9fa;
+        --surface: #ffffff;
+        --surface2: #f1f3f4;
+        --surface3: #e8eaed;
+        --border: rgba(0, 0, 0, 0.1);
+        --text: #202124;
+        --text2: #5f6368;
+        --text3: #80868b;
+      }
+    }
+    
+    /* Skip navigation para screen readers */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 6px;
+      background: var(--accent);
+      color: var(--bg);
+      padding: 8px;
+      text-decoration: none;
+      border-radius: 4px;
+      z-index: 1000;
+    }
+    
+    .skip-link:focus {
+      top: 6px;
+    }
+    
+    /* Atributos aria mejorados */
+    [aria-hidden="true"] {
+      display: none;
+    }
+    
+    [role="button"] {
+      cursor: pointer;
+    }
+    
+    /* Indicadores de progreso mejorados */
+    .progress-ring {
+      transform: rotate(-90deg);
+    }
+    
+    .progress-ring__circle {
+      stroke: var(--accent);
+      stroke-dasharray: 126;
+      stroke-dashoffset: 126;
+      transition: stroke-dashoffset 0.35s;
+      transform-origin: 50% 50%;
+    }
+    
+    /* Tooltips mejorados */
+    [data-tooltip] {
+      position: relative;
+    }
+    
+    [data-tooltip]:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--surface);
+      color: var(--text);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      border: 1px solid var(--border);
+      z-index: 1000;
+    }
+
+    /* ─── MEJORAS DE RETROALIMENTACIÓN TÁCTIL ─── */
+    @media (hover: hover) {
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+    }
+    
+    @media (pointer: coarse) {
+      /* Mejoras para dispositivos táctiles */
+      .btn {
+        min-height: 44px;
+        min-width: 44px;
+      }
+      
+      .cat-btn {
+        min-height: 48px;
+      }
+      
+      /* Ripple effect para touch */
+      .btn, .cat-btn, .trip-sidebar-btn {
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .btn::before, .cat-btn::before, .trip-sidebar-btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        transform: translate(-50%, -50%);
+        transition: width 0.3s, height 0.3s;
+      }
+      
+      .btn:active::before, .cat-btn:active::before, .trip-sidebar-btn:active::before {
+        width: 200px;
+        height: 200px;
+      }
+    }
+    
+    /* Focus states mejorados */
+    .btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    
+    .cat-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    
+    /* Estados vacíos más atractivos */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      opacity: 0.8;
+    }
+    
+    .empty-state:hover {
+      opacity: 1;
+    }
+    
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      opacity: 0.6;
+    }
+    
+    .empty-state p {
+      color: var(--text2);
+      margin-bottom: 8px;
+    }
+    
+    .empty-state small {
+      color: var(--text3);
+      font-size: 0.85rem;
+    }
+
+    /* ─── MEJORAS DE ANIMACIONES ─── */
+    * {
+      transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+    
+    .btn {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+    
+    .btn:active {
+      transform: translateY(0);
+    }
+    
+    .cat-btn {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .cat-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .cat-btn.selected {
+      transform: translateY(-1px);
+    }
+    
+    /* Micro-interacciones */
+    .expense-item:hover {
+      transform: translateX(4px);
+      background: var(--surface2);
+    }
+    
+    .trip-sidebar-btn:hover {
+      transform: translateX(2px);
+    }
+    
+    /* Loading states */
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    
+    .loading::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      margin: -10px 0 0 -10px;
+      border: 2px solid var(--accent);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ─── SKELETON LOADING ─── */
+    .skeleton {
+      background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: var(--radius-sm);
+    }
+    
+    @keyframes skeleton-loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    
+    .skeleton-text {
+      height: 12px;
+      margin: 4px 0;
+    }
+    
+    .skeleton-text.small {
+      width: 60%;
+      height: 10px;
+    }
+    
+    .skeleton-text.medium {
+      width: 80%;
+    }
+    
+    .skeleton-text.large {
+      width: 100%;
+    }
+    
+    .skeleton-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+    
+    .skeleton-card {
+      height: 80px;
+      margin: 8px 0;
+    }
+
+    /* ─── PASSWORD TOGGLE ICON ─── */
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text2);
+      padding: 8px;
+      border-radius: 6px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .password-toggle:hover {
+      background: var(--surface2);
+      color: var(--text);
+    }
+    
+    .password-toggle:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    
+    .password-toggle svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2;
+    }
+
     /* ─── AUTH SCREEN ─── */
     #auth-screen {
-      position: fixed; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      z-index: 100; padding: 20px;
+      position: fixed; 
+      inset: 0;
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      z-index: 100; 
+      padding: 20px;
+      min-height: 100vh;
+      /* Asegurar centrado en móviles */
+      overflow-y: auto;
     }
+    
     .auth-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 24px; padding: 48px 40px;
-      width: 100%; max-width: 420px;
-      box-shadow: var(--shadow); animation: slideUp 0.5s ease;
+      background: var(--surface); 
+      border: 1px solid var(--border);
+      border-radius: 24px; 
+      padding: 48px 40px;
+      width: 100%; 
+      max-width: 420px;
+      /* Mejorar centrado vertical */
+      margin: auto;
+      position: relative;
+      box-shadow: var(--shadow); 
+      animation: slideUp 0.5s ease;
     }
     .auth-logo { text-align: center; margin-bottom: 32px; }
     .auth-logo h1 { font-family: 'Fraunces', serif; font-size: 2.4rem; font-weight: 800; color: var(--accent); letter-spacing: -1px; }
@@ -113,8 +1039,249 @@
     .topnav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; background: rgba(10, 12, 16, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
     .nav-brand { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
     .nav-user { display: flex; align-items: center; gap: 12px; }
-    .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent2), var(--accent)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; color: #fff; flex-shrink: 0; }
+    .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent2), var(--accent)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; color: #fff; flex-shrink: 0; overflow: hidden; }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .avatar-lg { width: 48px; height: 48px; font-size: 1rem; }
+
+    /* ─── AVATAR DROPDOWN ─── */
+    .nav-avatar-btn {
+      position: relative;
+      cursor: pointer;
+      border: none; background: none; padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .nav-avatar-ring {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem; color: #fff;
+      overflow: hidden;
+      border: 2px solid transparent;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .nav-avatar-ring img { width: 100%; height: 100%; object-fit: cover; }
+    .nav-avatar-btn:hover .nav-avatar-ring,
+    .nav-avatar-btn.open .nav-avatar-ring { border-color: var(--accent); transform: scale(1.05); }
+
+    .user-dropdown {
+      position: absolute; top: calc(100% + 10px); right: 0;
+      width: 220px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      z-index: 200;
+      display: none;
+      animation: slideDown 0.2s ease;
+      overflow: hidden;
+    }
+    .user-dropdown.open { display: block; }
+    .user-dropdown-header {
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .user-dropdown-name { font-weight: 700; font-size: 0.95rem; color: var(--text); }
+    .user-dropdown-email { font-size: 0.75rem; color: var(--text3); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .user-dropdown-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 16px;
+      font-size: 0.88rem; color: var(--text2);
+      cursor: pointer; transition: background 0.15s, color 0.15s;
+      border: none; background: none; width: 100%;
+      font-family: 'DM Sans', sans-serif; text-align: left;
+    }
+    .user-dropdown-item:hover { background: var(--surface2); color: var(--text); }
+    .user-dropdown-item.danger { color: var(--danger); }
+    .user-dropdown-item.danger:hover { background: rgba(240,120,120,0.1); }
+    .user-dropdown-sep { height: 1px; background: var(--border); margin: 2px 0; }
+    .user-dropdown-item .item-icon { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
+
+    /* ─── RESPONSIVE AUTH ─── */
+    @media (max-width: 480px) {
+      #auth-screen {
+        padding: 16px;
+        align-items: flex-start;
+        padding-top: 10vh;
+      }
+      
+      .auth-card {
+        padding: 32px 24px;
+        max-width: 100%;
+      }
+      
+      .auth-logo h1 {
+        font-size: 2rem;
+      }
+      
+      .auth-logo p {
+        font-size: 0.85rem;
+      }
+    }
+    
+    @media (max-height: 700px) {
+      #auth-screen {
+        align-items: flex-start;
+        padding-top: 5vh;
+      }
+      
+      .auth-card {
+        margin-top: 20px;
+      }
+    }
+
+    /* ─── RESPONSIVE DESIGN ─── */
+    .trip-hero {
+      border-radius: var(--radius); margin-bottom: 24px;
+      position: relative; overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .trip-hero-bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      transition: transform 0.4s ease;
+    }
+    .trip-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.75) 100%);
+    }
+    .trip-hero-inner {
+      position: relative; z-index: 2;
+      padding: 22px 24px 20px;
+    }
+    /* No cover = dark surface */
+    .trip-hero.no-cover { background: var(--surface); }
+    .trip-hero.no-cover .trip-hero-info h2 { color: var(--text); }
+    .trip-hero.no-cover .trip-hero-info p { color: var(--text2); }
+    /* With cover = white text */
+    .trip-hero.has-cover .trip-hero-info h2 { color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+    .trip-hero.has-cover .trip-hero-info p { color: rgba(255,255,255,0.8); }
+    .trip-hero.has-cover .btn-ghost {
+      background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
+      border-color: rgba(255,255,255,0.25); color: #fff;
+    }
+    .trip-hero.has-cover .btn-ghost:hover { background: rgba(255,255,255,0.25); }
+    .trip-hero.has-cover .trip-emoji { background: rgba(255,255,255,0.15) !important; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.2) !important; }
+    .trip-hero.has-cover .trip-date-strip { background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.12); backdrop-filter: blur(8px); }
+    .trip-hero.has-cover .trip-date-label { color: rgba(255,255,255,0.5); }
+    .trip-hero.has-cover .trip-date-value { color: #fff; }
+    .trip-hero.has-cover .trip-date-sub { color: rgba(255,255,255,0.6); }
+    .trip-hero.has-cover .trip-date-duration { color: rgba(255,255,255,0.5); }
+    .trip-hero.has-cover .member-chip { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.15); color: #fff; backdrop-filter: blur(6px); }
+    .trip-hero-top { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
+    .trip-hero-info { flex: 1; min-width: 0; }
+    .trip-hero-info h2 { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 700; line-height: 1.2; }
+    .trip-hero-info p { font-size: 0.88rem; margin-top: 3px; }
+    .trip-hero-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: flex-start; }
+
+    /* Trip hero dropdown menu */
+    .trip-hero-menu {
+      position: relative;
+    }
+    .trip-hero-dots {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text2); font-size: 1.2rem;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+    .trip-hero-dots:hover { 
+      background: var(--surface2); 
+      border-color: var(--border); 
+      color: var(--text); 
+    }
+    .trip-hero-dropdown {
+      position: absolute; top: calc(100% + 8px); right: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      min-width: 160px;
+      z-index: 100;
+      display: none;
+      animation: slideDown 0.15s ease;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    }
+    .trip-hero-dropdown.open { display: block; }
+    .trip-hero-dropdown-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px;
+      font-size: 0.88rem; color: var(--text2);
+      cursor: pointer; transition: background 0.15s;
+      border: none; background: none; width: 100%;
+      font-family: 'DM Sans', sans-serif; text-align: left;
+    }
+    .trip-hero-dropdown-item:hover { background: var(--surface2); color: var(--text); }
+
+    /* Deletion Request Banner */
+    .deletion-request-banner {
+      background: rgba(232, 201, 122, 0.15);
+      border: 1px solid rgba(232, 201, 122, 0.3);
+      border-radius: var(--radius-sm);
+      margin: 16px;
+      padding: 16px;
+      animation: slideDown 0.3s ease;
+    }
+    .deletion-request-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .deletion-request-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    .deletion-request-text {
+      flex: 1;
+    }
+    .deletion-request-title {
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+    .deletion-request-desc {
+      font-size: 0.85rem;
+      color: var(--text2);
+      margin-bottom: 8px;
+    }
+    .deletion-request-progress {
+      font-size: 0.8rem;
+      color: var(--text3);
+    }
+    .deletion-request-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .trip-date-strip {
+      display: flex; align-items: center; gap: 8px;
+      margin-top: 12px; padding: 10px 14px;
+      background: var(--surface2); border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    .trip-date-col { text-align: center; min-width: 56px; }
+    .trip-date-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text3); font-weight: 600; margin-bottom: 2px; }
+    .trip-date-value { font-family: 'Fraunces', serif; font-size: 1rem; font-weight: 700; color: var(--text); line-height: 1; }
+    .trip-date-sub { font-size: 0.7rem; color: var(--text2); margin-top: 2px; }
+    .trip-date-arrow {
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    }
+    .trip-date-arrow-line {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      position: relative;
+    }
+    .trip-date-arrow-line::after {
+      content: '▶'; position: absolute; right: -6px; top: -6px;
+      font-size: 0.6rem; color: var(--accent);
+    }
+    .trip-date-duration { font-size: 0.7rem; color: var(--text3); font-weight: 600; }
+
+    .trip-members-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
 
     /* ─── BELL NOTIFICATION ─── */
     .bell-btn {
@@ -201,11 +1368,109 @@
     .section-title { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 600; color: var(--text); }
     .section-subtitle { color: var(--text2); font-size: 0.9rem; margin-top: 4px; }
 
-    .trip-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; cursor: pointer; transition: all 0.25s; position: relative; }
-    .trip-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent2), var(--accent)); opacity: 0; transition: opacity 0.25s; }
-    .trip-card:hover { border-color: rgba(91, 140, 247, 0.3); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3); }
-    .trip-card:hover::before { opacity: 1; }
-    .trip-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .trip-card {
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      cursor: pointer;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+      min-height: 160px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .trip-card:hover { transform: translateY(-3px); box-shadow: 0 16px 48px rgba(0,0,0,0.5); }
+    .trip-card-bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      transition: transform 0.4s ease;
+    }
+    .trip-card:hover .trip-card-bg { transform: scale(1.04); }
+    .trip-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.15) 0%,
+        rgba(0,0,0,0.55) 60%,
+        rgba(0,0,0,0.82) 100%
+      );
+    }
+    .trip-card-body {
+      position: relative; z-index: 2;
+      padding: 20px 20px 18px;
+      display: flex; flex-direction: column;
+      height: 100%; min-height: 160px;
+      justify-content: flex-end;
+    }
+    .trip-card-top {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: auto; padding-bottom: 12px;
+    }
+    .trip-card-emoji-wrap {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .trip-card-arrow {
+      margin-left: auto;
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,0.15); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.9rem; color: #fff;
+      transition: background 0.2s;
+    }
+    .trip-card:hover .trip-card-arrow { background: rgba(232,201,122,0.35); }
+    .trip-card-name {
+      font-family: 'Fraunces', serif;
+      font-size: 1.35rem; font-weight: 700;
+      color: #fff; line-height: 1.2;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+      margin-bottom: 6px;
+    }
+    .trip-card-meta {
+      display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+    }
+    .trip-card-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(255,255,255,0.12); backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 20px; padding: 3px 10px;
+      font-size: 0.72rem; color: rgba(255,255,255,0.9);
+      font-weight: 500;
+    }
+    /* Cover selector in modal */
+    .cover-tabs {
+      display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px;
+    }
+    .cover-tab-btn {
+      padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
+      border: 1px solid var(--border); background: var(--surface2); color: var(--text3);
+      cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+      white-space: nowrap;
+    }
+    .cover-tab-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
+    .cover-tab-btn.active { background: var(--accent); color: #0a0c10; border-color: var(--accent); }
+    .cover-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+      max-height: 220px; overflow-y: auto;
+    }
+    .cover-option {
+      aspect-ratio: 16/9; border-radius: 8px; overflow: hidden;
+      cursor: pointer; position: relative;
+      border: 2px solid transparent; transition: all 0.2s;
+    }
+    .cover-option img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .cover-option:hover { border-color: var(--accent2); transform: scale(1.03); }
+    .cover-option.selected { border-color: var(--accent); }
+    .cover-option.selected::after {
+      content: '✓'; position: absolute; top: 4px; right: 6px;
+      color: #fff; font-weight: 800; font-size: 0.8rem;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    }
     .trip-emoji { font-size: 2rem; width: 52px; height: 52px; background: var(--surface2); border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .trip-info { flex: 1; }
     .trip-name { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 4px; }
@@ -217,19 +1482,86 @@
     .badge-red { background: rgba(240, 120, 120, 0.15); color: var(--danger); }
 
     /* ─── TRIP DETAIL ─── */
-    #trip-view { display: none; max-width: 900px; margin: 0 auto; padding: 32px 24px; }
+    #trip-view { display: none; width: 100%; max-width: 1200px; margin: 0 auto; padding: 32px 32px; }
     .back-btn { display: inline-flex; align-items: center; gap: 8px; color: var(--text2); cursor: pointer; font-size: 0.9rem; margin-bottom: 24px; transition: color 0.2s; }
     .back-btn:hover { color: var(--text); }
-    .trip-hero { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 24px; }
-    .trip-hero-top { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
     .trip-hero-info h2 { font-family: 'Fraunces', serif; font-size: 1.8rem; font-weight: 700; }
-    .trip-hero-info p { color: var(--text2); font-size: 0.9rem; margin-top: 4px; }
+    .trip-hero-info p { font-size: 0.9rem; margin-top: 4px; }
     .members-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .member-chip { display: flex; align-items: center; gap: 8px; background: var(--surface2); border: 1px solid var(--border); border-radius: 30px; padding: 6px 12px; font-size: 0.85rem; }
 
-    .tabs { display: flex; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 6px; margin-bottom: 24px; gap: 4px; }
-    .tab { flex: 1; padding: 10px 16px; text-align: center; border-radius: var(--radius-sm); cursor: pointer; font-size: 0.9rem; font-weight: 500; color: var(--text2); transition: all 0.2s; }
-    .tab.active { background: var(--surface2); color: var(--text); }
+    /* ─── TRIP LAYOUT: sidebar desktop / tabs mobile ─── */
+    .trip-layout {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    /* SIDEBAR (desktop only) */
+    .trip-sidebar {
+      width: 200px;
+      flex-shrink: 0;
+      position: sticky;
+      top: 90px;
+    }
+    .trip-sidebar-nav {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .trip-sidebar-btn {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.88rem; font-weight: 500;
+      color: var(--text2);
+      transition: all 0.18s;
+      border: none; background: none;
+      font-family: 'DM Sans', sans-serif;
+      text-align: left; width: 100%;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .trip-sidebar-btn:hover { background: var(--surface2); color: var(--text); }
+    .trip-sidebar-btn.active { background: var(--surface2); color: var(--text); }
+    .trip-sidebar-btn.active .sidebar-icon { filter: none; }
+    .trip-sidebar-btn .sidebar-active-bar {
+      width: 3px; height: 18px; border-radius: 2px;
+      background: var(--accent); margin-left: auto;
+      opacity: 0; transition: opacity 0.18s;
+    }
+    .trip-sidebar-btn.active .sidebar-active-bar { opacity: 1; }
+    .sidebar-icon { font-size: 1.05rem; flex-shrink: 0; }
+    .sidebar-sep { height: 1px; background: var(--border); margin: 4px 2px; }
+
+    /* CONTENT AREA */
+    .trip-content { flex: 1; min-width: 0; }
+
+    /* Desktop: hide bottom nav */
+    @media (min-width: 641px) {
+      .bottom-nav { display: none !important; }
+      .bnav-more-hint { display: none !important; }
+    }
+
+    @media (max-width: 640px) {
+      .trip-layout { flex-direction: column; gap: 0; }
+      .trip-sidebar { display: none; }
+      .trip-content { width: 100%; }
+      .tab.active { background: var(--surface2); color: var(--text); }
+      
+      /* Mejorar espaciado en trip hero para móvil */
+      .trip-hero { padding: 16px; margin-bottom: 16px; }
+      .trip-hero-top { gap: 12px; align-items: flex-start; }
+      .trip-hero-info h2 { font-size: 1.3rem; line-height: 1.3; margin-bottom: 8px; }
+      .trip-hero-info p { font-size: 0.9rem; line-height: 1.4; margin-bottom: 12px; }
+      .trip-hero-dots { width: 28px; height: 28px; font-size: 1rem; }
+      .trip-date-strip { padding: 8px 12px; gap: 6px; margin-top: 12px; }
+      .trip-members-row { margin-top: 12px; }
+    }
 
     /* ─── EXPENSE CARDS ─── */
     .expense-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 12px; transition: all 0.2s; }
@@ -506,16 +1838,71 @@
     .bnav-btn.active { color: var(--accent); }
     .bnav-btn:active { transform: scale(0.92); }
 
+    /* Bottom nav scroll hint — fade edge */
+    .bottom-nav-wrap {
+      position: relative;
+    }
+    .bottom-nav-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; right: 0;
+      width: 52px;
+      background: linear-gradient(to left, rgba(17,19,24,0.98) 10%, transparent);
+      pointer-events: none;
+      z-index: 52;
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+    .bottom-nav-wrap.has-more::after {
+      opacity: 1;
+    }
+    /* Chevron dot inside the fade */
+    .bnav-more-hint {
+      position: fixed;
+      bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+      right: 6px;
+      z-index: 53;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+    .bnav-more-hint.visible {
+      opacity: 1;
+    }
+    .bnav-more-hint-inner {
+      display: flex; flex-direction: column; align-items: center; gap: 1px;
+    }
+    .bnav-more-hint-inner span {
+      display: block; width: 4px; height: 4px; border-radius: 50%;
+      background: var(--accent);
+    }
+    .bnav-more-hint-inner span:nth-child(1) { opacity: 0.4; }
+    .bnav-more-hint-inner span:nth-child(2) { opacity: 0.7; }
+    .bnav-more-hint-inner span:nth-child(3) { opacity: 1; }
+    @keyframes hintPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .bnav-more-hint.visible .bnav-more-hint-inner span:nth-child(3) {
+      animation: hintPulse 1.4s ease-in-out infinite;
+    }
+
     @media (max-width: 640px) {
       .form-row { grid-template-columns: 1fr; }
       .auth-card { padding: 32px 20px; border-radius: 20px; }
       .auth-logo h1 { font-size: 2rem; }
       .topnav { padding: 12px 16px; }
       .nav-brand { font-size: 1.2rem; }
-      #nav-name { display: none; }
+      .trip-hero { padding: 14px 16px; margin-bottom: 16px; }
+      .trip-hero-top { gap: 10px; }
+      .trip-hero-info h2 { font-size: 1.25rem; }
+      #tv-emoji { width: 46px !important; height: 46px !important; font-size: 1.3rem !important; border-radius: 12px; }
+      .trip-date-strip { padding: 8px 12px; gap: 6px; }
+      .trip-date-value { font-size: 0.88rem; }
+      .trip-date-sub { font-size: 0.62rem; }
+      .trip-date-duration { font-size: 0.65rem; }
       .bottom-nav { display: block; }
-      .main-content { padding-top: 68px; padding-bottom: 80px; }
-      .fab { bottom: 80px; right: 16px; width: 52px; height: 52px; font-size: 1.3rem; }
+      .main-content { padding-top: 68px; padding-bottom: 80px; }      .fab { bottom: 80px; right: 16px; width: 52px; height: 52px; font-size: 1.3rem; }
       #home-view { padding: 20px 16px; }
       .section-title { font-size: 1.3rem; }
       .trip-card { padding: 16px; }
@@ -527,7 +1914,8 @@
       .trip-hero-top { gap: 12px; }
       .trip-hero-info h2 { font-size: 1.3rem; }
       #tv-emoji { width: 48px !important; height: 48px !important; font-size: 1.4rem !important; border-radius: 12px; }
-      .tabs { display: none; }
+      .tabs-wrapper { display: none; }
+      .tabs-arrow { display: none; }
       .members-row { gap: 6px; margin-top: 12px; }
       .member-chip { font-size: 0.78rem; padding: 4px 10px; }
       .expense-card { padding: 14px 16px; }
@@ -895,6 +2283,9 @@
 
 <body>
 
+  <!-- Skip navigation for accessibility -->
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
   <!-- AUTH SCREEN -->
   <div id="auth-screen">
     <div class="auth-card">
@@ -908,35 +2299,51 @@
       </div>
       <div id="login-form">
         <div class="form-group">
-          <label>Correo electrónico</label>
-          <input type="email" id="login-email" placeholder="tu@correo.com" onkeydown="if(event.key==='Enter') doLogin()">
+          <label for="login-email">Correo electrónico</label>
+          <input type="email" id="login-email" class="form-input" placeholder="tu@correo.com" onkeydown="if(event.key==='Enter') doLogin()" oninput="validateEmail(this)">
+          <div class="validation-message" id="login-email-error"></div>
+          <div class="validation-icon" id="login-email-icon"></div>
         </div>
         <div class="form-group">
-          <label>Contraseña</label>
-          <div style="position:relative">
-            <input type="password" id="login-password" placeholder="••••••••" style="padding-right:44px" onkeydown="if(event.key==='Enter') doLogin()">
-            <button type="button" onclick="togglePwd('login-password', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text2);font-size:1rem;padding:0;line-height:1">👁</button>
+          <label for="login-password">Contraseña</label>
+          <div class="form-group with-icon" style="position:relative">
+            <input type="password" id="login-password" class="form-input" placeholder="••••••••" style="padding-right:44px" onkeydown="if(event.key==='Enter') doLogin()" oninput="validatePassword(this)">
+            <button type="button" class="password-toggle" onclick="togglePwd('login-password', this)" aria-label="Mostrar/ocultar contraseña">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+            <div class="validation-message" id="login-password-error"></div>
           </div>
         </div>
-        <button class="btn btn-primary" onclick="doLogin()">Entrar al viaje →</button>
+        <button class="btn btn-primary" onclick="doLogin()" aria-label="Iniciar sesión en tu cuenta" data-tooltip="Accede a tus viajes">Entrar al viaje →</button>
       </div>
       <div id="register-form" style="display:none">
         <div class="form-group">
-          <label>Tu nombre</label>
-          <input type="text" id="reg-name" placeholder="Pablo Muñoz" onkeydown="if(event.key==='Enter') doRegister()">
+          <label for="reg-name">Tu nombre</label>
+          <input type="text" id="reg-name" class="form-input" placeholder="Pablo Muñoz" onkeydown="if(event.key==='Enter') doRegister()" oninput="validateName(this)">
+          <div class="validation-message" id="reg-name-error"></div>
         </div>
         <div class="form-group">
-          <label>Correo electrónico</label>
-          <input type="email" id="reg-email" placeholder="tu@correo.com" onkeydown="if(event.key==='Enter') doRegister()">
+          <label for="reg-email">Correo electrónico</label>
+          <input type="email" id="reg-email" class="form-input" placeholder="tu@correo.com" onkeydown="if(event.key==='Enter') doRegister()" oninput="validateEmail(this)">
+          <div class="validation-message" id="reg-email-error"></div>
         </div>
         <div class="form-group">
-          <label>Contraseña</label>
-          <div style="position:relative">
-            <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" style="padding-right:44px" onkeydown="if(event.key==='Enter') doRegister()">
-            <button type="button" onclick="togglePwd('reg-password', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text2);font-size:1rem;padding:0;line-height:1">👁</button>
+          <label for="reg-password">Contraseña</label>
+          <div class="form-group with-icon" style="position:relative">
+            <input type="password" id="reg-password" class="form-input" placeholder="Mínimo 6 caracteres" style="padding-right:44px" onkeydown="if(event.key==='Enter') doRegister()" oninput="validatePassword(this)">
+            <button type="button" class="password-toggle" onclick="togglePwd('reg-password', this)" aria-label="Mostrar/ocultar contraseña">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+            <div class="validation-message" id="reg-password-error"></div>
           </div>
         </div>
-        <button class="btn btn-primary" onclick="doRegister()">Crear cuenta →</button>
+        <button class="btn btn-primary" onclick="doRegister()" aria-label="Crear nueva cuenta" data-tooltip="Regístrate para empezar">Crear cuenta →</button>
       </div>
       <div style="margin-top:16px;text-align:center">
         <p class="text-muted">¿Tienes un código de viaje?</p>
@@ -971,14 +2378,33 @@
             </div>
           </div>
         </div>
-        <div class="avatar" id="nav-avatar">?</div>
-        <span id="nav-name" style="font-size:0.9rem;color:var(--text2)"></span>
-        <button class="btn btn-ghost btn-sm" onclick="openProfile()">👤 Perfil</button>
-        <button class="btn btn-ghost btn-sm" onclick="doLogout()">Salir</button>
+
+        <!-- AVATAR DROPDOWN -->
+        <div style="position:relative" id="user-menu-wrapper">
+          <button class="nav-avatar-btn" id="nav-avatar-btn" onclick="toggleUserMenu()">
+            <div class="nav-avatar-ring" id="nav-avatar">?</div>
+          </button>
+          <div class="user-dropdown" id="user-dropdown">
+            <div class="user-dropdown-header">
+              <div class="user-dropdown-name" id="ud-name">—</div>
+              <div class="user-dropdown-email" id="ud-email">—</div>
+            </div>
+            <button class="user-dropdown-item" onclick="openProfile();closeUserMenu()">
+              <span class="item-icon">👤</span> Mi perfil
+            </button>
+            <button class="user-dropdown-item" onclick="openChangePhotoModal();closeUserMenu()">
+              <span class="item-icon">📷</span> Cambiar foto
+            </button>
+            <div class="user-dropdown-sep"></div>
+            <button class="user-dropdown-item danger" onclick="doLogout()">
+              <span class="item-icon">🔴</span> Cerrar sesión
+            </button>
+          </div>
+        </div>
       </div>
     </nav>
 
-    <div class="main-content">
+    <div class="main-content" id="main-content" role="main">
       <!-- HOME VIEW -->
       <div id="home-view">
         <div class="section-header">
@@ -986,13 +2412,14 @@
             <h2 class="section-title">Mis Viajes</h2>
             <p class="section-subtitle">Tus aventuras y sus gastos</p>
           </div>
-          <button class="btn btn-primary" style="width:auto" onclick="openModal('create-trip-modal')">+ Nuevo viaje</button>
+          <button class="btn btn-primary" style="width:auto" onclick="openModal('create-trip-modal');renderCoverGrid();selectedCoverUrl=null;document.getElementById('cover-preview').innerHTML='Sin portada seleccionada'" aria-label="Crear nuevo viaje" data-tooltip="Comienza una nueva aventura">+ Nuevo viaje</button>
         </div>
         <div id="trips-list">
-          <div class="empty-state">
-            <div class="empty-icon">🗺️</div>
-            <p>No tienes viajes aún</p>
-            <small>Crea uno o únete con un código</small>
+          <div class="empty-state-enhanced">
+            <div class="empty-icon-enhanced">🗺️</div>
+            <div class="empty-title">No tienes viajes aún</div>
+            <div class="empty-description">Comienza una nueva aventura o únete a un viaje existente</div>
+            <div class="empty-action" onclick="openModal('create-trip-modal');renderCoverGrid();selectedCoverUrl=null;document.getElementById('cover-preview').innerHTML='Sin portada seleccionada'">Crear tu primer viaje</div>
           </div>
         </div>
       </div>
@@ -1000,43 +2427,100 @@
       <!-- TRIP DETAIL VIEW -->
       <div id="trip-view">
         <div class="back-btn" onclick="goHome()">← Volver a mis viajes</div>
-        <div class="trip-hero">
-          <div class="trip-hero-top">
-            <div class="trip-emoji" id="tv-emoji" style="font-size:1.8rem;width:60px;height:60px">✈️</div>
-            <div class="trip-hero-info">
-              <h2 id="tv-name">Viaje</h2>
-              <p id="tv-desc"></p>
-              <div class="trip-dates-row" id="tv-dates" style="display:none"></div>
+        <div class="trip-hero no-cover" id="trip-hero">
+          <div class="trip-hero-bg" id="trip-hero-bg"></div>
+          <div class="trip-hero-overlay" id="trip-hero-overlay" style="display:none"></div>
+          
+          <!-- Deletion Request Banner -->
+          <div id="deletion-request-banner" style="display:none" class="deletion-request-banner">
+            <div class="deletion-request-content">
+              <div class="deletion-request-icon">⚠️</div>
+              <div class="deletion-request-text">
+                <div class="deletion-request-title">Solicitud de eliminación activa</div>
+                <div class="deletion-request-desc" id="deletion-request-desc"></div>
+                <div class="deletion-request-progress" id="deletion-request-progress"></div>
+              </div>
+              <div class="deletion-request-actions">
+                <button class="btn btn-sm" onclick="approveDeletion(currentTripId)" style="background:var(--accent3);color:var(--bg)">✅ Aprobar</button>
+                <button class="btn btn-sm btn-danger" onclick="rejectDeletion(currentTripId)">❌ Rechazar</button>
+              </div>
             </div>
-            <div style="display:flex;gap:8px;margin-left:auto">
-              <button class="btn btn-ghost btn-sm" onclick="openModal('invite-modal')">👥 Invitar</button>
+          </div>
+          
+          <div class="trip-hero-inner">
+            <div class="trip-hero-top">
+              <div class="trip-hero-info">
+                <h2 id="tv-name">Viaje</h2>
+                <p id="tv-desc"></p>
+              </div>
+              <div class="trip-hero-actions">
+              <div class="trip-hero-menu">
+                <button class="trip-hero-dots" onclick="toggleTripHeroMenu()">⋮</button>
+                <div class="trip-hero-dropdown" id="trip-hero-dropdown">
+                  <button class="trip-hero-dropdown-item" onclick="openEditCoverModal()">🖼️ Cambiar portada</button>
+                  <button class="trip-hero-dropdown-item" onclick="openModal('invite-modal')">👥 Invitar personas</button>
+                  <button class="trip-hero-dropdown-item" onclick="tripDangerAction()" style="color:var(--danger)">🗑️ Eliminar viaje</button>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="members-row" id="tv-members"></div>
-        </div>
-
-        <div class="tabs">
-          <div class="tab active" onclick="switchTab('shared')">💸 Gastos Compartidos</div>
-          <div class="tab" onclick="switchTab('personal')">🔒 Mis Gastos</div>
-          <div class="tab" onclick="switchTab('balance')">📊 Dashboard</div>
-          <div class="tab" onclick="switchTab('notes')">📝 Notas</div>
-          <div class="tab" onclick="switchTab('itinerary')">🗺️ Itinerario</div>
-          <div class="tab" onclick="switchTab('gallery')">📸 Galería</div>
-        </div>
-
-        <!-- SHARED EXPENSES -->
-        <div class="section-panel active" id="panel-shared">
-          <div id="shared-list">
-            <div class="empty-state"><div class="empty-icon">💸</div><p>Sin gastos compartidos aún</p><small>Toca + para agregar el primero</small></div>
+            </div>
+            <div id="tv-dates"></div>
+            <div class="trip-members-row" id="tv-members"></div>
           </div>
         </div>
 
-        <!-- PERSONAL EXPENSES -->
-        <div class="section-panel" id="panel-personal">
-          <div id="personal-list">
-            <div class="empty-state"><div class="empty-icon">🔒</div><p>Sin gastos personales</p><small>Solo tú puedes verlos</small></div>
-          </div>
-        </div>
+        <div class="trip-layout">
+          <!-- SIDEBAR (desktop) -->
+          <nav class="trip-sidebar">
+            <div class="trip-sidebar-nav">
+              <button class="trip-sidebar-btn active" id="sb-shared" onclick="switchTab('shared')">
+                <span class="sidebar-icon">💸</span> Gastos
+                <span class="sidebar-active-bar"></span>
+              </button>
+              <button class="trip-sidebar-btn" id="sb-personal" onclick="switchTab('personal')">
+                <span class="sidebar-icon">🔒</span> Personales
+                <span class="sidebar-active-bar"></span>
+              </button>
+              <button class="trip-sidebar-btn" id="sb-balance" onclick="switchTab('balance')">
+                <span class="sidebar-icon">📊</span> Dashboard
+                <span class="sidebar-active-bar"></span>
+              </button>
+              <div class="sidebar-sep"></div>
+              <button class="trip-sidebar-btn" id="sb-notes" onclick="switchTab('notes')">
+                <span class="sidebar-icon">📝</span> Notas
+                <span class="sidebar-active-bar"></span>
+              </button>
+              <button class="trip-sidebar-btn" id="sb-itinerary" onclick="switchTab('itinerary')">
+                <span class="sidebar-icon">🗺️</span> Itinerario
+                <span class="sidebar-active-bar"></span>
+              </button>
+              <button class="trip-sidebar-btn" id="sb-gallery" onclick="switchTab('gallery')">
+                <span class="sidebar-icon">📸</span> Galería
+                <span class="sidebar-active-bar"></span>
+              </button>
+              <div class="sidebar-sep"></div>
+              <button class="trip-sidebar-btn" id="trip-action-btn" onclick="tripDangerAction()" style="color:var(--danger)">
+                <span class="sidebar-icon">🗑️</span> <span id="trip-action-label">Solicitar eliminar</span>
+                <span class="sidebar-active-bar" style="background:var(--danger)"></span>
+              </button>
+            </div>
+          </nav>
+
+          <!-- MAIN CONTENT -->
+          <div class="trip-content">
+            <!-- SHARED EXPENSES -->
+            <div class="section-panel active" id="panel-shared">
+              <div id="shared-list">
+                <div class="empty-state"><div class="empty-icon">💸</div><p>Sin gastos compartidos aún</p><small>Toca + para agregar el primero</small></div>
+              </div>
+            </div>
+
+            <!-- PERSONAL EXPENSES -->
+            <div class="section-panel" id="panel-personal">
+              <div id="personal-list">
+                <div class="empty-state"><div class="empty-icon">🔒</div><p>Sin gastos personales</p><small>Solo tú puedes verlos</small></div>
+              </div>
+            </div>
 
         <!-- ═══ NUEVO DASHBOARD ═══ -->
         <div class="section-panel" id="panel-balance">
@@ -1156,9 +2640,8 @@
             </div>
           </div>
         </div>
-        <div id="trip-danger-zone" style="margin-top:32px;padding-top:20px;border-top:1px solid var(--border)">
-          <button id="trip-action-btn" class="btn btn-danger" style="width:100%" onclick="tripDangerAction()">🗑️ Eliminar viaje</button>
-        </div>
+          </div><!-- /trip-content -->
+        </div><!-- /trip-layout -->
       </div>
 
       <!-- PROFILE VIEW -->
@@ -1191,17 +2674,12 @@
       <div class="form-group"><label>Nombre del viaje</label><input type="text" id="trip-name-input" placeholder="Dolomitas 2025"></div>
       <div class="form-group"><label>Descripción</label><input type="text" id="trip-desc-input" placeholder="Un viaje épico por los Alpes italianos"></div>
       <div class="form-group">
-        <label>Emoji del viaje</label>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <span class="cat-btn selected" onclick="selectEmoji(this,'🏔️')"><span class="cat-icon">🏔️</span></span>
-          <span class="cat-btn" onclick="selectEmoji(this,'🏖️')"><span class="cat-icon">🏖️</span></span>
-          <span class="cat-btn" onclick="selectEmoji(this,'🏙️')"><span class="cat-icon">🏙️</span></span>
-          <span class="cat-btn" onclick="selectEmoji(this,'🚗')"><span class="cat-icon">🚗</span></span>
-          <span class="cat-btn" onclick="selectEmoji(this,'🛳️')"><span class="cat-icon">🛳️</span></span>
-          <span class="cat-btn" onclick="selectEmoji(this,'🎭')"><span class="cat-icon">🎭</span></span>
-          <span class="cat-btn" onclick="selectEmoji(this,'🎿')"><span class="cat-icon">🎿</span></span>
-          <span class="cat-btn" onclick="selectEmoji(this,'🌴')"><span class="cat-icon">🌴</span></span>
+        <label>Foto de portada</label>
+        <div id="cover-preview" style="width:100%;aspect-ratio:16/6;border-radius:10px;overflow:hidden;margin-bottom:8px;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:0.85rem">
+          Sin portada seleccionada
         </div>
+        <div class="cover-tabs" id="cover-tabs"></div>
+        <div class="cover-grid" id="cover-grid"></div>
       </div>
       <div class="form-group"><label>Moneda</label>
         <select id="trip-currency">
@@ -1505,8 +2983,9 @@
   </div>
 
   <!-- BOTTOM NAV (mobile) -->
+  <div class="bottom-nav-wrap" id="bottom-nav-wrap">
   <nav class="bottom-nav" id="bottom-nav" style="display:none">
-    <div class="bottom-nav-inner">
+    <div class="bottom-nav-inner" id="bottom-nav-inner">
       <button class="bnav-btn active" id="bnav-shared" onclick="switchTabMobile('shared')"><span class="bnav-icon">💸</span>Compartido</button>
       <button class="bnav-btn" id="bnav-personal" onclick="switchTabMobile('personal')"><span class="bnav-icon">🔒</span>Personal</button>
       <button class="bnav-btn" id="bnav-balance" onclick="switchTabMobile('balance')"><span class="bnav-icon">📊</span>Dashboard</button>
@@ -1515,6 +2994,13 @@
       <button class="bnav-btn" id="bnav-gallery" onclick="switchTabMobile('gallery')"><span class="bnav-icon">📸</span>Galería</button>
     </div>
   </nav>
+  </div>
+  <!-- Mobile bottom nav scroll hint -->
+  <div class="bnav-more-hint" id="bnav-more-hint">
+    <div class="bnav-more-hint-inner">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
 
   <!-- CUSTOM CONFIRM DIALOG -->
   <div class="confirm-overlay" id="confirm-overlay">
@@ -1542,6 +3028,23 @@
       <h2 class="modal-title" id="pay-modal-title">💳 Datos para transferir</h2>
       <div id="pay-modal-content"><p style="color:var(--text2)">Cargando...</p></div>
       <button class="btn btn-ghost" style="width:100%;margin-top:20px" onclick="closeModal('pay-info-modal')">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- EDIT COVER MODAL -->
+  <div class="modal-overlay" id="edit-cover-modal">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <h2 class="modal-title">Foto de portada 🖼️</h2>
+      <div id="edit-cover-preview" style="width:100%;aspect-ratio:16/6;border-radius:10px;overflow:hidden;margin-bottom:10px;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:0.85rem">
+        Sin portada
+      </div>
+      <div class="cover-tabs" id="edit-cover-tabs"></div>
+      <div class="cover-grid" id="edit-cover-grid"></div>
+      <div style="display:flex;gap:10px;margin-top:14px">
+        <button class="btn btn-ghost" style="flex:1" onclick="closeModal('edit-cover-modal')">Cancelar</button>
+        <button class="btn btn-primary" style="flex:1" onclick="saveEditCover()">Guardar portada</button>
+      </div>
     </div>
   </div>
 
@@ -1600,8 +3103,39 @@
     </div>
   </div>
 
+  <!-- CHANGE AVATAR MODAL -->
+  <div class="modal-overlay" id="change-photo-modal">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <h2 class="modal-title">Cambiar foto de perfil 📷</h2>
+      <div style="display:flex;justify-content:center;margin-bottom:20px">
+        <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:700;color:#fff;overflow:hidden" id="cp-preview-avatar"></div>
+      </div>
+      <div class="form-group">
+        <input type="file" id="cp-photo-input" accept="image/*" style="display:none" onchange="onAvatarPhotoSelected(this)">
+        <label for="cp-photo-input" class="file-upload-btn" id="cp-photo-label">
+          <span class="file-icon">🖼️</span>
+          <span id="cp-photo-filename">Seleccionar foto...</span>
+        </label>
+      </div>
+      <div id="cp-upload-status" style="display:none;text-align:center;padding:8px;font-size:0.85rem;color:var(--text2)">Subiendo... 📤</div>
+      <div style="display:flex;gap:10px;margin-top:8px">
+        <button class="btn btn-ghost" style="flex:1" onclick="closeModal('change-photo-modal')">Cancelar</button>
+        <button class="btn btn-primary" style="flex:1" id="cp-save-btn" onclick="saveAvatarPhoto()">Guardar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- TOAST -->
-  <div class="toast" id="toast"></div>
+  <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+  <!-- LOADING OVERLAY -->
+  <div class="loading-overlay" id="loading-overlay" style="display:none;position:fixed;inset:0;background:rgba(10,12,16,0.8);z-index:9999;display:flex;align-items:center;justify-content:center">
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p style="margin-top:16px;color:var(--text2)">Cargando...</p>
+    </div>
+  </div>
 
   <!-- FIREBASE SDK -->
   <script type="module">
@@ -1628,7 +3162,6 @@
     let currentUser = null;
     let currentTrip = null;
     let currentTripId = null;
-    let selectedEmoji = '🏔️';
     let selectedCat = 'Alojamiento';
     let selectedCatIcon = '🏠';
     let selectedExpType = 'shared';
@@ -1672,7 +3205,7 @@
     window.switchTab = switchTab;
     window.switchTabMobile = switchTabMobile;
     window.openTripView = openTripView;
-    window.selectEmoji = selectEmoji;
+    window.toggleTripHeroMenu = toggleTripHeroMenu;
     window.selectCat = selectCat;
     window.selectExpenseType = selectExpenseType;
     window.saveExpense = saveExpense;
@@ -1682,6 +3215,8 @@
     window.copyCode = copyCode;
     window.openAddExpense = openAddExpense;
     window.deleteTrip = deleteTrip;
+    window.approveDeletion = approveDeletion;
+    window.rejectDeletion = rejectDeletion;
     window.leaveTrip = leaveTrip;
     window.editExpense = editExpense;
     window.deleteExpense = deleteExpense;
@@ -1709,30 +3244,209 @@
     window.openGalleryLightbox = openGalleryLightbox;
     window.galleryLbNav = galleryLbNav;
     window.closeGalleryLightbox = closeGalleryLightbox;
+    window.toggleUserMenu = toggleUserMenu;
+    window.closeUserMenu = closeUserMenu;
+    window.openChangePhotoModal = openChangePhotoModal;
+    window.onAvatarPhotoSelected = onAvatarPhotoSelected;
+    window.saveAvatarPhoto = saveAvatarPhoto;
+
+    // ─── USER MENU ───
+    let userMenuOpen = false;
+
+    function toggleUserMenu() {
+      userMenuOpen = !userMenuOpen;
+      document.getElementById('user-dropdown').classList.toggle('open', userMenuOpen);
+      document.getElementById('nav-avatar-btn').classList.toggle('open', userMenuOpen);
+    }
+
+    function closeUserMenu() {
+      userMenuOpen = false;
+      document.getElementById('user-dropdown').classList.remove('open');
+      document.getElementById('nav-avatar-btn').classList.remove('open');
+    }
+
+    document.addEventListener('click', e => {
+      if (!e.target.closest('#user-menu-wrapper') && userMenuOpen) closeUserMenu();
+    });
+
+    async function updateNavAvatar(user) {
+      const avatarEl = document.getElementById('nav-avatar');
+      // Check if user has a saved photo URL in Firestore
+      try {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        const photoUrl = userDoc.exists() ? userDoc.data().photoUrl : null;
+        if (photoUrl) {
+          avatarEl.innerHTML = `<img src="${photoUrl}" alt="${(user.displayName || '?')[0]}">`;
+        } else {
+          avatarEl.textContent = user.displayName ? user.displayName[0].toUpperCase() : '?';
+        }
+      } catch(e) {
+        avatarEl.textContent = user.displayName ? user.displayName[0].toUpperCase() : '?';
+      }
+    }
+
+    // ─── CHANGE AVATAR PHOTO ───
+    let avatarPhotoFile = null;
+
+    function openChangePhotoModal() {
+      avatarPhotoFile = null;
+      document.getElementById('cp-photo-input').value = '';
+      document.getElementById('cp-photo-filename').textContent = 'Seleccionar foto...';
+      document.getElementById('cp-upload-status').style.display = 'none';
+      document.getElementById('cp-save-btn').disabled = false;
+      // Show current avatar in preview
+      const ring = document.getElementById('nav-avatar');
+      const preview = document.getElementById('cp-preview-avatar');
+      preview.innerHTML = ring.innerHTML || ring.textContent;
+      openModal('change-photo-modal');
+    }
+
+    function onAvatarPhotoSelected(input) {
+      const file = input.files[0];
+      if (!file) return;
+      avatarPhotoFile = file;
+      document.getElementById('cp-photo-filename').textContent = file.name;
+      const reader = new FileReader();
+      reader.onload = e => {
+        document.getElementById('cp-preview-avatar').innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    async function saveAvatarPhoto() {
+      if (!avatarPhotoFile) return toast('Selecciona una foto primero');
+      const saveBtn = document.getElementById('cp-save-btn');
+      const status = document.getElementById('cp-upload-status');
+      saveBtn.disabled = true;
+      status.style.display = 'block';
+      try {
+        const formData = new FormData();
+        formData.append('image', avatarPhotoFile);
+        const res = await fetch('https://api.imgbb.com/1/upload?key=ea6a31b8d4d6e7ef9c7c19cd8d6c4d44', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!data.success) { toast('Error al subir la foto'); saveBtn.disabled = false; status.style.display = 'none'; return; }
+        const photoUrl = data.data.url;
+        // Save to Firestore
+        await setDoc(doc(db, 'users', currentUser.uid), { photoUrl }, { merge: true });
+        // Update nav avatar
+        document.getElementById('nav-avatar').innerHTML = `<img src="${photoUrl}" alt="${(currentUser.displayName || '?')[0]}">`;
+        toast('Foto de perfil actualizada ✓');
+        closeModal('change-photo-modal');
+      } catch(e) { toast('Error: ' + e.message); }
+      saveBtn.disabled = false;
+      status.style.display = 'none';
+    }
 
     window.togglePwd = function (inputId, btn) {
       const input = document.getElementById(inputId);
       if (!input) return;
       input.type = input.type === 'password' ? 'text' : 'password';
-      btn.textContent = input.type === 'password' ? '👁' : '🙈';
+      
+      // Cambiar el icono SVG según el estado
+      if (input.type === 'password') {
+        // Ojo abierto (mostrar contraseña)
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        `;
+        btn.setAttribute('aria-label', 'Mostrar contraseña');
+      } else {
+        // Ojo cerrado (ocultar contraseña)
+        btn.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+            <line x1="1" y1="1" x2="23" y2="23"></line>
+          </svg>
+        `;
+        btn.setAttribute('aria-label', 'Ocultar contraseña');
+      }
     };
 
+    window.scrollTabs = function(dir) {
+      const bar = document.getElementById('tabs-bar');
+      if (bar) bar.scrollBy({ left: dir * 160, behavior: 'smooth' });
+    };
+
+    function updateTabsArrows() {
+      const bar = document.getElementById('tabs-bar');
+      const wrapper = document.getElementById('tabs-wrapper');
+      if (!bar || !wrapper) return;
+      const hasOverflow = bar.scrollWidth > bar.clientWidth + 2;
+      wrapper.classList.toggle('can-scroll-left', bar.scrollLeft > 4);
+      wrapper.classList.toggle('can-scroll-right', hasOverflow && bar.scrollLeft < bar.scrollWidth - bar.clientWidth - 4);
+    }
+
+    // Set up tabs scroll listener once DOM is ready
+    setTimeout(() => {
+      const bar = document.getElementById('tabs-bar');
+      if (bar) {
+        bar.addEventListener('scroll', updateTabsArrows, { passive: true });
+        // Use RAF to ensure layout is complete before measuring
+        requestAnimationFrame(() => {
+          requestAnimationFrame(updateTabsArrows);
+        });
+      }
+    }, 100);
+
     // ─── AUTH ───
+    // Evitar animación inicial si ya está autenticado
+    let initialAuthCheck = true;
+    
     onAuthStateChanged(auth, user => {
       if (user) {
         currentUser = user;
-        document.getElementById('auth-screen').style.display = 'none';
-        document.getElementById('app').style.display = 'block';
-        document.getElementById('nav-avatar').textContent = user.displayName ? user.displayName[0].toUpperCase() : '?';
-        document.getElementById('nav-name').textContent = user.displayName || user.email;
+        
+        if (initialAuthCheck) {
+          // Primera carga: mostrar app directamente sin animación
+          document.getElementById('auth-screen').style.display = 'none';
+          document.getElementById('app').style.display = 'block';
+        } else {
+          // Login posterior: mostrar con animación suave
+          document.getElementById('auth-screen').style.opacity = '0';
+          setTimeout(() => {
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+            document.getElementById('app').style.opacity = '0';
+            setTimeout(() => {
+              document.getElementById('app').style.opacity = '1';
+            }, 50);
+          }, 300);
+        }
+        
+        // Update nav avatar — could be photo URL stored in Firestore
+        updateNavAvatar(user);
+        document.getElementById('ud-name').textContent = user.displayName || 'Viajero';
+        document.getElementById('ud-email').textContent = user.email || '';
         loadTrips();
         const pendingCode = localStorage.getItem('pendingJoinCode');
         if (pendingCode) { localStorage.removeItem('pendingJoinCode'); joinByCodeValue(pendingCode); }
       } else {
         currentUser = null;
-        document.getElementById('auth-screen').style.display = 'flex';
-        document.getElementById('app').style.display = 'none';
+        
+        if (initialAuthCheck) {
+          // Primera carga: mostrar login directamente sin animación
+          document.getElementById('auth-screen').style.display = 'flex';
+          document.getElementById('app').style.display = 'none';
+        } else {
+          // Logout: mostrar login con animación suave
+          document.getElementById('app').style.opacity = '0';
+          setTimeout(() => {
+            document.getElementById('app').style.display = 'none';
+            document.getElementById('auth-screen').style.display = 'flex';
+            document.getElementById('auth-screen').style.opacity = '0';
+            setTimeout(() => {
+              document.getElementById('auth-screen').style.opacity = '1';
+            }, 50);
+          }, 300);
+        }
       }
+      
+      // Marcar que la verificación inicial ha terminado
+      setTimeout(() => {
+        initialAuthCheck = false;
+      }, 100);
     });
 
     async function doLogin() {
@@ -1773,29 +3487,175 @@
       renderTrips(trips);
     }
 
+    // ─── COVER PHOTOS ───
+    const COVER_PHOTOS = [
+      // Europa
+      { id:'eu1', label:'Europa', url:'https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&q=80' },  // Paris
+      { id:'eu2', label:'Europa', url:'https://images.unsplash.com/photo-1552832230-c0197dd311b5?w=800&q=80' },  // Roma
+      { id:'eu3', label:'Europa', url:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80' },  // Amsterdam canales
+      { id:'eu4', label:'Europa', url:'https://images.unsplash.com/photo-1486299267070-83823f5448dd?w=800&q=80' },  // Londres Tower Bridge
+      { id:'eu5', label:'Europa', url:'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=800&q=80' },  // Santorini
+      { id:'eu6', label:'Europa', url:'https://images.unsplash.com/photo-1531973576160-7125cd663d86?w=800&q=80' },  // Barcelona
+      // Italia
+      { id:'it1', label:'Italia', url:'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&q=80' },  // Venecia
+      { id:'it2', label:'Italia', url:'https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=800&q=80' },  // Dolomitas
+      { id:'it3', label:'Italia', url:'https://images.unsplash.com/photo-1534445867742-43195f401b6c?w=800&q=80' },  // Amalfi
+      // Asia
+      { id:'as1', label:'Asia', url:'https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80' },  // Tokio noche
+      { id:'as2', label:'Asia', url:'https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&q=80' },  // Japón monte fuji
+      { id:'as3', label:'Asia', url:'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&q=80' },  // Bali templo
+      { id:'as4', label:'Asia', url:'https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?w=800&q=80' },  // Tailandia templos
+      // Latinoamérica
+      { id:'la1', label:'Latinoamérica', url:'https://images.unsplash.com/photo-1526392060635-9d6019884377?w=800&q=80' },  // Machu Picchu
+      { id:'la2', label:'Latinoamérica', url:'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80' },  // Patagonia
+      { id:'la3', label:'Latinoamérica', url:'https://images.unsplash.com/photo-1508193638397-1c4234db14d8?w=800&q=80' },  // Carretera Austral
+      { id:'la4', label:'Latinoamérica', url:'https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=800&q=80' },  // Buenos Aires
+      { id:'la5', label:'Latinoamérica', url:'https://images.unsplash.com/photo-1504893524553-b855bce32c67?w=800&q=80' },  // Atacama
+      // Playa & Caribe
+      { id:'pl1', label:'Playa & Caribe', url:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80' },  // Playa tropical
+      { id:'pl2', label:'Playa & Caribe', url:'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?w=800&q=80' },  // Maldivas
+      { id:'pl3', label:'Playa & Caribe', url:'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=800&q=80' },  // Caribe aguas turquesa
+      // Road Trip & Aventura
+      { id:'rd1', label:'Road Trip', url:'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&q=80' },  // Ruta desierto
+      { id:'rd2', label:'Road Trip', url:'https://images.unsplash.com/photo-1494783367193-149034c05e8f?w=800&q=80' },  // Carretera montaña
+      { id:'rd3', label:'Road Trip', url:'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80' },  // París road trip
+      // Nieve & Ski
+      { id:'sk1', label:'Nieve & Ski', url:'https://images.unsplash.com/photo-1548777123-e216912df7d8?w=800&q=80' },  // Esquí pista
+      { id:'sk2', label:'Nieve & Ski', url:'https://images.unsplash.com/photo-1520209759809-a9bcb6cb3241?w=800&q=80' },  // Alpes invierno
+    ];
+
+    let selectedCoverUrl = null;
+    let editCoverSelectedUrl = null;
+
+    function getCoverGroups() {
+      const groups = {};
+      COVER_PHOTOS.forEach(p => {
+        if (!groups[p.label]) groups[p.label] = [];
+        groups[p.label].push(p);
+      });
+      return groups;
+    }
+
+    function buildCoverSelector(tabsElId, gridElId, previewElId, currentUrl) {
+      const tabsEl = document.getElementById(tabsElId);
+      const groups = getCoverGroups();
+      const labels = Object.keys(groups);
+      // Pick starting tab: the one that contains the current URL, else first
+      const matchLabel = currentUrl ? (COVER_PHOTOS.find(p => p.url === currentUrl)?.label) : null;
+      const startLabel = matchLabel || labels[0];
+
+      tabsEl.innerHTML = labels.map(l =>
+        `<button class="cover-tab-btn${l === startLabel ? ' active' : ''}" data-label="${l}"
+          onclick="switchCoverTab('${tabsElId}','${gridElId}','${previewElId}',this,'${l}')">${l}</button>`
+      ).join('');
+
+      renderCoverTabPhotos(tabsElId, gridElId, previewElId, groups[startLabel]);
+    }
+
+    window.switchCoverTab = function(tabsElId, gridElId, previewElId, btn, label) {
+      document.getElementById(tabsElId)?.querySelectorAll('.cover-tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCoverTabPhotos(tabsElId, gridElId, previewElId, getCoverGroups()[label] || []);
+    };
+
+    function renderCoverTabPhotos(tabsElId, gridElId, previewElId, photos) {
+      const isEdit = tabsElId.includes('edit');
+      const selUrl = isEdit ? editCoverSelectedUrl : selectedCoverUrl;
+      const gridEl = document.getElementById(gridElId);
+      if (!gridEl) return;
+      gridEl.innerHTML = photos.map(p =>
+        `<div class="cover-option${selUrl === p.url ? ' selected' : ''}" id="${tabsElId}-${p.id}"
+          onclick="pickCoverPhoto('${p.id}','${p.url}','${tabsElId}','${previewElId}')">
+          <img src="${p.url}" loading="lazy">
+        </div>`
+      ).join('');
+    }
+
+    window.pickCoverPhoto = function(id, url, tabsElId, previewElId) {
+      const isEdit = tabsElId.includes('edit');
+      if (isEdit) editCoverSelectedUrl = url;
+      else selectedCoverUrl = url;
+      document.querySelectorAll(`[id^="${tabsElId}-"]`).forEach(el => el.classList.remove('selected'));
+      document.getElementById(`${tabsElId}-${id}`)?.classList.add('selected');
+      const preview = document.getElementById(previewElId);
+      if (preview) preview.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover">`;
+    };
+
+    function renderCoverGrid() {
+      selectedCoverUrl = null;
+      buildCoverSelector('cover-tabs', 'cover-grid', 'cover-preview', null);
+      document.getElementById('cover-preview').innerHTML = 'Sin portada seleccionada';
+    }
+
+    function selectCover(id, url) {
+      pickCoverPhoto(id, url, 'cover-tabs', 'cover-preview');
+    }
+
+    window.selectCover = selectCover;
+    window.renderCoverGrid = renderCoverGrid;
+    window.openEditCoverModal = openEditCoverModal;
+    window.saveEditCover = saveEditCover;
+
+    function openEditCoverModal() {
+      editCoverSelectedUrl = currentTrip?.coverUrl || null;
+      buildCoverSelector('edit-cover-tabs', 'edit-cover-grid', 'edit-cover-preview', editCoverSelectedUrl);
+      const preview = document.getElementById('edit-cover-preview');
+      if (editCoverSelectedUrl) {
+        preview.innerHTML = `<img src="${editCoverSelectedUrl}" style="width:100%;height:100%;object-fit:cover">`;
+      } else {
+        preview.innerHTML = 'Sin portada seleccionada';
+      }
+      openModal('edit-cover-modal');
+    }
+
+    async function saveEditCover() {
+      if (!editCoverSelectedUrl || !currentTripId) return toast('Selecciona una foto primero');
+      await updateDoc(doc(db, 'trips', currentTripId), { coverUrl: editCoverSelectedUrl });
+      currentTrip.coverUrl = editCoverSelectedUrl;
+      // Update hero live
+      const hero = document.getElementById('trip-hero');
+      const heroBg = document.getElementById('trip-hero-bg');
+      const heroOverlay = document.getElementById('trip-hero-overlay');
+      heroBg.style.backgroundImage = `url('${editCoverSelectedUrl}')`;
+      heroOverlay.style.display = '';
+      hero.classList.remove('no-cover');
+      hero.classList.add('has-cover');
+      toast('Portada actualizada ✓');
+      closeModal('edit-cover-modal');
+      loadTrips();
+    }
+
     function renderTrips(trips) {
       const container = document.getElementById('trips-list');
       if (!trips.length) {
         container.innerHTML = `<div class="empty-state"><div class="empty-icon">🗺️</div><p>No tienes viajes aún</p><small>Crea uno o únete con un código</small></div>`;
         return;
       }
-      container.innerHTML = trips.map(t => `
-        <div class="trip-card" onclick="openTripView('${t.id}')">
-          <div class="trip-card-header">
-            <div class="trip-emoji">${t.emoji || '✈️'}</div>
-            <div class="trip-info">
-              <div class="trip-name">${t.name}</div>
-              <div class="trip-meta">
-                <span>👥 ${t.memberIds?.length || 1} personas</span>
-                <span>${t.currency || 'CLP'}</span>
-                ${t.description ? `<span>${t.description}</span>` : ''}
-                ${t.startDate ? `<span>📅 ${formatDate(t.startDate)} → ${t.endDate ? formatDate(t.endDate) : '?'}</span>` : ''}
-              </div>
+      const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+      container.innerHTML = trips.map(t => {
+        const bgStyle = t.coverUrl ? `background-image:url('${t.coverUrl}')` : `background:var(--surface2)`;
+        const hasPhoto = !!t.coverUrl;
+        const dateStr = t.startDate ? (() => {
+          const s = new Date(t.startDate + 'T12:00:00');
+          const e = t.endDate ? new Date(t.endDate + 'T12:00:00') : null;
+          return `${s.getDate()} ${months[s.getMonth()]} → ${e ? e.getDate() + ' ' + months[e.getMonth()] : '?'}`;
+        })() : null;
+        return `<div class="trip-card" onclick="openTripView('${t.id}')">
+          ${hasPhoto ? `<div class="trip-card-bg" style="${bgStyle}"></div><div class="trip-card-overlay"></div>` : ''}
+          <div class="trip-card-body" style="${!hasPhoto ? 'background:var(--surface);border-radius:var(--radius)' : ''}">
+            <div class="trip-card-top">
+              <div class="trip-card-arrow">→</div>
             </div>
-            <span class="badge badge-blue">→</span>
+            <div class="trip-card-name" style="${!hasPhoto ? 'color:var(--text)' : ''}">${t.name}</div>
+            <div class="trip-card-meta">
+              ${t.description ? `<span class="trip-card-pill" style="${!hasPhoto ? 'background:var(--surface2);border-color:var(--border);color:var(--text2)' : ''}">${t.description}</span>` : ''}
+              <span class="trip-card-pill" style="${!hasPhoto ? 'background:var(--surface2);border-color:var(--border);color:var(--text2)' : ''}">👥 ${t.memberIds?.length || 1}</span>
+              ${dateStr ? `<span class="trip-card-pill" style="${!hasPhoto ? 'background:var(--surface2);border-color:var(--border);color:var(--text2)' : ''}">📅 ${dateStr}</span>` : ''}
+              <span class="trip-card-pill" style="${!hasPhoto ? 'background:var(--surface2);border-color:var(--border);color:var(--text2)' : ''}">${t.currency || 'CLP'}</span>
+            </div>
           </div>
-        </div>
-      `).join('');
+        </div>`;
+      }).join('');
     }
 
     async function createTrip() {
@@ -1806,9 +3666,11 @@
       const code = Math.random().toString(36).substr(2, 6).toUpperCase();
       const startDate = document.getElementById('trip-start-date').value;
       const endDate = document.getElementById('trip-end-date').value;
-      const tripData = { name, description: desc, emoji: selectedEmoji, currency, code, startDate, endDate, createdBy: currentUser.uid, memberIds: [currentUser.uid], members: [{ uid: currentUser.uid, name: currentUser.displayName || currentUser.email }], createdAt: serverTimestamp() };
+      const tripData = { name, description: desc, currency, code, startDate, endDate, createdBy: currentUser.uid, memberIds: [currentUser.uid], members: [{ uid: currentUser.uid, name: currentUser.displayName || currentUser.email }], createdAt: serverTimestamp() };
+      if (selectedCoverUrl) tripData.coverUrl = selectedCoverUrl;
       const ref = await addDoc(collection(db, 'trips'), tripData);
       closeModal('create-trip-modal');
+      selectedCoverUrl = null;
       toast('Viaje creado! 🎉');
       loadTrips();
       setTimeout(() => openTripView(ref.id), 400);
@@ -1847,22 +3709,85 @@
 
       document.getElementById('home-view').style.display = 'none';
       document.getElementById('trip-view').style.display = 'block';
-      document.getElementById('tv-emoji').textContent = currentTrip.emoji || '✈️';
       document.getElementById('tv-name').textContent = currentTrip.name;
       document.getElementById('tv-desc').textContent = currentTrip.description || '';
 
-      const datesRow = document.getElementById('tv-dates');
-      if (currentTrip.startDate) {
-        datesRow.innerHTML = `<span>📅</span><span class="date-badge">${formatDate(currentTrip.startDate)}</span><span>→</span><span class="date-badge">${currentTrip.endDate ? formatDate(currentTrip.endDate) : '?'}</span>`;
-        datesRow.style.display = 'flex';
-      } else { datesRow.style.display = 'none'; }
+      // Mostrar banner de solicitud de eliminación si existe
+      updateDeletionRequestBanner();
 
-      document.getElementById('tv-members').innerHTML = tripMembers.map(m => `
+      // Escuchar cambios en el viaje para actualizar el banner
+      const unsubscribeTrip = onSnapshot(doc(db, 'trips', tripId), (docSnap) => {
+        if (docSnap.exists()) {
+          currentTrip = { id: tripId, ...docSnap.data() };
+          updateDeletionRequestBanner();
+        }
+      });
+
+      // Apply cover photo to hero
+      const hero = document.getElementById('trip-hero');
+      const heroBg = document.getElementById('trip-hero-bg');
+      const heroOverlay = document.getElementById('trip-hero-overlay');
+      if (currentTrip.coverUrl) {
+        heroBg.style.backgroundImage = `url('${currentTrip.coverUrl}')`;
+        heroOverlay.style.display = '';
+        hero.classList.remove('no-cover');
+        hero.classList.add('has-cover');
+      } else {
+        heroBg.style.backgroundImage = '';
+        heroOverlay.style.display = 'none';
+        hero.classList.remove('has-cover');
+        hero.classList.add('no-cover');
+      }
+
+      // Dates strip
+      const datesEl = document.getElementById('tv-dates');
+      if (currentTrip.startDate) {
+        const months = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+        const weekDays = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+        const s = new Date(currentTrip.startDate + 'T12:00:00');
+        const e = currentTrip.endDate ? new Date(currentTrip.endDate + 'T12:00:00') : null;
+        const allDays = getDaysBetween(currentTrip.startDate, currentTrip.endDate);
+        const totalDays = allDays.length;
+        const durationLabel = totalDays > 1 ? `${totalDays} días` : '1 día';
+        datesEl.innerHTML = `<div class="trip-date-strip">
+          <div class="trip-date-col">
+            <div class="trip-date-label">Inicio</div>
+            <div class="trip-date-value">${s.getDate()} ${months[s.getMonth()]}</div>
+            <div class="trip-date-sub">${weekDays[s.getDay()]} ${s.getFullYear()}</div>
+          </div>
+          <div class="trip-date-arrow">
+            <div class="trip-date-duration">${durationLabel}</div>
+            <div class="trip-date-arrow-line"></div>
+          </div>
+          <div class="trip-date-col">
+            <div class="trip-date-label">Regreso</div>
+            <div class="trip-date-value">${e ? e.getDate() + ' ' + months[e.getMonth()] : '?'}</div>
+            <div class="trip-date-sub">${e ? weekDays[e.getDay()] + ' ' + e.getFullYear() : ''}</div>
+          </div>
+        </div>`;
+      } else {
+        datesEl.innerHTML = '';
+      }
+
+      // Render member chips with photos
+      const memberChipsContainer = document.getElementById('tv-members');
+      memberChipsContainer.innerHTML = tripMembers.map(m => `
         <div class="member-chip">
-          <div class="avatar" style="width:28px;height:28px;font-size:0.75rem">${(m.name || '?')[0].toUpperCase()}</div>
-          ${m.name}
+          <div class="avatar member-avatar" style="width:26px;height:26px;font-size:0.7rem" id="mavatar-${m.uid}">${(m.name || '?')[0].toUpperCase()}</div>
+          ${m.name.split(' ')[0]}
         </div>
       `).join('');
+      // Async load photos for each member
+      tripMembers.forEach(async m => {
+        try {
+          const userDoc = await getDoc(doc(db, 'users', m.uid));
+          const photoUrl = userDoc.exists() ? userDoc.data().photoUrl : null;
+          if (photoUrl) {
+            const el = document.getElementById('mavatar-' + m.uid);
+            if (el) el.innerHTML = `<img src="${photoUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+          }
+        } catch(e) {}
+      });
       subscribeExpenses();
       subscribeNotes();
       subscribeNotifications(tripId);
@@ -1872,21 +3797,33 @@
       // Now that the trip subscriptions are set, enable the FAB and default tab
       switchTab('shared');
       document.getElementById('bottom-nav').style.display = 'block';
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        updateTabsArrows();
+        updateBnavHint();
+      }));
       // Ensure FAB visibility matches the active tab now that we're in trip view
       const fab = document.getElementById('fab-btn');
       if (fab) fab.style.display = (window._currentTabType === 'balance') ? 'none' : 'flex';
       document.body.classList.add('trip-view-active');
 
       const dangerBtn = document.getElementById('trip-action-btn');
-      dangerBtn.textContent = currentTrip.createdBy === currentUser.uid ? '🗑️ Eliminar viaje' : '🚪 Salir del viaje';
+      const dangerLabel = document.getElementById('trip-action-label');
+      if (dangerLabel) dangerLabel.textContent = currentTrip.createdBy === currentUser.uid ? 'Eliminar viaje' : 'Salir del viaje';
+      if (dangerBtn) dangerBtn.querySelector('.sidebar-icon').textContent = currentTrip.createdBy === currentUser.uid ? '🗑️' : '🚪';
     }
 
     function goHome() {
       document.getElementById('home-view').style.display = 'block';
       document.getElementById('trip-view').style.display = 'none';
+      document.getElementById('profile-view').style.display = 'none';
       document.getElementById('bottom-nav').style.display = 'none';
       document.getElementById('fab-btn').style.display = 'none';
       document.body.classList.remove('trip-view-active');
+      
+      // Reset scroll to top
+      window.scrollTo(0, 0);
+      document.getElementById('home-view').scrollTop = 0;
+      
       if (unsubscribeExpenses) { unsubscribeExpenses(); unsubscribeExpenses = null; }
       if (unsubscribeNotes) { unsubscribeNotes(); unsubscribeNotes = null; }
       if (unsubscribeNotifications) { unsubscribeNotifications(); unsubscribeNotifications = null; }
@@ -1899,15 +3836,19 @@
 
     function switchTab(tab) {
       window._currentTabType = tab === 'personal' ? 'personal' : 'shared';
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
-      const tabIndex = ['shared', 'personal', 'balance', 'notes', 'itinerary', 'gallery'].indexOf(tab);
-      document.querySelectorAll('.tab')[tabIndex].classList.add('active');
       document.getElementById('panel-' + tab).classList.add('active');
+
+      // Sync sidebar buttons
+      ['shared','personal','balance','notes','itinerary','gallery'].forEach(t => {
+        const btn = document.getElementById('sb-' + t);
+        if (btn) btn.classList.toggle('active', t === tab);
+      });
+
       if (tab === 'balance') renderDashboard();
       if (tab === 'itinerary') renderItinerary(true);
       if (tab === 'gallery') renderGallery();
-      // FAB behavior per tab
+
       const fab = document.getElementById('fab-btn');
       if (tab === 'balance') { fab.style.display = 'none'; }
       else if (tab === 'itinerary') { fab.style.display = 'none'; }
@@ -1925,7 +3866,27 @@
       // Scroll active tab into view smoothly
       const activeBtn = document.getElementById('bnav-' + tab);
       if (activeBtn) activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      updateBnavHint();
     }
+
+    function updateBnavHint() {
+      const inner = document.getElementById('bottom-nav-inner');
+      const hint = document.getElementById('bnav-more-hint');
+      const wrap = document.getElementById('bottom-nav-wrap');
+      if (!inner || !hint) return;
+      const hasMore = inner.scrollLeft < inner.scrollWidth - inner.clientWidth - 4;
+      hint.classList.toggle('visible', hasMore);
+      if (wrap) wrap.classList.toggle('has-more', hasMore);
+    }
+
+    // Init bottom nav hint listener
+    setTimeout(() => {
+      const inner = document.getElementById('bottom-nav-inner');
+      if (inner) {
+        inner.addEventListener('scroll', updateBnavHint, { passive: true });
+        updateBnavHint();
+      }
+    }, 600);
 
     // ─── NOTIFICATIONS (in-app, Firestore realtime) ───
     function subscribeNotifications(tripId) {
@@ -2020,12 +3981,18 @@
       const panel = document.getElementById('notif-panel');
       notifPanelOpen = !notifPanelOpen;
       panel.classList.toggle('open', notifPanelOpen);
-      if (notifPanelOpen) {
+    }
+
+    function toggleTripHeroMenu() {
+      const dropdown = document.getElementById('trip-hero-dropdown');
+      dropdown.classList.toggle('open');
+    }
+
+    if (notifPanelOpen) {
         // Mark all as read when opening
         notifications.forEach(n => n.read = true);
         renderNotifications();
       }
-    }
 
     function clearNotifications() {
       notifications = [];
@@ -2036,9 +4003,13 @@
 
     // Close notif panel on outside click
     document.addEventListener('click', e => {
-      if (!e.target.closest('#bell-wrapper') && notifPanelOpen) {
+      if (!e.target.closest('#bell-wrapper') && !e.target.closest('.notif-panel')) {
         document.getElementById('notif-panel').classList.remove('open');
         notifPanelOpen = false;
+      }
+      // Close trip hero menu on outside click
+      if (!e.target.closest('.trip-hero-menu') && !e.target.closest('.trip-hero-dropdown')) {
+        document.getElementById('trip-hero-dropdown').classList.remove('open');
       }
     });
 
@@ -2576,19 +4547,73 @@
     // ─── TRIP DANGER ───
     async function tripDangerAction() {
       if (!currentTripId || !currentTrip) return;
-      if (currentTrip.createdBy === currentUser.uid) await deleteTrip(currentTripId, currentTrip.name);
-      else await leaveTrip(currentTripId, currentTrip.name);
+      // Con el nuevo sistema de consenso, cualquier miembro puede solicitar eliminar
+      await deleteTrip(currentTripId, currentTrip.name);
     }
 
     async function deleteTrip(tripId, name) {
-      const ok = await customConfirm({ icon: '🗑️', title: '¿Eliminar viaje?', msg: `"${name}" y todos sus gastos se borrarán para siempre.`, okLabel: 'Sí, eliminar', okClass: 'btn-danger' });
-      if (!ok) return;
-      const expSnap = await getDocs(collection(db, 'trips', tripId, 'expenses'));
-      for (const d of expSnap.docs) await deleteDoc(doc(db, 'trips', tripId, 'expenses', d.id));
-      const notesSnap = await getDocs(collection(db, 'trips', tripId, 'notes'));
-      for (const d of notesSnap.docs) await deleteDoc(doc(db, 'trips', tripId, 'notes', d.id));
-      await deleteDoc(doc(db, 'trips', tripId));
-      toast('Viaje eliminado 🗑️'); goHome();
+      try {
+        // Si estás solo en el viaje, puedes eliminar directamente
+        const members = currentTrip.members || [];
+        if (members.length <= 1) {
+          const ok = await customConfirm({ 
+            icon: '🗑️', 
+            title: '¿Eliminar viaje?', 
+            msg: `"${name}" y todos sus gastos se borrarán para siempre.`, 
+            okLabel: 'Sí, eliminar', 
+            okClass: 'btn-danger' 
+          });
+          if (!ok) return;
+          
+          // Eliminar directamente
+          await executeTripDeletion(tripId);
+          return;
+        }
+        
+        // Iniciar proceso de consenso para eliminar viaje (múltiples miembros)
+        const ok = await customConfirm({ 
+          icon: '🗑️', 
+          title: '¿Solicitar eliminar viaje?', 
+          msg: `Se solicitará eliminar "${name}". Todos los miembros deben estar de acuerdo.`, 
+          okLabel: 'Solicitar eliminación', 
+          okClass: 'btn-danger' 
+        });
+        if (!ok) return;
+        
+        await requestTripDeletion(tripId, name);
+      } catch (error) {
+        console.error('Error en deleteTrip:', error);
+        toast('Error al procesar solicitud: ' + error.message);
+      }
+    }
+
+    async function requestTripDeletion(tripId, name) {
+      // Crear solicitud de eliminación
+      const deletionRequest = {
+        requestedBy: currentUser.uid,
+        requestedByName: currentUser.displayName || currentUser.email,
+        requestedAt: serverTimestamp(),
+        status: 'pending', // pending | approved | rejected
+        approvals: [], // Array de UIDs que han aprobado
+        rejections: []  // Array de UIDs que han rechazado
+      };
+      
+      await updateDoc(doc(db, 'trips', tripId), { 
+        deletionRequest: deletionRequest 
+      });
+      
+      toast('Solicitud de eliminación enviada 👍');
+      
+      // Notificar a todos los miembros
+      const members = currentTrip.members || [];
+      members.forEach(member => {
+        if (member.uid !== currentUser.uid) {
+          addNotification(tripId, member.uid, 'delete_request', {
+            requesterName: currentUser.displayName || currentUser.email,
+            tripName: name
+          });
+        }
+      });
     }
 
     async function leaveTrip(tripId, name) {
@@ -2596,6 +4621,91 @@
       if (!ok) return;
       await updateDoc(doc(db, 'trips', tripId), { memberIds: arrayRemove(currentUser.uid), members: arrayRemove(tripMembers.find(m => m.uid === currentUser.uid)) });
       toast('Saliste del viaje'); goHome();
+    }
+
+    // ─── DELETION CONSENSUS ───
+    async function approveDeletion(tripId) {
+      if (!currentTrip?.deletionRequest || currentTrip.deletionRequest.status !== 'pending') return;
+      
+      const updatedRequest = {
+        ...currentTrip.deletionRequest,
+        approvals: [...(currentTrip.deletionRequest.approvals || []), currentUser.uid],
+        rejections: (currentTrip.deletionRequest.rejections || []).filter(uid => uid !== currentUser.uid)
+      };
+      
+      await updateDoc(doc(db, 'trips', tripId), { deletionRequest: updatedRequest });
+      
+      // Verificar si todos han aprobado
+      const allMembers = currentTrip.members || [];
+      const otherMembers = allMembers.filter(m => m.uid !== currentTrip.deletionRequest.requestedBy);
+      const requiredApprovals = otherMembers.length;
+      
+      if (updatedRequest.approvals.length >= requiredApprovals) {
+        // Todos están de acuerdo, eliminar el viaje
+        await executeTripDeletion(tripId);
+      } else {
+        toast('Tu aprobación ha sido registrada ✅');
+      }
+    }
+
+    async function rejectDeletion(tripId) {
+      if (!currentTrip?.deletionRequest || currentTrip.deletionRequest.status !== 'pending') return;
+      
+      const updatedRequest = {
+        ...currentTrip.deletionRequest,
+        rejections: [...(currentTrip.deletionRequest.rejections || []), currentUser.uid],
+        status: 'rejected'
+      };
+      
+      await updateDoc(doc(db, 'trips', tripId), { deletionRequest: updatedRequest });
+      toast('Has rechazado la eliminación del viaje ❌');
+    }
+
+    async function executeTripDeletion(tripId) {
+      try {
+        const expSnap = await getDocs(collection(db, 'trips', tripId, 'expenses'));
+        for (const d of expSnap.docs) await deleteDoc(doc(db, 'trips', tripId, 'expenses', d.id));
+        const notesSnap = await getDocs(collection(db, 'trips', tripId, 'notes'));
+        for (const d of notesSnap.docs) await deleteDoc(doc(db, 'trips', tripId, 'notes', d.id));
+        await deleteDoc(doc(db, 'trips', tripId));
+        toast('Viaje eliminado 🗑️'); goHome();
+      } catch (error) {
+        console.error('Error al eliminar viaje:', error);
+        toast('Error al eliminar viaje: ' + error.message);
+      }
+    }
+
+    function updateDeletionRequestBanner() {
+      const banner = document.getElementById('deletion-request-banner');
+      const desc = document.getElementById('deletion-request-desc');
+      const progress = document.getElementById('deletion-request-progress');
+      
+      if (!currentTrip?.deletionRequest || currentTrip.deletionRequest.status !== 'pending') {
+        banner.style.display = 'none';
+        return;
+      }
+      
+      const request = currentTrip.deletionRequest;
+      const allMembers = currentTrip.members || [];
+      const otherMembers = allMembers.filter(m => m.uid !== request.requestedBy);
+      const approvals = request.approvals || [];
+      const rejections = request.rejections || [];
+      
+      // Ocultar botones para el solicitante y para quienes ya votaron
+      const actions = banner.querySelector('.deletion-request-actions');
+      if (request.requestedBy === currentUser.uid || approvals.includes(currentUser.uid) || rejections.includes(currentUser.uid)) {
+        actions.style.display = 'none';
+      } else {
+        actions.style.display = 'flex';
+      }
+      
+      desc.textContent = `${request.requestByName} solicitó eliminar este viaje`;
+      
+      const approvedCount = approvals.length;
+      const requiredCount = otherMembers.length;
+      progress.textContent = `${approvedCount} de ${requiredCount} miembros han aprobado`;
+      
+      banner.style.display = 'block';
     }
 
     async function editExpense(expId) {
@@ -2853,6 +4963,11 @@
       document.getElementById('profile-view').style.display = 'block';
       document.getElementById('bottom-nav').style.display = 'none';
       document.body.classList.remove('trip-view-active');
+      
+      // Reset scroll to top
+      window.scrollTo(0, 0);
+      document.getElementById('profile-view').scrollTop = 0;
+      
       const u = currentUser;
       document.getElementById('pv-avatar').textContent = (u.displayName || '?')[0].toUpperCase();
       document.getElementById('pv-name').textContent = u.displayName || 'Sin nombre';
@@ -3858,12 +5973,6 @@
       return currency + ' ' + num.toLocaleString('en-US');
     }
 
-    function selectEmoji(el, emoji) {
-      selectedEmoji = emoji;
-      document.querySelectorAll('#create-trip-modal .cat-btn').forEach(b => b.classList.remove('selected'));
-      el.classList.add('selected');
-    }
-
     function selectCat(el, cat, icon) {
       selectedCat = cat; selectedCatIcon = icon;
       document.querySelectorAll('.category-grid .cat-btn').forEach(b => b.classList.remove('selected'));
@@ -3893,12 +6002,294 @@
     }
 
     let toastTimer;
-    function toast(msg) {
+    
+    // ─── NOTIFICATIONS MEJORADAS ───
+    function toast(msg, type = 'info', duration = 3000) {
       const el = document.getElementById('toast');
-      el.textContent = msg; el.classList.add('show');
-      clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+      el.className = 'toast show ' + type;
+      el.innerHTML = `<span class="toast-icon">${getToastIcon(type)}</span>${msg}`;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        el.classList.remove('show');
+        setTimeout(() => {
+          el.className = 'toast';
+        }, 300);
+      }, duration);
     }
+    
+    function getToastIcon(type) {
+      const icons = {
+        success: '✓',
+        error: '✕',
+        warning: '⚠',
+        info: 'ℹ'
+      };
+      return icons[type] || icons.info;
+    }
+    
+    function showNotification(title, message, type = 'info', duration = 5000) {
+      const notificationId = 'notification-' + Date.now();
+      const notification = document.createElement('div');
+      notification.id = notificationId;
+      notification.className = `notification-banner ${type} show`;
+      notification.innerHTML = `
+        <div class="notification-content">
+          <div class="notification-icon">${getNotificationIcon(type)}</div>
+          <div class="notification-text">
+            <div class="notification-title">${title}</div>
+            <div class="notification-message">${message}</div>
+          </div>
+          <button class="notification-close" onclick="closeNotification('${notificationId}')">✕</button>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        closeNotification(notificationId);
+      }, duration);
+    }
+    
+    function getNotificationIcon(type) {
+      const icons = {
+        success: '✓',
+        error: '✕',
+        warning: '⚠',
+        info: 'ℹ'
+      };
+      return icons[type] || icons.info;
+    }
+    
+    function closeNotification(id) {
+      const notification = document.getElementById(id);
+      if (notification) {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          notification.remove();
+        }, 300);
+      }
+    }
+    
+    // ─── FORM VALIDATION ───
+    function validateEmail(input) {
+      const email = input.value.trim();
+      const errorEl = document.getElementById(input.id + '-error');
+      const iconEl = document.getElementById(input.id + '-icon');
+      
+      if (!email) {
+        setValidationState(input, '', errorEl, iconEl);
+        return false;
+      }
+      
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        setValidationState(input, 'invalid', errorEl, iconEl, 'Correo electrónico inválido');
+        return false;
+      }
+      
+      setValidationState(input, 'valid', errorEl, iconEl, 'Correo válido');
+      return true;
+    }
+    
+    function validatePassword(input) {
+      const password = input.value;
+      const errorEl = document.getElementById(input.id + '-error');
+      
+      if (!password) {
+        setValidationState(input, '', errorEl, null, '');
+        return false;
+      }
+      
+      if (password.length < 6) {
+        setValidationState(input, 'invalid', errorEl, null, 'Mínimo 6 caracteres');
+        return false;
+      }
+      
+      setValidationState(input, 'valid', errorEl, null, 'Contraseña válida');
+      return true;
+    }
+    
+    function validateName(input) {
+      const name = input.value.trim();
+      const errorEl = document.getElementById(input.id + '-error');
+      
+      if (!name) {
+        setValidationState(input, '', errorEl, null, '');
+        return false;
+      }
+      
+      if (name.length < 2) {
+        setValidationState(input, 'invalid', errorEl, null, 'Nombre demasiado corto');
+        return false;
+      }
+      
+      setValidationState(input, 'valid', errorEl, null, 'Nombre válido');
+      return true;
+    }
+    
+    function setValidationState(input, state, errorEl, iconEl, message = '') {
+      // Remover todos los estados
+      input.classList.remove('valid', 'invalid');
+      if (errorEl) {
+        errorEl.classList.remove('error', 'success');
+        errorEl.textContent = '';
+      }
+      if (iconEl) {
+        iconEl.classList.remove('show');
+        iconEl.innerHTML = '';
+      }
+      
+      // Aplicar nuevo estado
+      if (state === 'valid') {
+        input.classList.add('valid');
+        if (errorEl) {
+          errorEl.classList.add('success');
+          errorEl.textContent = message;
+        }
+        if (iconEl) {
+          iconEl.classList.add('show');
+          iconEl.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 6L9 17l-5-5"></path>
+          </svg>`;
+        }
+      } else if (state === 'invalid') {
+        input.classList.add('invalid');
+        if (errorEl) {
+          errorEl.classList.add('error');
+          errorEl.textContent = message;
+        }
+        if (iconEl) {
+          iconEl.classList.add('show');
+          iconEl.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="15" y1="9" x2="9" y2="15"></line>
+            <line x1="9" y1="9" x2="15" y2="15"></line>
+          </svg>`;
+        }
+      }
+    }
+    
+    // ─── SKELETON HELPERS ───
+    function showSkeletonLoader(container, type = 'card', count = 3) {
+      const skeletons = [];
+      for (let i = 0; i < count; i++) {
+        let skeleton = '';
+        switch (type) {
+          case 'trip':
+            skeleton = `<div class="skeleton-trip-card"></div>`;
+            break;
+          case 'expense':
+            skeleton = `
+              <div class="skeleton-expense-item">
+                <div class="skeleton-expense-icon skeleton"></div>
+                <div class="skeleton-expense-content">
+                  <div class="skeleton skeleton-text medium"></div>
+                  <div class="skeleton skeleton-text small"></div>
+                </div>
+                <div class="skeleton-expense-amount skeleton"></div>
+              </div>
+            `;
+            break;
+          case 'member':
+            skeleton = `
+              <div class="skeleton-member-item">
+                <div class="skeleton-member-avatar skeleton"></div>
+                <div class="skeleton-member-info">
+                  <div class="skeleton skeleton-text medium"></div>
+                </div>
+                <div class="skeleton-member-balance skeleton"></div>
+              </div>
+            `;
+            break;
+          default:
+            skeleton = `<div class="skeleton-card"></div>`;
+        }
+        skeletons.push(skeleton);
+      }
+      
+      if (container) {
+        container.innerHTML = skeletons.join('');
+      }
+    }
+    
     window.toast = toast;
+    window.showNotification = showNotification;
+
+    // ─── UX HELPER FUNCTIONS ───
+    
+    // Loading overlay
+    function showLoading(message = 'Cargando...') {
+      const overlay = document.getElementById('loading-overlay');
+      const text = overlay.querySelector('p');
+      text.textContent = message;
+      overlay.classList.add('show');
+    }
+    
+    function hideLoading() {
+      const overlay = document.getElementById('loading-overlay');
+      overlay.classList.remove('show');
+    }
+    
+    // Skeleton loading utilities
+    function createSkeletonText(size = 'medium') {
+      return `<div class="skeleton skeleton-text ${size}"></div>`;
+    }
+    
+    function createSkeletonCard() {
+      return `<div class="skeleton skeleton-card"></div>`;
+    }
+    
+    function createSkeletonAvatar() {
+      return `<div class="skeleton skeleton-avatar"></div>`;
+    }
+    
+    // Enhanced feedback
+    function showButtonLoading(button, originalText) {
+      button.classList.add('loading');
+      button.disabled = true;
+      button.dataset.originalText = originalText;
+      button.innerHTML = '<span style="opacity:0">Cargando...</span>';
+    }
+    
+    function hideButtonLoading(button) {
+      button.classList.remove('loading');
+      button.disabled = false;
+      button.innerHTML = button.dataset.originalText || 'Guardar';
+    }
+    
+    // Touch feedback
+    function addTouchFeedback(element) {
+      element.addEventListener('touchstart', () => {
+        element.style.transform = 'scale(0.95)';
+      });
+      
+      element.addEventListener('touchend', () => {
+        element.style.transform = '';
+      });
+    }
+    
+    // Initialize touch feedback for all interactive elements
+    document.addEventListener('DOMContentLoaded', () => {
+      const interactiveElements = document.querySelectorAll('.btn, .cat-btn, .trip-sidebar-btn');
+      interactiveElements.forEach(addTouchFeedback);
+    });
+    
+    // Progress indicators
+    function updateProgress(element, percentage) {
+      element.style.setProperty('--progress', percentage + '%');
+    }
+    
+    // Enhanced error handling
+    function handleError(error, context = '') {
+      console.error(`Error in ${context}:`, error);
+      toast(`Algo salió mal ${context ? `al ${context}` : ''}. Intenta de nuevo.`);
+      hideLoading();
+    }
+    
+    // Smooth scroll
+    function smoothScrollTo(element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   </script>
 </body>
 </html>
