@@ -166,6 +166,63 @@
       flex-shrink: 0;
     }
 
+    
+    /* ─── THEME STYLES ─── */
+    .light-theme {
+      --bg: #f8f9fa;
+      --surface: #ffffff;
+      --surface2: #f1f3f7;
+      --surface3: #e8eaf6;
+      --border: rgba(0, 0, 0, 0.1);
+      --accent: #e8c97a;
+      --accent2: #5b8cf7;
+      --accent3: #7cefb0;
+      --danger: #f07878;
+      --text: #1a1a1a;
+      --text2: #6b7280;
+      --text3: #9ca3af;
+    }
+    
+    .light-theme body::before {
+      background:
+        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(91, 140, 247, 0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 110%, rgba(232, 201, 122, 0.03) 0%, transparent 60%);
+    }
+    
+    .theme-toggle-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: all 0.3s ease;
+      z-index: 2000; /* Aumentado para estar sobre el perfil */
+    }
+    
+    .theme-toggle-btn:hover {
+      background: var(--surface3);
+      border-color: var(--accent);
+      transform: scale(1.1);
+    }
+    
+    .light-theme .theme-toggle-btn {
+      background: rgba(0, 0, 0, 0.1);
+      border-color: rgba(0, 0, 0, 0.2);
+    }
+    
+    .light-theme .theme-toggle-btn:hover {
+      background: rgba(0, 0, 0, 0.15);
+      border-color: var(--accent);
+    }
+    
     /* ─── DETALLES UX MEJORADOS ─── */
     
     /* Tooltips contextuales */
@@ -404,11 +461,12 @@
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%) translateY(100px);
-      background: var(--surface);
+      background: rgba(30, 35, 45, 0.85);
+      backdrop-filter: blur(10px);
       color: var(--text);
       padding: 12px 20px;
       border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
       z-index: 10000;
       font-size: 0.9rem;
@@ -427,26 +485,26 @@
     }
     
     .toast.success {
-      background: rgba(124, 239, 176, 0.1);
-      border-color: var(--accent3);
+      background: rgba(124, 239, 176, 0.15);
+      border-color: rgba(124, 239, 176, 0.3);
       color: var(--accent3);
     }
     
     .toast.error {
-      background: rgba(240, 120, 120, 0.1);
-      border-color: var(--danger);
+      background: rgba(240, 120, 120, 0.15);
+      border-color: rgba(240, 120, 120, 0.3);
       color: var(--danger);
     }
     
     .toast.warning {
-      background: rgba(232, 201, 122, 0.1);
-      border-color: var(--accent);
+      background: rgba(232, 201, 122, 0.15);
+      border-color: rgba(232, 201, 122, 0.3);
       color: var(--accent);
     }
     
     .toast.info {
-      background: rgba(91, 140, 247, 0.1);
-      border-color: var(--accent2);
+      background: rgba(91, 140, 247, 0.15);
+      border-color: rgba(91, 140, 247, 0.3);
       color: var(--accent2);
     }
     
@@ -454,6 +512,34 @@
       display: inline-block;
       margin-right: 8px;
       font-size: 1rem;
+    }
+    
+    /* Light theme adjustments */
+    .light-theme .toast {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      color: var(--text);
+    }
+    
+    .light-theme .toast.success {
+      background: rgba(124, 239, 176, 0.2);
+      border-color: rgba(124, 239, 176, 0.4);
+    }
+    
+    .light-theme .toast.error {
+      background: rgba(240, 120, 120, 0.2);
+      border-color: rgba(240, 120, 120, 0.4);
+    }
+    
+    .light-theme .toast.warning {
+      background: rgba(232, 201, 122, 0.2);
+      border-color: rgba(232, 201, 122, 0.4);
+    }
+    
+    .light-theme .toast.info {
+      background: rgba(91, 140, 247, 0.2);
+      border-color: rgba(91, 140, 247, 0.4);
     }
     
     /* Notification banners */
@@ -893,48 +979,6 @@
     
     @keyframes spin {
       to { transform: rotate(360deg); }
-    }
-
-    /* ─── SKELETON LOADING ─── */
-    .skeleton {
-      background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
-      background-size: 200% 100%;
-      animation: skeleton-loading 1.5s infinite;
-      border-radius: var(--radius-sm);
-    }
-    
-    @keyframes skeleton-loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-    
-    .skeleton-text {
-      height: 12px;
-      margin: 4px 0;
-    }
-    
-    .skeleton-text.small {
-      width: 60%;
-      height: 10px;
-    }
-    
-    .skeleton-text.medium {
-      width: 80%;
-    }
-    
-    .skeleton-text.large {
-      width: 100%;
-    }
-    
-    .skeleton-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-    }
-    
-    .skeleton-card {
-      height: 80px;
-      margin: 8px 0;
     }
 
     /* ─── PASSWORD TOGGLE ICON ─── */
@@ -1564,12 +1608,14 @@
     }
 
     /* ─── EXPENSE CARDS ─── */
-    .expense-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 12px; transition: all 0.2s; }
+    .expense-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 12px; transition: all 0.2s; position: relative; overflow: visible; }
     .expense-card:hover { border-color: rgba(255, 255, 255, 0.12); }
     .expense-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
     .expense-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
-    .expense-details { flex: 1; }
-    .expense-title { font-weight: 600; font-size: 1rem; margin-bottom: 4px; }
+    .expense-details { flex: 1; min-width: 0; overflow: hidden; }
+    .expense-btn-row { margin-top: 8px; display: flex; gap: 6px; }
+    .expense-btn-row .btn { white-space: nowrap; padding: 4px 8px !important; font-size: 0.72rem !important; width: auto !important; flex-shrink: 0; }
+    .expense-title { font-weight: 600; font-size: 1rem; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .expense-meta { display: flex; gap: 12px; font-size: 0.82rem; color: var(--text2); flex-wrap: wrap; }
     .expense-amount { text-align: right; }
     .expense-amount .total { font-family: 'Fraunces', serif; font-size: 1.3rem; font-weight: 600; color: var(--accent); }
@@ -1714,6 +1760,135 @@
     .modal-overlay.show .modal { transform: translateY(0); }
     .modal-handle { width: 40px; height: 4px; background: var(--surface3); border-radius: 2px; margin: 0 auto 24px; }
     .modal-title { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 600; margin-bottom: 24px; }
+    
+    /* ─── CALCULATOR AND RECEIPT VIEWER STYLES ─── */
+    #receipt-image {
+      transition: transform 0.1s ease;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      touch-action: none; /* Prevent all default touch actions */
+    }
+    
+    #receipt-image.dragging {
+      transition: none; /* No transition during drag */
+      cursor: grabbing;
+    }
+    
+    #receipt-image:not(.dragging) {
+      cursor: zoom-in;
+    }
+    
+    #receipt-image.zoomed {
+      cursor: move;
+    }
+    
+    #calc-total {
+      transition: all 0.3s ease;
+    }
+    
+    #calc-total.pulse {
+      animation: calcPulse 0.4s ease;
+    }
+    
+    @keyframes calcPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); color: var(--accent3); }
+      100% { transform: scale(1); }
+    }
+    
+    .calc-operation-indicator {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin: 0 4px;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+    
+    .calc-operation-indicator.show {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+    
+    .calc-operation-indicator.add {
+      color: var(--accent2);
+    }
+    
+    .calc-operation-indicator.subtract {
+      color: var(--danger);
+    }
+    
+    #calc-input:focus {
+      outline: none;
+      border-color: var(--accent2);
+      box-shadow: 0 0 0 3px rgba(91, 140, 247, 0.1);
+    }
+    
+    #calc-history {
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    
+    #calc-history::-webkit-scrollbar {
+      width: 4px;
+    }
+    
+    #calc-history::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    #calc-history::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+    
+    .calc-button {
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .calc-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .calc-button:active {
+      transform: translateY(0);
+    }
+    
+    .calc-button::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s;
+    }
+    
+    .calc-button:active::after {
+      width: 100px;
+      height: 100px;
+    }
+    
+    @media (max-width: 480px) {
+      #receipt-image {
+        height: 150px;
+      }
+      
+      #expense-calculator {
+        padding: 10px;
+      }
+      
+      #calc-input {
+        font-size: 16px; /* Prevent zoom on iOS */
+      }
+    }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .category-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 4px; }
     .cat-btn { padding: 10px 8px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); text-align: center; cursor: pointer; font-size: 0.8rem; color: var(--text2); transition: all 0.2s; }
@@ -1744,10 +1919,7 @@
     .note-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 12px; }
     .note-card .note-author { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
 
-    /* ─── TOAST ─── */
-    .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface3); border: 1px solid var(--border); border-radius: 30px; padding: 12px 24px; font-size: 0.9rem; font-weight: 500; z-index: 999; opacity: 0; transition: all 0.3s; pointer-events: none; white-space: nowrap; }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
+    
     /* ─── LOADER ─── */
     .loader { width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -1775,13 +1947,14 @@
 
     /* ─── DROPDOWN ─── */
     .dropdown { position: relative; }
-    .dropdown-menu { position: fixed; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); min-width: 180px; z-index: 500; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6); overflow: hidden; display: none; }
+    .dropdown-menu { position: fixed; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); min-width: 160px; z-index: 9999; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6); overflow: hidden; display: none; }
     .dropdown-menu.open { display: block; animation: fadeIn 0.15s ease; }
     .dropdown-item { display: flex; align-items: center; gap: 8px; padding: 10px 14px; font-size: 0.88rem; cursor: pointer; color: var(--text2); transition: background 0.15s; }
     .dropdown-item:hover { background: var(--surface3); color: var(--text); }
     .dropdown-item.danger { color: var(--danger); }
     .dropdown-item.danger:hover { background: rgba(240, 120, 120, 0.1); }
-    .dots-btn { width: 32px; height: 32px; border-radius: 8px; border: 1px solid transparent; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2); font-size: 1.2rem; transition: all 0.15s; flex-shrink: 0; }
+    .dots-btn { width: 28px; height: 28px; border-radius: 8px; border: 1px solid transparent; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text2); font-size: 1.1rem; transition: all 0.15s; flex-shrink: 0; }
+
     .dots-btn:hover { background: var(--surface2); border-color: var(--border); color: var(--text); }
 
     /* ─── TOTAL BAR ─── */
@@ -1918,12 +2091,13 @@
       .tabs-arrow { display: none; }
       .members-row { gap: 6px; margin-top: 12px; }
       .member-chip { font-size: 0.78rem; padding: 4px 10px; }
-      .expense-card { padding: 14px 16px; }
+      .expense-card { padding: 14px 16px; padding-top: 10px; }
       .expense-icon { width: 38px; height: 38px; font-size: 1rem; border-radius: 10px; }
       .expense-title { font-size: 0.92rem; }
       .expense-meta { font-size: 0.76rem; gap: 6px; }
       .expense-amount .total { font-size: 1.1rem; }
-      .expense-amount .per-person { font-size: 0.76rem; }
+      .expense-amount .per-person { font-size: 0.72rem; }
+      .expense-header { gap: 8px; }
       .payment-pill { font-size: 0.76rem; padding: 5px 10px; }
       .modal { padding: 24px 20px; border-radius: 20px 20px 0 0; }
       .modal-title { font-size: 1.2rem; }
@@ -2040,18 +2214,40 @@
     .itin-tag-book { background: rgba(240,120,120,0.12); color: var(--danger); border-color: rgba(240,120,120,0.25); }
     .itin-tag-tip  { background: rgba(124,239,176,0.12); color: var(--accent3); border-color: rgba(124,239,176,0.25); }
     .itin-tag-free { background: rgba(91,140,247,0.12); color: var(--accent2); border-color: rgba(91,140,247,0.25); }
+    .itin-tag-done { background: rgba(124,239,176,0.15); color: var(--accent3); border-color: rgba(124,239,176,0.35); }
 
     .itin-event-actions {
       display: flex; gap: 6px; flex-shrink: 0; padding-top: 2px;
     }
     .itin-action-btn {
-      width: 28px; height: 28px; border-radius: 8px;
-      background: transparent; border: 1px solid var(--border);
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      font-size: 0.8rem; color: var(--text3); transition: all 0.2s;
+      background: none; border: none; color: var(--text2); cursor: pointer; padding: 4px; border-radius: 4px; font-size: 14px; transition: all 0.2s;
     }
-    .itin-action-btn:hover { background: var(--surface3); color: var(--text); border-color: rgba(255,255,255,0.12); }
-    .itin-action-btn.del:hover { background: rgba(240,120,120,0.15); color: var(--danger); border-color: rgba(240,120,120,0.3); }
+    .itin-action-btn:hover { background: var(--surface2); color: var(--text); }
+    .itin-action-btn.del:hover { background: rgba(240,120,120,0.15); color: var(--danger); }
+
+    .itin-event-maps {
+      margin-top: 6px;
+    }
+    
+    .itin-maps-btn {
+      background: linear-gradient(135deg, #4285f4, #34a853);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .itin-maps-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(66, 133, 244, 0.3);
+    }
 
     .itin-add-event-btn {
       display: flex; align-items: center; gap: 6px;
@@ -2306,7 +2502,7 @@
         </div>
         <div class="form-group">
           <label for="login-password">Contraseña</label>
-          <div class="form-group with-icon" style="position:relative">
+          <div style="position:relative">
             <input type="password" id="login-password" class="form-input" placeholder="••••••••" style="padding-right:44px" onkeydown="if(event.key==='Enter') doLogin()" oninput="validatePassword(this)">
             <button type="button" class="password-toggle" onclick="togglePwd('login-password', this)" aria-label="Mostrar/ocultar contraseña">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -2314,15 +2510,15 @@
                 <circle cx="12" cy="12" r="3"></circle>
               </svg>
             </button>
-            <div class="validation-message" id="login-password-error"></div>
           </div>
+          <div class="validation-message" id="login-password-error"></div>
         </div>
         <button class="btn btn-primary" onclick="doLogin()" aria-label="Iniciar sesión en tu cuenta" data-tooltip="Accede a tus viajes">Entrar al viaje →</button>
       </div>
       <div id="register-form" style="display:none">
         <div class="form-group">
           <label for="reg-name">Tu nombre</label>
-          <input type="text" id="reg-name" class="form-input" placeholder="Pablo Muñoz" onkeydown="if(event.key==='Enter') doRegister()" oninput="validateName(this)">
+          <input type="text" id="reg-name" class="form-input" placeholder="Tu nombre" onkeydown="if(event.key==='Enter') doRegister()" oninput="validateName(this)">
           <div class="validation-message" id="reg-name-error"></div>
         </div>
         <div class="form-group">
@@ -2332,7 +2528,7 @@
         </div>
         <div class="form-group">
           <label for="reg-password">Contraseña</label>
-          <div class="form-group with-icon" style="position:relative">
+          <div style="position:relative">
             <input type="password" id="reg-password" class="form-input" placeholder="Mínimo 6 caracteres" style="padding-right:44px" onkeydown="if(event.key==='Enter') doRegister()" oninput="validatePassword(this)">
             <button type="button" class="password-toggle" onclick="togglePwd('reg-password', this)" aria-label="Mostrar/ocultar contraseña">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -2340,8 +2536,8 @@
                 <circle cx="12" cy="12" r="3"></circle>
               </svg>
             </button>
-            <div class="validation-message" id="reg-password-error"></div>
           </div>
+          <div class="validation-message" id="reg-password-error"></div>
         </div>
         <button class="btn btn-primary" onclick="doRegister()" aria-label="Crear nueva cuenta" data-tooltip="Regístrate para empezar">Crear cuenta →</button>
       </div>
@@ -2394,6 +2590,9 @@
             </button>
             <button class="user-dropdown-item" onclick="openChangePhotoModal();closeUserMenu()">
               <span class="item-icon">📷</span> Cambiar foto
+            </button>
+            <button class="user-dropdown-item" onclick="toggleTheme();closeUserMenu()">
+              <span class="item-icon">🌘</span> Cambiar tema
             </button>
             <div class="user-dropdown-sep"></div>
             <button class="user-dropdown-item danger" onclick="doLogout()">
@@ -2459,7 +2658,7 @@
                 <div class="trip-hero-dropdown" id="trip-hero-dropdown">
                   <button class="trip-hero-dropdown-item" onclick="openEditCoverModal()">🖼️ Cambiar portada</button>
                   <button class="trip-hero-dropdown-item" onclick="openModal('invite-modal')">👥 Invitar personas</button>
-                  <button class="trip-hero-dropdown-item" onclick="tripDangerAction()" style="color:var(--danger)">🗑️ Eliminar viaje</button>
+                  <button class="trip-hero-dropdown-item" onclick="deleteTrip(currentTripId, currentTrip.name)" style="color:var(--danger)">🗑️ Eliminar viaje</button>
                 </div>
               </div>
             </div>
@@ -2499,7 +2698,7 @@
                 <span class="sidebar-active-bar"></span>
               </button>
               <div class="sidebar-sep"></div>
-              <button class="trip-sidebar-btn" id="trip-action-btn" onclick="tripDangerAction()" style="color:var(--danger)">
+              <button class="trip-sidebar-btn" id="trip-action-btn" onclick="deleteTrip(currentTripId, currentTrip.name)" style="color:var(--danger)">
                 <span class="sidebar-icon">🗑️</span> <span id="trip-action-label">Solicitar eliminar</span>
                 <span class="sidebar-active-bar" style="background:var(--danger)"></span>
               </button>
@@ -2714,7 +2913,7 @@
         </div>
       </div>
 
-      <div class="form-group"><label>Descripcion</label><input type="text" id="exp-desc" placeholder="Cena en Venecia, Camper Dolomitas..."></div>
+      <div class="form-group"><label>Descripcion <span id="exp-desc-counter" style="float:right;font-size:0.75rem;color:var(--text3)">0/25</span></label><input type="text" id="exp-desc" placeholder="Cena en Venecia, Camper Dolomitas..." maxlength="25" oninput="document.getElementById('exp-desc-counter').textContent=this.value.length+'/25'"></div>
 
       <div class="form-row">
         <div class="form-group">
@@ -2793,7 +2992,7 @@
             <span id="file-name-display">Seleccionar foto o boleta...</span>
           </label>
         </div>
-        <div id="receipt-upload-status" style="font-size:0.8rem;color:var(--text3);margin-top:8px;display:none">Subiendo imagen... &#x23F3;</div>
+                <div id="receipt-upload-status" style="font-size:0.8rem;color:var(--text3);margin-top:8px;display:none">Subiendo imagen... &#x23F3;</div>
       </div>
 
       <div id="exp-preview" style="display:none;margin-bottom:16px;padding:14px;background:var(--surface2);border-radius:var(--radius-sm);font-size:0.88rem;color:var(--text2)"></div>
@@ -2811,6 +3010,62 @@
       <div class="modal-handle"></div>
       <h2 class="modal-title">Editar mi parte 📋</h2>
       
+      <!-- Receipt viewer with calculator -->
+      <div id="receipt-calculator-section" style="margin-bottom:16px">
+        <!-- Receipt image viewer -->
+        <div id="receipt-viewer" style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;display:none">
+          <div style="color:var(--text3);margin-bottom:8px;font-size:0.85rem">📸 Recibo del gasto</div>
+          <div style="position:relative;background:#000;border-radius:8px;overflow:hidden;margin-bottom:8px">
+            <img id="receipt-image" style="width:100%;height:200px;object-fit:contain;cursor:zoom-in" alt="Recibo">
+            <!-- Zoom controls -->
+            <div style="position:absolute;top:8px;right:8px;display:flex;gap:4px">
+              <button onclick="zoomReceipt(-0.2)" style="background:rgba(0,0,0,0.7);color:white;border:none;border-radius:4px;width:28px;height:28px;font-size:16px;cursor:pointer">−</button>
+              <button onclick="zoomReceipt(0.2)" style="background:rgba(0,0,0,0.7);color:white;border:none;border-radius:4px;width:28px;height:28px;font-size:16px;cursor:pointer">+</button>
+              <button onclick="resetZoom()" style="background:rgba(0,0,0,0.7);color:white;border:none;border-radius:4px;width:28px;height:28px;font-size:12px;cursor:pointer">⟲</button>
+            </div>
+          </div>
+          <div style="text-align:center;color:var(--text3);font-size:0.75rem">Arrastra para mover • Scroll/pinch para zoom • ⟲ para resetear</div>
+        </div>
+        
+        <!-- Calculator -->
+        <div id="expense-calculator" style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px">
+          <div style="color:var(--text3);margin-bottom:8px;font-size:0.85rem">🧮 Calculadora de gastos</div>
+          
+          <!-- Calculator display -->
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-size:0.75rem;color:var(--text3)">Total calculado</div>
+                <div style="display:flex;align-items:center">
+                  <span class="calc-operation-indicator" id="calc-operation"></span>
+                  <div style="font-family:'Fraunces',serif;font-size:1.4rem;font-weight:600;color:var(--accent)" id="calc-total">$0</div>
+                </div>
+              </div>
+              <button onclick="assignCalcToAmount()" class="calc-button" style="background:var(--accent3);color:var(--bg);border:none;border-radius:6px;padding:8px 12px;font-size:0.8rem;font-weight:600;cursor:pointer">Asignar →</button>
+            </div>
+          </div>
+          
+          <!-- Calculator input -->
+          <div style="display:flex;gap:8px;margin-bottom:8px">
+            <input type="number" id="calc-input" placeholder="0" min="0" style="flex:1;padding:8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text)">
+            <button onclick="addToCalculator()" class="calc-button" style="background:var(--accent2);color:white;border:none;border-radius:6px;padding:8px 16px;font-weight:600;cursor:pointer">+</button>
+            <button onclick="subtractFromCalculator()" class="calc-button" style="background:var(--danger);color:white;border:none;border-radius:6px;padding:8px 16px;font-weight:600;cursor:pointer">−</button>
+            <button onclick="clearCalculator()" class="calc-button" style="background:var(--surface3);color:var(--text);border:none;border-radius:6px;padding:8px 12px;font-weight:600;cursor:pointer">C</button>
+          </div>
+          
+          <!-- Percentage calculator -->
+          <div style="display:flex;gap:8px;margin-bottom:8px">
+            <input type="number" id="calc-percent-input" placeholder="%" min="0" max="100" step="0.1" style="width:80px;padding:8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text)">
+            <button onclick="calculatePercentage()" class="calc-button" style="background:var(--accent);color:white;border:none;border-radius:6px;padding:8px 12px;font-weight:600;cursor:pointer">Calcular %</button>
+          </div>
+          
+          <!-- Calculation history -->
+          <div id="calc-history" style="max-height:80px;overflow-y:auto;font-size:0.8rem;color:var(--text2)">
+            <!-- History items will appear here -->
+          </div>
+        </div>
+      </div>
+      
       <!-- Expense summary -->
       <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px;margin-bottom:16px;font-size:0.85rem">
         <div style="color:var(--text3);margin-bottom:4px">Gasto total:</div>
@@ -2818,6 +3073,7 @@
         <div style="color:var(--text3);font-size:0.75rem;margin-top:4px" id="share-orig-currency-display"></div>
       </div>
       
+            
       <!-- Currency selector (if EUR/USD) -->
       <div id="share-currency-group" style="display:none;margin-bottom:16px">
         <div class="form-group"><label>Mi cantidad está en</label>
@@ -2833,12 +3089,7 @@
         </div>
       </div>
       
-      <!-- My amount input -->
-      <div class="form-group">
-        <label>Mi total (según comprobante)</label>
-        <input type="number" id="share-amount-input" placeholder="0" min="0" oninput="onShareAmountInput()">
-      </div>
-      
+            
       <!-- Real-time validation -->
       <div id="share-validation" style="display:none;padding:8px 10px;border-radius:8px;font-size:0.82rem;margin-bottom:12px" class="alert"></div>
       
@@ -2961,6 +3212,14 @@
       </div>
 
       <div class="form-group">
+        <label>Google Maps (opcional)</label>
+        <input type="text" id="itin-maps-url" placeholder="https://maps.google.com/?q=...">
+        <small style="color:var(--text3);font-size:0.75rem;margin-top:4px;display:block">
+          💡 Pega la URL de Google Maps o busca un lugar para obtener coordenadas
+        </small>
+      </div>
+
+      <div class="form-group">
         <label>Nota / Datos relevantes (opcional)</label>
         <textarea id="itin-note" placeholder="Comprar entradas con anticipación, llevar agua, código de reserva: ABC123..." style="height:80px;resize:none"></textarea>
       </div>
@@ -2972,7 +3231,29 @@
           <div class="itin-tag-toggle book" id="itag-book" onclick="toggleItinTag('book')">📋 Reservar antes</div>
           <div class="itin-tag-toggle tip" id="itag-tip" onclick="toggleItinTag('tip')">💡 Dato útil</div>
           <div class="itin-tag-toggle" id="itag-free" onclick="toggleItinTag('free')" style="--tag-clr:var(--accent2)">🆓 Gratis</div>
+          <div class="itin-tag-toggle" id="itag-done" onclick="toggleItinTag('done')" style="--tag-clr:var(--accent3)">✅ Reservado</div>
         </div>
+      </div>
+
+      <div class="form-group">
+        <label>Link de reserva (opcional)</label>
+        <input type="url" id="itin-booking-url" placeholder="https://airbnb.com/rooms/... · booking.com/...">
+        <small style="color:var(--text3);font-size:0.75rem;margin-top:4px;display:block">💡 Link al alojamiento, vuelo, actividad...</small>
+      </div>
+
+      <div class="form-group">
+        <label>Comprobante de reserva (opcional)</label>
+        <div class="file-upload-wrapper">
+          <input type="file" id="itin-receipt" accept="image/*" class="file-input-hidden" onchange="updateItinFileName(this)">
+          <label for="itin-receipt" class="file-upload-btn" id="itin-receipt-label">
+            <span class="file-icon">📸</span>
+            <span id="itin-file-name-display">Seleccionar foto o comprobante...</span>
+          </label>
+        </div>
+        <div id="itin-receipt-preview-link" style="display:none;margin-top:6px;font-size:0.8rem;color:var(--text3)">
+          Foto actual: <span id="itin-receipt-view-link" style="color:var(--accent2);text-decoration:underline;cursor:pointer">ver foto</span>
+        </div>
+        <div id="itin-receipt-upload-status" style="font-size:0.8rem;color:var(--text3);margin-top:8px;display:none">Subiendo imagen... ⏳</div>
       </div>
 
       <div style="display:flex;gap:10px;margin-top:4px">
@@ -3126,6 +3407,7 @@
     </div>
   </div>
 
+  
   <!-- TOAST -->
   <div class="toast" id="toast" role="alert" aria-live="polite"></div>
 
@@ -3137,6 +3419,7 @@
     </div>
   </div>
 
+  
   <!-- FIREBASE SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -3172,6 +3455,7 @@
     let unsubscribeNotifications = null;
     let unsubscribeItinerary = null;
     let unsubscribeGallery = null;
+    let unsubscribeTrip = null;
     let editingExpenseId = null;
 
     // Itinerary state
@@ -3225,9 +3509,20 @@
     window.openPayModal = openPayModal;
     window.toggleNotifPanel = toggleNotifPanel;
     window.clearNotifications = clearNotifications;
-    window.tripDangerAction = tripDangerAction;
     window.openAddItinEvent = openAddItinEvent;
     window.openEditItinEvent = openEditItinEvent;
+    function updateItinFileName(input) {
+      const label = document.getElementById('itin-receipt-label');
+      const nameDisplay = document.getElementById('itin-file-name-display');
+      if (input.files && input.files[0]) {
+        nameDisplay.textContent = input.files[0].name;
+        label.classList.add('has-file');
+      } else {
+        nameDisplay.textContent = 'Seleccionar foto o comprobante...';
+        label.classList.remove('has-file');
+      }
+    }
+    window.updateItinFileName = updateItinFileName;
     window.saveItinEvent = saveItinEvent;
     window.deleteItinEvent = deleteItinEvent;
     window.selectItinCat = selectItinCat;
@@ -3244,6 +3539,7 @@
     window.openGalleryLightbox = openGalleryLightbox;
     window.galleryLbNav = galleryLbNav;
     window.closeGalleryLightbox = closeGalleryLightbox;
+    window.openGoogleMaps = openGoogleMaps;
     window.toggleUserMenu = toggleUserMenu;
     window.closeUserMenu = closeUserMenu;
     window.openChangePhotoModal = openChangePhotoModal;
@@ -3470,13 +3766,33 @@
       } catch (e) { toast('Error: ' + friendlyError(e.code)); }
     }
 
-    async function doLogout() { await signOut(auth); }
+    async function doLogout() {
+      // Cancel all Firestore listeners before signing out to avoid permission-denied errors
+      if (unsubscribeExpenses) { unsubscribeExpenses(); unsubscribeExpenses = null; }
+      if (unsubscribeNotes) { unsubscribeNotes(); unsubscribeNotes = null; }
+      if (unsubscribeNotifications) { unsubscribeNotifications(); unsubscribeNotifications = null; }
+      if (unsubscribeItinerary) { unsubscribeItinerary(); unsubscribeItinerary = null; }
+      if (unsubscribeGallery) { unsubscribeGallery(); unsubscribeGallery = null; }
+      if (unsubscribeTrip) { unsubscribeTrip(); unsubscribeTrip = null; }
+      await signOut(auth);
+      document.getElementById('bottom-nav').style.display = 'none';
+    }
 
     function switchAuthTab(tab) {
       document.querySelectorAll('.auth-tab').forEach((t, i) => t.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register')));
       document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
       document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
     }
+
+    // Hacer funciones disponibles globalmente
+    window.doLogin = doLogin;
+    window.doRegister = doRegister;
+    window.doLogout = doLogout;
+    window.switchAuthTab = switchAuthTab;
+    window.validateEmail = validateEmail;
+    window.validatePassword = validatePassword;
+    window.validateName = validateName;
+    window.toggleTheme = toggleTheme;
 
     // ─── TRIPS ───
     async function loadTrips() {
@@ -3716,7 +4032,8 @@
       updateDeletionRequestBanner();
 
       // Escuchar cambios en el viaje para actualizar el banner
-      const unsubscribeTrip = onSnapshot(doc(db, 'trips', tripId), (docSnap) => {
+      if (unsubscribeTrip) { unsubscribeTrip(); unsubscribeTrip = null; }
+      unsubscribeTrip = onSnapshot(doc(db, 'trips', tripId), (docSnap) => {
         if (docSnap.exists()) {
           currentTrip = { id: tripId, ...docSnap.data() };
           updateDeletionRequestBanner();
@@ -4011,6 +4328,10 @@
       if (!e.target.closest('.trip-hero-menu') && !e.target.closest('.trip-hero-dropdown')) {
         document.getElementById('trip-hero-dropdown').classList.remove('open');
       }
+      // Close kebab menus on outside click
+      if (!e.target.closest('[id^="kebab-"]') && !e.target.classList.contains('dots-btn')) {
+        document.querySelectorAll('[id^="kebab-"]').forEach(m => m.style.display = 'none');
+      }
     });
 
     // ─── EXPENSES ───
@@ -4061,8 +4382,8 @@
       // Calcular monto por persona según splitMode
       let perPersonDisplay = '';
       if (showPayments && splitWith.length > 1) {
-        if (e.splitMode === 'custom' && e.splitAmounts) {
-          perPersonDisplay = 'monto personalizado';
+        if (e.splitMode === 'custom') {
+          perPersonDisplay = 'personalizado';
         } else {
           const pp = Math.round(e.amount / splitWith.length);
           perPersonDisplay = formatAmount(pp, currency) + ' c/u';
@@ -4120,9 +4441,15 @@
       const paidByMember = tripMembers.find(m => m.uid === e.paidBy);
       const paidByName = paidByMember ? paidByMember.name.split(' ')[0] : 'Alguien';
       const canEdit = e.createdBy === currentUser.uid;
-      const dotsMenu = canEdit ? `<div style="display:flex;flex-direction:column;gap:4px;margin-left:6px"><button class="dots-btn" onclick="editExpense('${e.id}')" title="Editar" style="font-size:0.9rem">✏️</button><button class="dots-btn" onclick="deleteExpense('${e.id}')" title="Eliminar" style="font-size:0.9rem;color:var(--danger)">🗑️</button></div>` : '';
-      const receiptBtn = e.receiptUrl ? `<button class="btn btn-ghost btn-sm" onclick="openLightbox('${e.receiptUrl}')" style="margin-top:8px;width:fit-content;border:1px solid var(--border);font-size:0.75rem;padding:4px 8px">📎 Ver Boleta</button>` : '';
-      const editPartBtn = (e.category === 'Comida' && (e.splitWith || []).includes(currentUser.uid)) ? `<button class="btn btn-ghost btn-sm" onclick="openEditShareModal('${e.id}','${currentUser.uid}')" style="margin-top:8px;margin-left:8px">✏️ Editar mi parte</button>` : '';
+      const dotsMenu = canEdit ? `<div style="position:relative;flex-shrink:0;margin-left:4px">
+        <button class="dots-btn" onclick="toggleKebab('${e.id}', event)" style="font-size:1.2rem;width:28px;height:28px">⋮</button>
+        <div id="kebab-${e.id}" style="display:none;position:absolute;top:100%;right:0;margin-top:4px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;min-width:160px;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,0.7)">
+          <div onclick="editExpense('${e.id}')" style="padding:12px 16px;cursor:pointer;font-size:0.88rem;color:var(--text2)">✏️ Editar gasto</div>
+          <div onclick="deleteExpense('${e.id}')" style="padding:12px 16px;cursor:pointer;font-size:0.88rem;color:var(--danger)">🗑️ Eliminar gasto</div>
+        </div>
+      </div>` : '';
+      const receiptBtn = e.receiptUrl ? `<button class="btn btn-ghost btn-sm" onclick="openLightbox('${e.receiptUrl}')" style="width:fit-content;max-width:none;border:1px solid var(--border);font-size:0.75rem;padding:4px 8px">📎 Ver Boleta</button>` : '';
+      const editPartBtn = (e.category === 'Comida' && (e.splitWith || []).includes(currentUser.uid)) ? `<button class="btn btn-ghost btn-sm" onclick="openEditShareModal('${e.id}','${currentUser.uid}')" style="width:fit-content;max-width:none">✏️ Editar mi parte</button>` : '';
 
       return `<div class="expense-card">
         <div class="expense-header">
@@ -4135,7 +4462,6 @@
               <span>${e.date || ''}</span>
               ${showPayments ? `<span>👥 ${splitWith.length} personas</span>` : ''}
             </div>
-            ${receiptBtn}${editPartBtn}
           </div>
           <div style="display:flex;align-items:flex-start;gap:4px">
             <div class="expense-amount">
@@ -4145,6 +4471,7 @@
             ${dotsMenu}
           </div>
         </div>
+        ${(receiptBtn || editPartBtn) ? `<div class="expense-btn-row">${receiptBtn}${editPartBtn}</div>` : ''}
         ${paymentsHtml}
       </div>`;
     }
@@ -4285,6 +4612,7 @@
       if (!currentTripId) return;
       const expType = forceType || 'shared';
       document.getElementById('exp-desc').value = '';
+      document.getElementById('exp-desc-counter').textContent = '0/25';
       document.getElementById('exp-amount').value = '';
       document.getElementById('exp-date').value = new Date().toISOString().split('T')[0];
       document.getElementById('exp-currency').value = 'CLP';
@@ -4468,8 +4796,9 @@
       // Calcular monto final con propina
       const finalAmountOrig = calcFinalAmount();
       // Convertir a CLP (moneda del viaje)
-      const finalAmountCLP = Math.round(toTripCurrency(finalAmountOrig));
-
+      let finalAmountCLP = Math.round(toTripCurrency(finalAmountOrig));
+      
+      
       // Validar división personalizada: sólo exigir suma si se ingresaron montos
       if (splitMode === 'custom' && selectedExpType === 'shared') {
         const sumCustom = Object.values(customSplitAmounts).reduce((a, b) => a + b, 0);
@@ -4527,12 +4856,13 @@
         type: selectedExpType,
         paidBy,
         // Siempre registrar quiénes participan; en modo custom los montos pueden llegar después
-        splitWith: selectedExpType === 'shared' ? selectedSplitMembers : [currentUser.uid],
+        splitWith: selectedExpType === 'shared' ? (selectedSplitMembers.length > 0 ? selectedSplitMembers : tripMembers.map(m => m.uid)) : [currentUser.uid],
         splitMode,
         ...(splitAmounts && { splitAmounts })
       };
       if (finalReceiptUrl) expData.receiptUrl = finalReceiptUrl;
-
+      
+      
       if (editingExpenseId) {
         await updateDoc(doc(db, 'trips', currentTripId, 'expenses', editingExpenseId), expData);
         toast('Gasto actualizado ✓'); editingExpenseId = null;
@@ -4544,13 +4874,7 @@
       if (selectedExpType !== 'personal') switchTab('shared'); else switchTab('personal');
     }
 
-    // ─── TRIP DANGER ───
-    async function tripDangerAction() {
-      if (!currentTripId || !currentTrip) return;
-      // Con el nuevo sistema de consenso, cualquier miembro puede solicitar eliminar
-      await deleteTrip(currentTripId, currentTrip.name);
-    }
-
+    // ─── TRIP DELETION ───
     async function deleteTrip(tripId, name) {
       try {
         // Si estás solo en el viaje, puedes eliminar directamente
@@ -4764,13 +5088,11 @@
           currencyGroup.style.display = 'none';
         }
         
-        // Load my current amount
+        // Load my current amount (NO modificar el título)
         const splitWith = e.splitWith || tripMembers.map(m => m.uid);
-        const defaultAmt = (e.splitMode === 'custom' && e.splitAmounts && e.splitAmounts[uid])
-          ? e.splitAmounts[uid]
-          : Math.round(totalClp / Math.max(1, splitWith.length));
-        document.getElementById('share-amount-input').value = defaultAmt;
         
+        // Since we removed the amount input and label, we don't need to display it
+        // Users will use the calculator to calculate their amount
         // Load paid status
         const isPaid = e.payments && (e.payments[uid] === 'claimed' || e.payments[uid] === 'confirmed');
         _editingShare.isPaid = isPaid || false;
@@ -4779,13 +5101,15 @@
         // Load breakdown of other members
         renderShareBreakdown(uid, e, splitWith);
         
-        // Trigger validation
-        onShareAmountInput();
+        // Initialize calculator and receipt viewer
+        initializeCalculator();
         
         openModal('edit-share-modal');
-      } catch (err) { console.error(err); toast('Error abriendo modal'); }
+      } catch (err) { toast('Error abriendo modal'); }
     }
     
+        
+        
     function updateSharePaidBtn() {
       const btn = document.getElementById('share-paid-btn');
       if (_editingShare.isPaid) {
@@ -4823,14 +5147,18 @@
         const tripCurrency = currentTrip?.currency || 'CLP';
         const status = expense.payments && expense.payments[uid];
         
+        // Usar el monto asignado directamente
+        let displayAmount = amt;
+        
+        let amtDisplay = displayAmount ? formatAmount(displayAmount, tripCurrency) : '—';
+        let statusEmoji = !displayAmount ? '⏳' : (status === 'confirmed' ? '✓' : (status === 'claimed' ? '🕐' : '○'));
+        
+        let displayText = `${statusEmoji} ${name}`;
         if (uid === currentUid) {
-          return `<div style="padding:8px 10px;background:rgba(91,140,247,0.1);border:1px solid rgba(91,140,247,0.2);border-radius:8px;color:var(--text2);font-size:0.82rem"><strong>👤 ${name}</strong> (tú) — <span style="color:var(--text3)">tu monto arriba</span></div>`;
+          displayText = `<strong>👤 ${name}</strong> (tú)`;
         }
         
-        let amtDisplay = amt ? formatAmount(amt, tripCurrency) : '—';
-        let statusEmoji = !amt ? '⏳' : (status === 'confirmed' ? '✓' : (status === 'claimed' ? '🕐' : '○'));
-        
-        return `<div style="padding:8px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-size:0.82rem;display:flex;justify-content:space-between;align-items:center"><span>${statusEmoji} ${name}</span><span style="color:var(--text);font-weight:600">${amtDisplay}</span></div>`;
+        return `<div style="padding:8px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-size:0.82rem;display:flex;justify-content:space-between;align-items:center"><span style="text-align:left">${displayText}</span><span style="color:var(--text);font-weight:600">${amtDisplay}</span></div>`;
       }).join('');
       breakdownList.innerHTML = items;
     }
@@ -4839,68 +5167,17 @@
       const expense = _editingShare.expense;
       if (!expense) return;
       
-      const srcCurrency = document.getElementById('share-currency-input').value;
-      const myAmt = parseFloat(document.getElementById('share-amount-input').value) || 0;
-      const tripCurrency = currentTrip?.currency || 'CLP';
-      
-      // Convert from selected currency to CLP
-      let myAmtCLP = myAmt;
-      if (srcCurrency !== 'CLP') {
-        // Fetch rate if not cached
-        if (!_editingShare.shareRate) {
-          _editingShare.shareRate = await fetchRate(srcCurrency);
-        }
-        if (_editingShare.shareRate) {
-          myAmtCLP = myAmt * _editingShare.shareRate;
-          // Show conversion
-          const convBox = document.getElementById('share-conversion-box');
-          convBox.style.display = 'block';
-          document.getElementById('share-conversion-text').textContent = `≈ ${formatAmount(Math.round(myAmtCLP), 'CLP')}`;
-          document.getElementById('share-rate-text').textContent = `1 ${srcCurrency} = ${Math.round(_editingShare.shareRate).toLocaleString('es-CL')} CLP`;
-        }
-      } else {
-        document.getElementById('share-conversion-box').style.display = 'none';
-      }
-      
-      // Validate against total
-      const totalCLP = expense.amount || 0;
-      const splitWith = expense.splitWith || tripMembers.map(m => m.uid);
-      const sumOtherAmts = Object.entries(expense.splitAmounts || {}).reduce((s, [uid, amt]) => {
-        if (uid !== _editingShare.uid) s += amt || 0;
-        return s;
-      }, 0);
-      const expectedMyAmt = totalCLP - sumOtherAmts;
-      
-      const validBox = document.getElementById('share-validation');
-      const diff = Math.abs(myAmtCLP - expectedMyAmt);
-      
-      if (myAmt <= 0) {
-        validBox.style.display = 'none';
-      } else if (diff < 1) {
-        validBox.className = 'alert alert-success';
-        validBox.style.display = 'block';
-        validBox.innerHTML = '✅ <strong>Perfecto:</strong> tus campos coinciden con el total.';
-      } else {
-        validBox.className = 'alert alert-warning';
-        validBox.style.display = 'block';
-        const offset = expectedMyAmt - myAmtCLP;
-        const sign = offset > 0 ? '+' : '';
-        validBox.innerHTML = `⚠️ <strong>Diferencia:</strong> ${sign}${formatAmount(Math.round(offset), tripCurrency)}`;
-      }
+      // Since we removed the amount input, this function is now just a placeholder
+      // The validation is no longer needed as users use the calculator
+      return;
     };
 
     async function saveShareEdit() {
       const { expId, uid, expense, isPaid } = _editingShare;
       if (!expId || !uid || !expense) return closeModal('edit-share-modal');
       
-      const srcCurrency = document.getElementById('share-currency-input').value;
-      const myAmt = parseFloat(document.getElementById('share-amount-input').value) || 0;
-      
-      let myAmtCLP = myAmt;
-      if (srcCurrency !== 'CLP' && _editingShare.shareRate) {
-        myAmtCLP = myAmt * _editingShare.shareRate;
-      }
-      myAmtCLP = Math.round(myAmtCLP);
+      // Use the calculator total as the amount
+      const myAmtCLP = Math.round(calculatorTotal);
       
       const expRef = doc(db, 'trips', currentTripId, 'expenses', expId);
       const snap = await getDoc(expRef);
@@ -4920,12 +5197,371 @@
       }
       
       await updateDoc(expRef, { splitAmounts, payments });
+      
       toast('Tu parte fue guardada');
       closeModal('edit-share-modal');
     }
-    window.onShareAmountInput = window.onShareAmountInput || onShareAmountInput;
+    
+    // ─── CALCULATOR AND RECEIPT VIEWER FUNCTIONS ───
+    
+    let calculatorTotal = 0;
+    let calculationHistory = [];
+    let receiptZoom = 1;
+    let receiptPanX = 0;
+    let receiptPanY = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    
+    // Calculator functions
+    function addToCalculator() {
+      const input = document.getElementById('calc-input');
+      const value = parseFloat(input.value) || 0;
+      
+      if (value > 0) {
+        calculatorTotal += value;
+        calculationHistory.push(`+${formatAmount(value, 'CLP')}`);
+        updateCalculatorDisplay();
+        showOperationIndicator('+');
+        input.value = '';
+        input.focus();
+      }
+    }
+    
+    function subtractFromCalculator() {
+      const input = document.getElementById('calc-input');
+      const value = parseFloat(input.value) || 0;
+      
+      if (value > 0) {
+        calculatorTotal -= value;
+        calculationHistory.push(`-${formatAmount(value, 'CLP')}`);
+        updateCalculatorDisplay();
+        showOperationIndicator('−');
+        input.value = '';
+        input.focus();
+      }
+    }
+    
+        
+    function calculatePercentage() {
+      const percentInput = document.getElementById('calc-percent-input');
+      const percent = parseFloat(percentInput.value) || 0;
+      
+      if (percent > 0 && calculatorTotal > 0) {
+        const percentageAmount = calculatorTotal * (percent / 100);
+        calculatorTotal += percentageAmount;
+        calculationHistory.push(`+${percent}% (${formatAmount(percentageAmount, 'CLP')})`);
+        updateCalculatorDisplay();
+        showOperationIndicator('+%');
+        percentInput.value = '';
+        percentInput.focus();
+        toast(`${percent}% agregado: +${formatAmount(percentageAmount, 'CLP')}`, 'success');
+      }
+    }
+    
+    function showOperationIndicator(operation) {
+      const indicator = document.getElementById('calc-operation');
+      const total = document.getElementById('calc-total');
+      
+      // Remove all classes
+      indicator.classList.remove('show', 'add', 'subtract');
+      total.classList.remove('pulse');
+      
+      // Force reflow to restart animation
+      void total.offsetWidth;
+      
+      // Add appropriate classes
+      if (operation === '+') {
+        indicator.textContent = '+';
+        indicator.classList.add('add');
+      } else if (operation === '−') {
+        indicator.textContent = '−';
+        indicator.classList.add('subtract');
+      } else if (operation === '+%') {
+        indicator.textContent = '+%';
+        indicator.classList.add('add');
+      }
+      
+      indicator.classList.add('show');
+      total.classList.add('pulse');
+      
+      // Hide indicator after animation
+      setTimeout(() => {
+        indicator.classList.remove('show');
+      }, 800);
+      
+      // Remove pulse class after animation
+      setTimeout(() => {
+        total.classList.remove('pulse');
+      }, 400);
+    }
+    
+    function clearCalculator() {
+      calculatorTotal = 0;
+      calculationHistory = [];
+      updateCalculatorDisplay();
+      document.getElementById('calc-input').value = '';
+      document.getElementById('calc-input').focus();
+    }
+    
+    function assignCalcToAmount() {
+      // Since we removed the amount input field, just show a toast with the calculated amount
+      toast(`Total calculado: ${formatAmount(calculatorTotal, 'CLP')}`, 'success');
+    }
+    
+    function updateCalculatorDisplay() {
+      const totalDisplay = document.getElementById('calc-total');
+      const historyDisplay = document.getElementById('calc-history');
+      
+      totalDisplay.textContent = formatAmount(calculatorTotal, 'CLP');
+      
+      if (calculationHistory.length > 0) {
+        historyDisplay.innerHTML = calculationHistory.slice(-5).join(' • ') + ' = ' + formatAmount(calculatorTotal, 'CLP');
+      } else {
+        historyDisplay.innerHTML = '<span style="color:var(--text3)">Sin cálculos aún</span>';
+      }
+    }
+    
+    // Receipt zoom and pan functions
+    function updateReceiptTransform() {
+      const img = document.getElementById('receipt-image');
+      img.style.transform = `translate(${receiptPanX}px, ${receiptPanY}px) scale(${receiptZoom})`;
+      
+      // Update cursor classes
+      img.classList.toggle('zoomed', receiptZoom > 1);
+      if (!isDragging) {
+        img.classList.toggle('dragging', false);
+      }
+    }
+    
+    function zoomReceipt(delta, centerX = null, centerY = null) {
+      const img = document.getElementById('receipt-image');
+      const rect = img.getBoundingClientRect();
+      
+      // If no center provided, use image center
+      const x = centerX !== null ? centerX : rect.left + rect.width / 2;
+      const y = centerY !== null ? centerY : rect.top + rect.height / 2;
+      
+      // Convert cursor position to image coordinates (accounting for current zoom and pan)
+      const cursorX = (x - rect.left - receiptPanX) / receiptZoom;
+      const cursorY = (y - rect.top - receiptPanY) / receiptZoom;
+      
+      // Update zoom
+      const newZoom = Math.max(0.5, Math.min(3, receiptZoom + delta));
+      
+      // Calculate new pan to keep the cursor position fixed
+      receiptPanX = x - rect.left - cursorX * newZoom;
+      receiptPanY = y - rect.top - cursorY * newZoom;
+      receiptZoom = newZoom;
+      
+      updateReceiptTransform();
+    }
+    
+    function resetZoom() {
+      receiptZoom = 1;
+      receiptPanX = 0;
+      receiptPanY = 0;
+      updateReceiptTransform();
+    }
+    
+    function startPan(x, y) {
+      isDragging = true;
+      dragStartX = x - receiptPanX;
+      dragStartY = y - receiptPanY;
+      const img = document.getElementById('receipt-image');
+      img.classList.add('dragging');
+    }
+    
+    function pan(x, y) {
+      if (isDragging) {
+        receiptPanX = x - dragStartX;
+        receiptPanY = y - dragStartY;
+        updateReceiptTransform();
+      }
+    }
+    
+    function endPan() {
+      isDragging = false;
+      const img = document.getElementById('receipt-image');
+      img.classList.remove('dragging');
+      updateReceiptTransform();
+    }
+    
+    // Initialize calculator when modal opens
+    function initializeCalculator() {
+      calculatorTotal = 0;
+      calculationHistory = [];
+      updateCalculatorDisplay();
+      receiptZoom = 1;
+      receiptPanX = 0;
+      receiptPanY = 0;
+      
+      // Check if expense has receipt image
+      const expense = _editingShare?.expense;
+      if (expense && expense.receiptUrl) {
+        const viewer = document.getElementById('receipt-viewer');
+        const img = document.getElementById('receipt-image');
+        
+        img.src = expense.receiptUrl;
+        viewer.style.display = 'block';
+        
+        // Mouse events for desktop
+        img.addEventListener('mousedown', (e) => {
+          if (e.button === 0) { // Left click only
+            e.preventDefault();
+            startPan(e.clientX, e.clientY);
+          }
+        });
+        
+        img.addEventListener('mousemove', (e) => {
+          pan(e.clientX, e.clientY);
+        });
+        
+        img.addEventListener('mouseup', (e) => {
+          endPan();
+        });
+        
+        img.addEventListener('mouseleave', (e) => {
+          endPan();
+        });
+        
+        // Mouse wheel zoom with debounce
+        let zoomTimeout;
+        img.addEventListener('wheel', (e) => {
+          e.preventDefault();
+          const delta = e.deltaY > 0 ? -0.05 : 0.05;
+          
+          clearTimeout(zoomTimeout);
+          zoomTimeout = setTimeout(() => {
+            zoomReceipt(delta, e.clientX, e.clientY);
+          }, 16);
+        });
+        
+        // Touch events for mobile
+        let touchStartDistance = 0;
+        let lastTouchDistance = 0;
+        
+        img.addEventListener('touchstart', (e) => {
+          if (e.touches.length === 1) {
+            // Single touch - start panning
+            e.preventDefault();
+            startPan(e.touches[0].clientX, e.touches[0].clientY);
+          } else if (e.touches.length === 2) {
+            // Two fingers - prepare for zoom
+            e.preventDefault();
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            touchStartDistance = Math.sqrt(dx * dx + dy * dy);
+            lastTouchDistance = touchStartDistance;
+            endPan(); // Stop panning when zoom starts
+          }
+        });
+        
+        img.addEventListener('touchmove', (e) => {
+          e.preventDefault();
+          
+          if (e.touches.length === 1) {
+            // Single touch - pan
+            pan(e.touches[0].clientX, e.touches[0].clientY);
+          } else if (e.touches.length === 2 && touchStartDistance > 0) {         // Two fingers - zoom
+            e.preventDefault();
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (lastTouchDistance > 0) {
+              const scale = distance / lastTouchDistance;
+              const centerX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+              const centerY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+              
+              // Calculate zoom delta
+              const zoomDelta = (scale - 1) * 0.2;
+              zoomReceipt(zoomDelta, centerX, centerY);
+            }
+            
+            lastTouchDistance = distance;
+          }
+        });
+        
+        img.addEventListener('touchend', (e) => {
+          endPan();
+          touchStartDistance = 0;
+          lastTouchDistance = 0;
+        });
+        
+        // Prevent context menu on long press
+        img.addEventListener('contextmenu', (e) => {
+          e.preventDefault();
+        });
+        
+      } else {
+        document.getElementById('receipt-viewer').style.display = 'none';
+      }
+    }
+    
+    // Add keyboard support for calculator
+    document.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('edit-share-modal');
+      const calcInput = document.getElementById('calc-input');
+      const percentInput = document.getElementById('calc-percent-input');
+      
+      // Only handle keys when modal is open
+      if (!modal.classList.contains('show')) return;
+      
+      // Handle calc input shortcuts
+      if (document.activeElement === calcInput) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          addToCalculator();
+        } else if (e.key === '+' || e.key === '=') {
+          e.preventDefault();
+          addToCalculator();
+        } else if (e.key === '-' || e.key === '_') {
+          e.preventDefault();
+          subtractFromCalculator();
+        } else if (e.key === 'Escape' || e.key === 'c' || e.key === 'C') {
+          e.preventDefault();
+          clearCalculator();
+        }
+      }
+      
+      // Handle percent input shortcuts
+      if (document.activeElement === percentInput) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          calculatePercentage();
+        }
+      }
+      
+      // Tab navigation between inputs
+      if (e.key === 'Tab' && !e.shiftKey) {
+        if (document.activeElement === calcInput) {
+          e.preventDefault();
+          percentInput.focus();
+        } else if (document.activeElement === percentInput) {
+          e.preventDefault();
+          calcInput.focus();
+        }
+      } else if (e.key === 'Tab' && e.shiftKey) {
+        if (document.activeElement === percentInput) {
+          e.preventDefault();
+          calcInput.focus();
+        } else if (document.activeElement === calcInput) {
+          e.preventDefault();
+          percentInput.focus();
+        }
+      }
+    });
+    
     window.openEditShareModal = openEditShareModal;
     window.saveShareEdit = saveShareEdit;
+    window.addToCalculator = addToCalculator;
+    window.subtractFromCalculator = subtractFromCalculator;
+    window.clearCalculator = clearCalculator;
+    window.assignCalcToAmount = assignCalcToAmount;
+    window.calculatePercentage = calculatePercentage;
+    window.zoomReceipt = zoomReceipt;
+    window.resetZoom = resetZoom;
 
     async function deleteExpense(expId) {
       const ok = await customConfirm({ icon: '💸', title: '¿Eliminar gasto?', msg: 'Este gasto se borrará y no se podrá recuperar.', okLabel: 'Eliminar', okClass: 'btn-danger' });
@@ -5469,13 +6105,16 @@
 
     function renderItinEventCard(ev) {
       const tagHtml = (ev.tags || []).map(tag => {
-        const tagMap = { must: ['itin-tag-must','⭐ Imperdible'], book: ['itin-tag-book','📋 Reservar'], tip: ['itin-tag-tip','💡 Dato útil'], free: ['itin-tag-free','🆓 Gratis'] };
+        const tagMap = { must: ['itin-tag-must','⭐ Imperdible'], book: ['itin-tag-book','📋 Reservar'], tip: ['itin-tag-tip','💡 Dato útil'], free: ['itin-tag-free','🆓 Gratis'], done: ['itin-tag-done','✅ Reservado'] };
         const [cls, label] = tagMap[tag] || ['', tag];
         return `<span class="itin-tag ${cls}">${label}</span>`;
       }).join('');
 
       const timeLabel = ev.timeStart ? `<span>🕐 ${ev.timeStart}${ev.timeEnd ? ' – ' + ev.timeEnd : ''}</span>` : '';
       const locationLabel = ev.location ? `<span>📍 ${ev.location}</span>` : '';
+      const mapsButton = ev.mapsUrl ? `<button class="itin-maps-btn" onclick="openGoogleMaps('${ev.mapsUrl.replace(/'/g, "\\'")}')">🗺️ Ver en Maps</button>` : '';
+      const reservaBtn = ev.receiptUrl ? `<button class="itin-maps-btn" onclick="openLightbox('${ev.receiptUrl}')" style="background:rgba(124,239,176,0.12);color:var(--accent3);border-color:rgba(124,239,176,0.25)">📎 Ver reserva</button>` : '';
+      const bookingBtn = ev.bookingUrl ? `<button class="itin-maps-btn" onclick="window.open('${ev.bookingUrl.replace(/'/g, "\\'")}','_blank')" style="background:rgba(91,140,247,0.12);color:var(--accent2);border-color:rgba(91,140,247,0.25)">🔗 Ver link</button>` : '';
       const noteHtml = ev.note ? `<div class="itin-event-note">💬 ${ev.note}</div>` : '';
 
       return `<div class="itin-event">
@@ -5487,6 +6126,7 @@
         <div class="itin-event-body">
           <div class="itin-event-title">${ev.title}</div>
           <div class="itin-event-meta">${timeLabel}${locationLabel}</div>
+          ${(mapsButton || reservaBtn || bookingBtn) ? `<div class="itin-event-maps" style="display:flex;flex-wrap:wrap;gap:6px">${mapsButton}${reservaBtn}${bookingBtn}</div>` : ''}
           ${noteHtml}
           ${tagHtml ? `<div class="itin-event-tags">${tagHtml}</div>` : ''}
         </div>
@@ -5584,6 +6224,12 @@
       document.getElementById('itin-time-start').value = '09:00';
       document.getElementById('itin-time-end').value = '';
       document.getElementById('itin-location').value = '';
+      document.getElementById('itin-maps-url').value = '';
+      document.getElementById('itin-booking-url').value = '';
+      document.getElementById('itin-receipt').value = '';
+      document.getElementById('itin-file-name-display').textContent = 'Seleccionar foto o comprobante...';
+      document.getElementById('itin-receipt-label').classList.remove('has-file');
+      document.getElementById('itin-receipt-preview-link').style.display = 'none';
       document.getElementById('itin-note').value = '';
       activeItinTags.clear();
       selectedItinCat = 'Visita'; selectedItinCatIcon = '🏛️';
@@ -5619,6 +6265,8 @@
       document.getElementById('itin-time-start').value = ev.timeStart || '09:00';
       document.getElementById('itin-time-end').value = ev.timeEnd || '';
       document.getElementById('itin-location').value = ev.location || '';
+      document.getElementById('itin-maps-url').value = ev.mapsUrl || '';
+      document.getElementById('itin-booking-url').value = ev.bookingUrl || '';
       document.getElementById('itin-note').value = ev.note || '';
       selectedItinCat = ev.category || 'Visita';
       selectedItinCatIcon = ev.icon || '📍';
@@ -5628,9 +6276,25 @@
       });
       // Restore tags
       activeItinTags = new Set(ev.tags || []);
-      ['must','book','tip','free'].forEach(t => {
+      ['must','book','tip','free','done'].forEach(t => {
         document.getElementById('itag-' + t)?.classList.toggle('active', activeItinTags.has(t));
       });
+      // Load existing receipt photo
+      const label = document.getElementById('itin-receipt-label');
+      const nameDisplay = document.getElementById('itin-file-name-display');
+      const previewLink = document.getElementById('itin-receipt-preview-link');
+      const viewLink = document.getElementById('itin-receipt-view-link');
+      document.getElementById('itin-receipt').value = '';
+      if (ev.receiptUrl) {
+        nameDisplay.textContent = 'Reemplazar foto';
+        label.classList.add('has-file');
+        previewLink.style.display = 'block';
+        viewLink.onclick = () => openLightbox(ev.receiptUrl);
+      } else {
+        nameDisplay.textContent = 'Seleccionar foto o comprobante...';
+        label.classList.remove('has-file');
+        previewLink.style.display = 'none';
+      }
       const dateRow = document.getElementById('itin-date-row');
       if (dateRow) dateRow.style.display = 'none';
       openModal('add-itin-event-modal');
@@ -5642,6 +6306,7 @@
       const timeStart = document.getElementById('itin-time-start').value;
       const timeEnd = document.getElementById('itin-time-end').value;
       const location = document.getElementById('itin-location').value.trim();
+      const mapsUrl = document.getElementById('itin-maps-url').value.trim();
       const note = document.getElementById('itin-note').value.trim();
 
       let date = editingItinDay;
@@ -5651,13 +6316,41 @@
       }
       if (!date) return toast('Selecciona un día');
 
+      // Upload comprobante if selected
+      const fileInput = document.getElementById('itin-receipt');
+      const file = fileInput ? fileInput.files[0] : null;
+      const saveBtn = document.querySelector('#add-itin-event-modal .btn-primary');
+      const statusText = document.getElementById('itin-receipt-upload-status');
+      let receiptUrl = null;
+
+      if (file) {
+        saveBtn.disabled = true; statusText.style.display = 'block';
+        const formData = new FormData();
+        formData.append('image', file);
+        try {
+          const res = await fetch('https://api.imgbb.com/1/upload?key=ea6a31b8d4d6e7ef9c7c19cd8d6c4d44', { method: 'POST', body: formData });
+          const data = await res.json();
+          if (data.success) receiptUrl = data.data.url;
+          else toast('Error al subir la imagen');
+        } catch (e) { toast('Error subiendo foto: ' + e.message); }
+        saveBtn.disabled = false; statusText.style.display = 'none';
+      }
+
       const eventData = {
-        title, timeStart, timeEnd, location, note,
+        title, timeStart, timeEnd, location, mapsUrl, note,
+        bookingUrl: document.getElementById('itin-booking-url').value.trim(),
         date, category: selectedItinCat, icon: selectedItinCatIcon,
         tags: Array.from(activeItinTags),
         authorId: currentUser.uid, authorName: currentUser.displayName || currentUser.email,
-        updatedAt: serverTimestamp()
+        createdAt: serverTimestamp()
       };
+      if (receiptUrl) {
+        eventData.receiptUrl = receiptUrl;
+      } else if (editingItinEventId) {
+        // Keep existing photo if no new one was selected
+        const existing = (window._itinEvents || []).find(e => e.id === editingItinEventId);
+        if (existing && existing.receiptUrl) eventData.receiptUrl = existing.receiptUrl;
+      }
 
       if (editingItinEventId) {
         await updateDoc(doc(db, 'trips', currentTripId, 'itinerary', editingItinEventId), eventData);
@@ -5675,6 +6368,22 @@
       if (!ok) return;
       await deleteDoc(doc(db, 'trips', currentTripId, 'itinerary', eventId));
       toast('Actividad eliminada');
+    }
+
+    // ─── GOOGLE MAPS INTEGRATION ───
+    function openGoogleMaps(mapsUrl) {
+      if (!mapsUrl) return;
+      
+      // Validar y formatear la URL
+      let url = mapsUrl.trim();
+      
+      // Si no es una URL completa, asumir que es una búsqueda
+      if (!url.startsWith('http')) {
+        url = `https://maps.google.com/?q=${encodeURIComponent(url)}`;
+      }
+      
+      // Abrir en nueva ventana/pestaña
+      window.open(url, '_blank');
     }
 
     function selectItinCat(el, cat, icon) {
@@ -6212,9 +6921,111 @@
       }
     }
     
+    function toggleKebab(id, event) {
+      event.stopPropagation();
+      const menu = document.getElementById('kebab-' + id);
+      const isOpen = menu.style.display === 'block';
+      document.querySelectorAll('[id^="kebab-"]').forEach(m => m.style.display = 'none');
+      menu.style.display = isOpen ? 'none' : 'block';
+    }
+    
+
+    
     window.toast = toast;
     window.showNotification = showNotification;
+    window.toggleKebab = toggleKebab;
 
+    // ─── THEME TOGGLE ───
+    function toggleTheme() {
+      const root = document.documentElement;
+      const body = document.body;
+      const avatar = document.getElementById('nav-avatar');
+      
+      const isLight = root.style.getPropertyValue('--bg').includes('f8f9fa') || 
+                     root.style.getPropertyValue('--bg').includes('ffffff');
+      
+      if (isLight) {
+        // Cambiar a oscuro
+        root.style.setProperty('--bg', '#0a0c10');
+        root.style.setProperty('--surface', '#111318');
+        root.style.setProperty('--surface2', '#191d26');
+        root.style.setProperty('--surface3', '#1f2535');
+        root.style.setProperty('--border', 'rgba(255, 255, 255, 0.07)');
+        root.style.setProperty('--text', '#f0ede6');
+        root.style.setProperty('--text2', '#8a8fa3');
+        root.style.setProperty('--text3', '#5a5f73');
+        if (!avatar.querySelector('img')) avatar.textContent = '🌘';
+        toast('🎨 Tema oscuro activado', 'success');
+        localStorage.setItem('theme', 'dark');
+        document.cookie = 'theme=dark; max-age=86400; SameSite=Lax';
+      } else {
+        // Cambiar a claro
+        root.style.setProperty('--bg', '#f8f9fa');
+        root.style.setProperty('--surface', '#ffffff');
+        root.style.setProperty('--surface2', '#f1f3f7');
+        root.style.setProperty('--surface3', '#e8eaf6');
+        root.style.setProperty('--border', 'rgba(0, 0, 0, 0.1)');
+        root.style.setProperty('--text', '#1a1a1a');
+        root.style.setProperty('--text2', '#6b7280');
+        root.style.setProperty('--text3', '#9ca3af');
+        if (!avatar.querySelector('img')) avatar.textContent = '🔆';
+        toast('🎨 Tema claro activado', 'success');
+        localStorage.setItem('theme', 'light');
+        document.cookie = 'theme=light; max-age=86400; SameSite=Lax';
+      }
+    }
+    
+    function loadTheme() {
+      let savedTheme = 'dark'; // Default
+      
+      // Intentar leer de localStorage primero
+      const localTheme = localStorage.getItem('theme');
+      if (localTheme) {
+        savedTheme = localTheme;
+      } else {
+        // Si no hay nada en localStorage, intentar cookies
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+          const [name, value] = cookie.trim().split('=');
+          if (name === 'theme') {
+            savedTheme = value;
+            break;
+          }
+        }
+      }
+      
+      const root = document.documentElement;
+      
+      const avatar = document.getElementById('nav-avatar');
+      
+      if (savedTheme === 'light') {
+        // Aplicar tema claro directamente
+        root.style.setProperty('--bg', '#f8f9fa');
+        root.style.setProperty('--surface', '#ffffff');
+        root.style.setProperty('--surface2', '#f1f3f7');
+        root.style.setProperty('--surface3', '#e8eaf6');
+        root.style.setProperty('--border', 'rgba(0, 0, 0, 0.1)');
+        root.style.setProperty('--text', '#1a1a1a');
+        root.style.setProperty('--text2', '#6b7280');
+        root.style.setProperty('--text3', '#9ca3af');
+        if (!avatar.querySelector('img')) avatar.textContent = '🔆';
+      } else {
+        // FORZAR tema oscuro directamente (no confiar en variables por defecto)
+        root.style.setProperty('--bg', '#0a0c10');
+        root.style.setProperty('--surface', '#111318');
+        root.style.setProperty('--surface2', '#191d26');
+        root.style.setProperty('--surface3', '#1f2535');
+        root.style.setProperty('--border', 'rgba(255, 255, 255, 0.07)');
+        root.style.setProperty('--text', '#f0ede6');
+        root.style.setProperty('--text2', '#8a8fa3');
+        root.style.setProperty('--text3', '#5a5f73');
+        if (!avatar.querySelector('img')) avatar.textContent = '🌘';
+      }
+    }
+    
+    // Cargar tema al iniciar
+    document.addEventListener('DOMContentLoaded', loadTheme);
+    
     // ─── UX HELPER FUNCTIONS ───
     
     // Loading overlay
