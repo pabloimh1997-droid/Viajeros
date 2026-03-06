@@ -3,6 +3,14 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Viajeros">
+  <meta name="application-name" content="Viajeros">
+  <meta name="theme-color" content="#0a0c10">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Viajeros</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
@@ -1050,7 +1058,8 @@
     .auth-tab.active { background: var(--surface3); color: var(--text); }
     .form-group { margin-bottom: 16px; }
     .form-group label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--text2); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-    input, textarea, select { width: 100%; max-width: 100%; box-sizing: border-box; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 16px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; outline: none; transition: border-color 0.2s; }
+    input, textarea, select { width: 100%; max-width: 100%; box-sizing: border-box; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 16px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; outline: none; transition: border-color 0.2s; text-align: left; }
+    input[type='date'], input[type='time'] { text-align: left; }
     input:focus, textarea:focus, select:focus { border-color: rgba(91, 140, 247, 0.4); }
     select option { background: var(--surface2); }
 
@@ -2142,7 +2151,10 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       margin-bottom: 16px;
-      overflow: hidden;
+      overflow: visible;
+    }
+    .itin-day-header {
+      border-radius: var(--radius) var(--radius) 0 0;
     }
     .itin-day-header {
       display: flex; align-items: center; justify-content: space-between;
@@ -2173,6 +2185,7 @@
       border-bottom: 1px solid var(--border);
       position: relative;
       transition: background 0.15s;
+      overflow: visible;
     }
     .itin-event:last-child { border-bottom: none; }
     .itin-timeline {
@@ -2217,7 +2230,7 @@
     .itin-tag-done { background: rgba(124,239,176,0.15); color: var(--accent3); border-color: rgba(124,239,176,0.35); }
 
     .itin-event-actions {
-      display: flex; gap: 6px; flex-shrink: 0; padding-top: 2px;
+      display: flex; gap: 6px; flex-shrink: 0; padding-top: 2px; position: relative; z-index: 10;
     }
     .itin-action-btn {
       background: none; border: none; color: var(--text2); cursor: pointer; padding: 4px; border-radius: 4px; font-size: 14px; transition: all 0.2s;
@@ -2981,7 +2994,7 @@
         <div id="split-custom-validation" style="display:none;margin-top:8px;font-size:0.82rem;padding:8px 10px;border-radius:8px;background:var(--surface2)"></div>
       </div>
 
-      <div class="form-group"><label>Fecha</label><input type="date" id="exp-date"></div>
+      <div class="form-group"><label>Fecha</label><input type="date" id="exp-date" style="width:100%;max-width:100%;-webkit-appearance:none;appearance:none;display:block"></div>
 
       <div class="form-group">
         <label>Comprobante o Boleta (Opcional)</label>
@@ -4221,50 +4234,78 @@
     function subscribeNotifications(tripId) {
       if (unsubscribeNotifications) unsubscribeNotifications();
 
-      // Listen to expenses to detect new ones added by others
       const expQ = query(collection(db, 'trips', tripId, 'expenses'), orderBy('createdAt', 'desc'), limit(20));
       let firstLoad = true;
+      let prevPayments = {};
 
       unsubscribeNotifications = onSnapshot(expQ, snap => {
-        if (firstLoad) { firstLoad = false; return; } // skip initial load
+        if (firstLoad) {
+          // Store initial payment states to detect changes later
+          snap.docs.forEach(d => { prevPayments[d.id] = { ...((d.data().payments) || {}) }; });
+          firstLoad = false;
+          return;
+        }
 
         snap.docChanges().forEach(change => {
+          const e = change.doc.data();
+          const expId = change.doc.id;
+          const currency = currentTrip?.currency || 'CLP';
+          const desc = e.description ? `"${e.description}"` : 'un gasto';
+          const amount = formatAmount(e.amount, currency);
+
+          // ── Nuevo gasto agregado por otro miembro ──
           if (change.type === 'added') {
-            const e = change.doc.data();
-            // Only notify if someone else added it
             if (e.createdBy && e.createdBy !== currentUser.uid) {
               const author = tripMembers.find(m => m.uid === e.createdBy);
               const authorName = author ? author.name.split(' ')[0] : 'Alguien';
-              const currency = currentTrip?.currency || 'CLP';
               addNotification({
                 icon: e.categoryIcon || '💸',
-                text: `<strong>${authorName}</strong> agregó un gasto: ${e.description} (${formatAmount(e.amount, currency)})`,
-                time: 'ahora'
+                text: `<strong>${authorName}</strong> registró un nuevo gasto: ${desc} por ${amount}`,
+                time: 'ahora',
+                _key: `added-${expId}`
               });
             }
+            prevPayments[expId] = { ...(e.payments || {}) };
           }
+
+          // ── Cambios en pagos ──
           if (change.type === 'modified') {
-            const e = change.doc.data();
             const payments = e.payments || {};
-            // Check if any payment was just confirmed and it's for current user's expense
-            if (e.createdBy === currentUser.uid) {
-              Object.entries(payments).forEach(([uid, state]) => {
-                if (state === 'confirmed') {
-                  const member = tripMembers.find(m => m.uid === uid);
-                  const memberName = member ? member.name.split(' ')[0] : 'Alguien';
-                  // Avoid duplicate notifications - simple check
-                  const already = notifications.some(n => n._key === `confirmed-${change.doc.id}-${uid}`);
-                  if (!already) {
-                    addNotification({
-                      icon: '✅',
-                      text: `<strong>${memberName}</strong> confirmó su pago en "${e.description}"`,
-                      time: 'ahora',
-                      _key: `confirmed-${change.doc.id}-${uid}`
-                    });
-                  }
-                }
-              });
-            }
+            const prev = prevPayments[expId] || {};
+
+            Object.entries(payments).forEach(([uid, state]) => {
+              const prevState = prev[uid];
+              if (state === prevState) return; // no change
+
+              const member = tripMembers.find(m => m.uid === uid);
+              const memberName = member ? member.name.split(' ')[0] : 'Alguien';
+              const key = `${state}-${expId}-${uid}`;
+              if (notifications.some(n => n._key === key)) return; // no duplicates
+
+              // Alguien marcó su pago como pendiente (quiere pagar) → notificar al creador
+              if (state === 'pending' && prevState !== 'pending' && e.createdBy === currentUser.uid && uid !== currentUser.uid) {
+                addNotification({
+                  icon: '🔔',
+                  text: `<strong>${memberName}</strong> realizó su pago en ${desc} — pendiente de confirmación`,
+                  time: 'ahora',
+                  _key: key
+                });
+              }
+
+              // El creador confirmó el pago de alguien → notificar a ese miembro
+              if (state === 'confirmed' && uid === currentUser.uid && e.createdBy !== currentUser.uid) {
+                const creator = tripMembers.find(m => m.uid === e.createdBy);
+                const creatorName = creator ? creator.name.split(' ')[0] : 'Alguien';
+                addNotification({
+                  icon: '✅',
+                  text: `<strong>${creatorName}</strong> confirmó tu pago en ${desc}`,
+                  time: 'ahora',
+                  _key: key
+                });
+              }
+            });
+
+            prevPayments[expId] = { ...payments };
           }
         });
       });
