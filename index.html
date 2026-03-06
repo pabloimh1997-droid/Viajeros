@@ -1050,7 +1050,7 @@
     .auth-tab.active { background: var(--surface3); color: var(--text); }
     .form-group { margin-bottom: 16px; }
     .form-group label { display: block; font-size: 0.8rem; font-weight: 500; color: var(--text2); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-    input, textarea, select { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 16px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; outline: none; transition: border-color 0.2s; }
+    input, textarea, select { width: 100%; max-width: 100%; box-sizing: border-box; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 16px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 16px; outline: none; transition: border-color 0.2s; }
     input:focus, textarea:focus, select:focus { border-color: rgba(91, 140, 247, 0.4); }
     select option { background: var(--surface2); }
 
@@ -1754,9 +1754,9 @@
     .balance-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; }
 
     /* ─── MODAL ─── */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: flex-end; justify-content: center; padding: 0; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: flex-end; justify-content: center; padding: 0; opacity: 0; pointer-events: none; transition: opacity 0.3s; overflow-x: hidden; }
     .modal-overlay.show { opacity: 1; pointer-events: all; }
-    .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 24px 24px 0 0; padding: 32px 28px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.5); }
+    .modal { overflow-x: hidden; background: var(--surface); border: 1px solid var(--border); border-radius: 24px 24px 0 0; padding: 32px 28px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.5); }
     .modal-overlay.show .modal { transform: translateY(0); }
     .modal-handle { width: 40px; height: 4px; background: var(--surface3); border-radius: 2px; margin: 0 auto 24px; }
     .modal-title { font-family: 'Fraunces', serif; font-size: 1.4rem; font-weight: 600; margin-bottom: 24px; }
@@ -3169,15 +3169,14 @@
       <div class="modal-handle"></div>
       <h2 class="modal-title" id="itin-modal-title">Agregar actividad 🗓️</h2>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label>Hora de inicio</label>
-          <input type="time" id="itin-time-start" value="09:00">
+      <div class="form-group">
+        <label>Horario</label>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="time" id="itin-time-start" value="09:00" style="flex:1;min-width:0;padding:10px 8px;text-align:center">
+          <span style="color:var(--text3);flex-shrink:0;font-size:0.9rem">→</span>
+          <input type="time" id="itin-time-end" style="flex:1;min-width:0;padding:10px 8px;text-align:center">
         </div>
-        <div class="form-group">
-          <label>Hora de fin (opcional)</label>
-          <input type="time" id="itin-time-end">
-        </div>
+        <small style="color:var(--text3);font-size:0.75rem;margin-top:4px;display:block">Inicio → Fin (opcional)</small>
       </div>
 
       <div class="form-group" id="itin-date-row" style="display:none">
@@ -3250,8 +3249,9 @@
             <span id="itin-file-name-display">Seleccionar foto o comprobante...</span>
           </label>
         </div>
-        <div id="itin-receipt-preview-link" style="display:none;margin-top:6px;font-size:0.8rem;color:var(--text3)">
+        <div id="itin-receipt-preview-link" style="display:none;margin-top:6px;font-size:0.8rem;color:var(--text3);display:none;align-items:center;gap:10px">
           Foto actual: <span id="itin-receipt-view-link" style="color:var(--accent2);text-decoration:underline;cursor:pointer">ver foto</span>
+          <span onclick="deleteItinReceipt()" style="color:var(--danger);cursor:pointer;font-size:0.8rem">✕ Borrar</span>
         </div>
         <div id="itin-receipt-upload-status" style="font-size:0.8rem;color:var(--text3);margin-top:8px;display:none">Subiendo imagen... ⏳</div>
       </div>
@@ -3425,7 +3425,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile }
       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFirestore, collection, doc, addDoc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, query, where, onSnapshot, serverTimestamp, arrayUnion, arrayRemove, orderBy, limit }
+    import { getFirestore, collection, doc, addDoc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, query, where, onSnapshot, serverTimestamp, arrayUnion, arrayRemove, orderBy, limit, deleteField }
       from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -3522,6 +3522,18 @@
         label.classList.remove('has-file');
       }
     }
+    function deleteItinReceipt() {
+      // Mark receipt as deleted
+      window._itinDeleteReceipt = true;
+      const previewLink = document.getElementById('itin-receipt-preview-link');
+      const nameDisplay = document.getElementById('itin-file-name-display');
+      const label = document.getElementById('itin-receipt-label');
+      previewLink.style.display = 'none';
+      nameDisplay.textContent = 'Seleccionar foto o comprobante...';
+      label.classList.remove('has-file');
+      document.getElementById('itin-receipt').value = '';
+    }
+    window.deleteItinReceipt = deleteItinReceipt;
     window.updateItinFileName = updateItinFileName;
     window.saveItinEvent = saveItinEvent;
     window.deleteItinEvent = deleteItinEvent;
@@ -4331,6 +4343,10 @@
       // Close kebab menus on outside click
       if (!e.target.closest('[id^="kebab-"]') && !e.target.classList.contains('dots-btn')) {
         document.querySelectorAll('[id^="kebab-"]').forEach(m => m.style.display = 'none');
+      }
+      // Close itin kebab menus
+      if (!e.target.closest('[id^="itin-kebab-"]') && !e.target.closest('.itin-action-btn')) {
+        document.querySelectorAll('[id^="itin-kebab-"]').forEach(m => m.style.display = 'none');
       }
     });
 
@@ -6130,9 +6146,12 @@
           ${noteHtml}
           ${tagHtml ? `<div class="itin-event-tags">${tagHtml}</div>` : ''}
         </div>
-        <div class="itin-event-actions">
-          <button class="itin-action-btn" title="Editar" onclick="openEditItinEvent('${ev.id}','${ev.date}')">✏️</button>
-          <button class="itin-action-btn del" title="Eliminar" onclick="deleteItinEvent('${ev.id}')">🗑️</button>
+        <div class="itin-event-actions" style="position:relative">
+          <button class="itin-action-btn" onclick="toggleItinKebab('${ev.id}', event)">⋮</button>
+          <div id="itin-kebab-${ev.id}" style="display:none;position:absolute;top:100%;right:0;margin-top:4px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;min-width:140px;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,0.7)">
+            <div onclick="openEditItinEvent('${ev.id}','${ev.date}');closeItinKebab('${ev.id}')" style="padding:12px 16px;cursor:pointer;font-size:0.88rem;color:var(--text2)">✏️ Editar</div>
+            <div onclick="deleteItinEvent('${ev.id}');closeItinKebab('${ev.id}')" style="padding:12px 16px;cursor:pointer;font-size:0.88rem;color:var(--danger)">🗑️ Eliminar</div>
+          </div>
         </div>
       </div>`;
     }
@@ -6230,6 +6249,7 @@
       document.getElementById('itin-file-name-display').textContent = 'Seleccionar foto o comprobante...';
       document.getElementById('itin-receipt-label').classList.remove('has-file');
       document.getElementById('itin-receipt-preview-link').style.display = 'none';
+      window._itinDeleteReceipt = false;
       document.getElementById('itin-note').value = '';
       activeItinTags.clear();
       selectedItinCat = 'Visita'; selectedItinCatIcon = '🏛️';
@@ -6288,7 +6308,7 @@
       if (ev.receiptUrl) {
         nameDisplay.textContent = 'Reemplazar foto';
         label.classList.add('has-file');
-        previewLink.style.display = 'block';
+        previewLink.style.display = 'flex';
         viewLink.onclick = () => openLightbox(ev.receiptUrl);
       } else {
         nameDisplay.textContent = 'Seleccionar foto o comprobante...';
@@ -6346,11 +6366,14 @@
       };
       if (receiptUrl) {
         eventData.receiptUrl = receiptUrl;
+      } else if (editingItinEventId && window._itinDeleteReceipt) {
+        eventData.receiptUrl = deleteField();
       } else if (editingItinEventId) {
         // Keep existing photo if no new one was selected
         const existing = (window._itinEvents || []).find(e => e.id === editingItinEventId);
         if (existing && existing.receiptUrl) eventData.receiptUrl = existing.receiptUrl;
       }
+      window._itinDeleteReceipt = false;
 
       if (editingItinEventId) {
         await updateDoc(doc(db, 'trips', currentTripId, 'itinerary', editingItinEventId), eventData);
@@ -6934,6 +6957,20 @@
     window.toast = toast;
     window.showNotification = showNotification;
     window.toggleKebab = toggleKebab;
+
+    function toggleItinKebab(id, event) {
+      event.stopPropagation();
+      const menu = document.getElementById('itin-kebab-' + id);
+      const isOpen = menu.style.display === 'block';
+      document.querySelectorAll('[id^="itin-kebab-"]').forEach(m => m.style.display = 'none');
+      menu.style.display = isOpen ? 'none' : 'block';
+    }
+    function closeItinKebab(id) {
+      const menu = document.getElementById('itin-kebab-' + id);
+      if (menu) menu.style.display = 'none';
+    }
+    window.toggleItinKebab = toggleItinKebab;
+    window.closeItinKebab = closeItinKebab;
 
     // ─── THEME TOGGLE ───
     function toggleTheme() {
